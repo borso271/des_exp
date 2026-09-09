@@ -1,0 +1,51 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Native motion, cleanup and image configurations</title><style>body{font:13px system-ui}#container,.lab-frame{width:880px;height:424px;border:0}pre{white-space:pre-wrap}</style></head><body><pre id="result">Checking native motion and image settings…</pre><div id="container"></div><script type="module">
+import {createLabHost} from '../../showcase/lab-host.js';
+const result=document.getElementById('result'),container=document.getElementById('container'),checks=[];
+const delay=ms=>new Promise(r=>setTimeout(r,ms)),copy=value=>JSON.parse(JSON.stringify(value));
+const equal=(a,b,label)=>{if(JSON.stringify(a)!==JSON.stringify(b))throw Error(label);};
+const wait=async fn=>{const start=performance.now();while(!fn()){if(performance.now()-start>10000)throw Error('Image did not load');await delay(30);}};
+try{
+for(const lab of ['ellipse','moving','canvas']){
+ const host=createLabHost({container});host.layout({editing:false,art:{x:0,y:0,width:880,height:424}});host.setHost({paused:true});
+ const urls={ellipse:'../../turrell-ellipse-light/?embed=1',moving:'../../moving_shapes/moving_shapes.html?embed=1',canvas:'../../canvas_light_columns_demo.html?embed=1'};
+ await host.load({lab,url:urls[lab]});const child=host.frame.contentWindow;
+ let state=await host.snapshot();
+ if(lab==='ellipse')state.native.parameters.breathing=.025;
+ if(lab==='moving')state.native.paused=false;
+ if(lab==='canvas'){state.native.settings.controls.geometryFamily='moving';state.native.settings.controls.movingAnimated=true;}
+ await host.restore(state);
+ const time=async()=>{const s=(await host.snapshot()).native;return lab==='canvas'?s.settings.controls.movingTime:s.time;};
+ for(const blocked of [{paused:true},{reduced:true},{visible:false}]){
+  host.setHost({paused:false,reduced:false,visible:true});const before=await time();await delay(180);if(await time()<=before)throw Error(lab+' did not animate');
+  host.setHost(blocked);await delay(40);const held=await time();await delay(180);equal(await time(),held,lab+' advanced while '+JSON.stringify(blocked));
+  checks.push({lab,blocked,held:true,resume:true});
+ }
+ host.setHost({paused:true,reduced:false,visible:true});await delay(40);
+ if(lab==='canvas'){
+  const canvas=document.createElement('canvas');canvas.width=8;canvas.height=8;const ctx=canvas.getContext('2d');ctx.fillStyle='#fca345';ctx.fillRect(0,0,8,8);ctx.fillStyle='#05324a';ctx.fillRect(0,0,4,4);
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve));const file=new File([blob],'native-image.png',{type:'image/png'}),dt=new DataTransfer();dt.items.add(file);
+  const input=child.document.getElementById('background-image-file');input.files=dt.files;input.dispatchEvent(new Event('change',{bubbles:true}));
+  await wait(()=>child.document.getElementById('background-image-status').textContent.includes('Off')&&child.canvasLight.getState().imageData);
+  const saved=await host.snapshot();if(!saved.native.imageData.startsWith('data:image/png;base64,'))throw Error('Image asset not saved');
+  await host.restore(copy(saved));equal(await host.snapshot(),saved,'Local image round-trip lost native state');
+  const invalid=copy(saved);invalid.native.imageData='data:image/png;base64,AAAA';let rejected=false;try{await host.restore(invalid);}catch{rejected=true;}
+  if(!rejected)throw Error('Invalid image accepted');equal(await host.snapshot(),saved,'Invalid image changed the native composition');
+  const vector='<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="red"/></svg>';
+  const vectorFiles=new DataTransfer();vectorFiles.items.add(new File([vector],'native-vector.svg',{type:'image/svg+xml'}));input.files=vectorFiles.files;input.dispatchEvent(new Event('change',{bubbles:true}));
+  await wait(()=>child.canvasLight.getState().imageData?.startsWith('data:image/svg+xml;'));
+  const vectorState=await host.snapshot();equal(atob(vectorState.native.imageData.split(',')[1]),vector,'Original SVG bytes were not preserved');
+  await host.restore(copy(vectorState));equal(await host.snapshot(),vectorState,'SVG image round-trip lost native state');
+  checks.push({localImage:'original PNG and SVG resources round-trip',invalidImage:'atomic'});
+ }
+ const art=child.document.querySelector('canvas'),gl=lab==='ellipse'?art.getContext('webgl2'):null;
+ const moving=lab==='moving'?child.movingShapes:null,held=moving?.getState().time;
+ await host.dispose();await delay(60);
+ if(gl&&!gl.isContextLost())throw Error('Ellipse GPU context remained active');
+ if(lab==='canvas'&&(art.width!==1||art.height!==1))throw Error('Canvas surfaces not released');
+ if(moving)equal(moving.getState().time,held,'Detached moving renderer advanced');
+ if(container.children.length)throw Error('Iframe not removed');
+ checks.push({lab,disposed:true});
+}
+result.dataset.status='passed';result.textContent=JSON.stringify(checks,null,2);
+}catch(error){result.dataset.status='failed';result.textContent=error.stack;}
+</script></body></html>

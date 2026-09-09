@@ -16,7 +16,8 @@
     powerPreference: 'high-performance'
   });
   if (!gl) {
-    document.body.innerHTML = '<p style="padding:20px">This study requires WebGL 2.</p>';
+    if(window.LabEmbed)window.LabEmbed.fail('This study requires WebGL 2.');
+    else document.body.innerHTML = '<p style="padding:20px">This study requires WebGL 2.</p>';
     return;
   }
 
@@ -197,20 +198,29 @@
     if(forceW&&forceH){w=forceW;h=forceH;}
     else {
       const dpr=Math.min(devicePixelRatio||1,2.5)*p.renderScale;
-      w=Math.max(2,Math.round(innerWidth*dpr)); h=Math.max(2,Math.round(innerHeight*dpr));
+      const bounds=window.LabEmbed?.size||{width:innerWidth,height:innerHeight};
+      w=Math.max(2,Math.round(bounds.width*dpr)); h=Math.max(2,Math.round(bounds.height*dpr));
     }
     if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;gl.viewport(0,0,w,h);}
   }
 
-  let needsRender=true, start=performance.now();
+  let needsRender=true, start=performance.now(),frameId=0,elapsed=0,lastFrame=null,disposed=false;
+  const reducedMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)');
+  const motionAllowed=()=>!document.hidden&&(window.LabEmbed?window.LabEmbed.motionAllowed:!reducedMotion?.matches);
+  function schedule(){if(!frameId&&!disposed)frameId=requestAnimationFrame(render);}
+  function invalidate(){needsRender=true;schedule();}
   function render(now=performance.now()){
-    if(p.breathing>0) needsRender=true;
-    if(needsRender){
-      resize(); syncUniforms((now-start)/1000);
-      gl.drawArrays(gl.TRIANGLES,0,3); needsRender=false;
-    }
-    requestAnimationFrame(render);
+    frameId=0;
+    const animated=p.breathing>0&&motionAllowed();
+    if(animated&&lastFrame!==null)elapsed+=Math.max(0,Math.min(.1,(now-lastFrame)/1000));
+    lastFrame=animated?now:null;
+    if(animated)needsRender=true;
+    if(needsRender){resize();syncUniforms(elapsed);gl.drawArrays(gl.TRIANGLES,0,3);needsRender=false;}
+    if(animated)schedule();
   }
+  function syncMotion(){cancelAnimationFrame(frameId);frameId=0;lastFrame=null;invalidate();}
+  reducedMotion?.addEventListener('change',syncMotion);
+  document.addEventListener('visibilitychange',syncMotion);
 
   const sliders=[...document.querySelectorAll('input[type=range][data-k]')];
   const colors=[...document.querySelectorAll('input[type=color][data-k]')];
@@ -264,7 +274,7 @@
       ['bg',...palette.fieldKeys].every(key=>typeof patch[key]==='string'&&/^#[\da-f]{6}$/i.test(patch[key]));
     p={...p,...(snapshot?palette.restore(patch):palette.applyChange(p,patch)),...geometryPatch(patch)};
     if(Object.keys(patch).some(key=>Object.hasOwn(palette.defaults,key)||Object.hasOwn(palette.reference,key)))colorStudy.value='custom';
-    updateControls();needsRender=true;
+    updateControls();invalidate();
   }
   sliders.forEach(el=>{
     el.addEventListener('input',()=>setParameters({[el.dataset.k]:+el.value}));
@@ -276,19 +286,19 @@
   document.getElementById('newPalette').onclick=()=>setParameters({paletteSeed:(p.paletteSeed+1)>>>0});
   function applyStudy(name){
     p={...p,...palette.study(name)};
-    colorStudy.value=name;updateControls();needsRender=true;
+    colorStudy.value=name;updateControls();invalidate();
   }
   colorStudy.onchange=()=>applyStudy(colorStudy.value);
   document.getElementById('resetColors').onclick=()=>applyStudy('reference');
-  function reset(){p={...reference};colorStudy.value='reference';updateControls();needsRender=true;}
+  function reset(){p={...reference};colorStudy.value='reference';updateControls();invalidate();}
   updateControls();
 
   let dragging=false, lastX=0,lastY=0;
   canvas.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;canvas.setPointerCapture(e.pointerId);});
-  canvas.addEventListener('pointermove',e=>{if(!dragging)return;p.centerX=Math.min(1,Math.max(0,p.centerX+(e.clientX-lastX)/innerWidth));p.centerY=Math.min(1,Math.max(0,p.centerY+(e.clientY-lastY)/innerHeight));lastX=e.clientX;lastY=e.clientY;updateControls();needsRender=true;});
+  canvas.addEventListener('pointermove',e=>{if(!dragging)return;p.centerX=Math.min(1,Math.max(0,p.centerX+(e.clientX-lastX)/(window.LabEmbed?.size.width||innerWidth)));p.centerY=Math.min(1,Math.max(0,p.centerY+(e.clientY-lastY)/(window.LabEmbed?.size.height||innerHeight)));lastX=e.clientX;lastY=e.clientY;updateControls();invalidate();});
   canvas.addEventListener('pointerup',()=>dragging=false);
   canvas.addEventListener('pointercancel',()=>dragging=false);
-  addEventListener('resize',()=>{resize();needsRender=true;});
+  addEventListener('resize',()=>{resize();invalidate();});
 
   function downloadBlob(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
   document.getElementById('resetBtn').onclick=()=>{reset();status.textContent='Reference preset restored.';};
@@ -300,7 +310,7 @@
       const obj=JSON.parse(await file.text());
       if(!obj||typeof obj!=='object'||Array.isArray(obj)||!Object.keys(obj).some(key=>Object.hasOwn(reference,key)))throw new Error('Invalid settings');
       p={...reference,...geometryPatch(obj),...palette.restore(obj)};
-      colorStudy.value='custom';updateControls();needsRender=true;status.textContent='Settings loaded.';
+      colorStudy.value='custom';updateControls();invalidate();status.textContent='Settings loaded.';
     }catch(err){status.textContent='Could not load JSON.';}
     e.target.value='';
   };
@@ -309,27 +319,50 @@
     const btn=document.getElementById('exportBtn'); btn.disabled=true; status.textContent='Rendering export…';
     const oldW=canvas.width, oldH=canvas.height;
     const width=Math.max(512,Math.min(8192,+document.getElementById('exportWidth').value||2400));
-    const aspect=innerWidth/innerHeight; const height=Math.round(width/aspect);
-    resize(width,height); syncUniforms((performance.now()-start)/1000); gl.drawArrays(gl.TRIANGLES,0,3);
+    const bounds=window.LabEmbed?.size||{width:innerWidth,height:innerHeight}; const aspect=bounds.width/bounds.height; const height=Math.round(width/aspect);
+    resize(width,height); syncUniforms(elapsed); gl.drawArrays(gl.TRIANGLES,0,3);
     canvas.toBlob(blob=>{
       if(blob) downloadBlob(blob,`ellipse-light-${width}x${height}.png`);
-      resize(oldW,oldH); needsRender=true; btn.disabled=false; status.textContent=`Exported ${width} × ${height}.`;
+      resize(oldW,oldH); invalidate(); btn.disabled=false; status.textContent=`Exported ${width} × ${height}.`;
     },'image/png');
   };
 
   addEventListener('keydown',e=>{
     if(e.target.matches('input,select,textarea'))return;
-    if(e.key.toLowerCase()==='h')ui.classList.toggle('hidden');
+    if(e.key.toLowerCase()==='h'){if(window.LabEmbed)window.LabEmbed.close();else ui.classList.toggle('hidden');}
     if(e.key.toLowerCase()==='r')reset();
     if(e.key.toLowerCase()==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.();}
   });
 
+  function validateState(input){
+    if(!input||typeof input!=='object'||Array.isArray(input))throw new Error('Ellipse settings must be an object.');
+    const keys=Object.keys(reference);
+    if(Object.keys(input).some(key=>!keys.includes(key))||keys.some(key=>!Object.hasOwn(input,key)))throw new Error('Incomplete or unsupported ellipse settings.');
+    const restored={...reference,...geometryPatch(input),...palette.restore(input)};
+    // The native sanitizers define the contract; imports must not silently clamp/drop values.
+    for(const key of keys)if(JSON.stringify(restored[key])!==JSON.stringify(input[key]))throw new Error(`Invalid ellipse setting: ${key}`);
+    return restored;
+  }
+  function setState(input){p=validateState(input);colorStudy.value='custom';elapsed=0;lastFrame=null;updateControls();invalidate();}
+  function renderAt(time){if(typeof time!=='number'||!Number.isFinite(time)||time<0)throw new Error('Invalid ellipse animation time.');elapsed=time;lastFrame=null;resize();syncUniforms(time);gl.drawArrays(gl.TRIANGLES,0,3);}
   window.ellipseLight={
     getParameters:()=>({...p,customColors:[...p.customColors]}),
     setParameters,
+    validateState,setState,renderAt,
     reset,
     exportPNG:async width=>{document.getElementById('exportWidth').value=width||2400;document.getElementById('exportBtn').click();}
   };
 
-  resize(); needsRender=true; requestAnimationFrame(render);
+  window.LabEmbed?.register({
+    getState:()=>({parameters:window.ellipseLight.getParameters(),time:elapsed}),
+    validateState(input){
+      if(!input||typeof input!=='object'||Object.keys(input).length!==2||!Object.hasOwn(input,'parameters')||typeof input.time!=='number'||!Number.isFinite(input.time)||input.time<0)throw new Error('Expected complete ellipse settings and animation time.');
+      return {parameters:validateState(input.parameters),time:input.time};
+    },
+    setState(input){setState(input.parameters);renderAt(input.time);},reset,
+    applyPreset:setParameters,resize:invalidate,syncMotion,isAnimated:()=>p.breathing>0,
+    renderAt,
+    dispose(){disposed=true;cancelAnimationFrame(frameId);reducedMotion?.removeEventListener('change',syncMotion);gl.getExtension('WEBGL_lose_context')?.loseContext();}
+  });
+  resize(); invalidate();
 })();

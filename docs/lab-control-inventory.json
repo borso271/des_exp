@@ -1,0 +1,2995 @@
+{
+  "ellipse": {
+    "source": "turrell-ellipse-light/index.html",
+    "controls": [
+      {
+        "id": "colorStudy",
+        "key": "colorStudy",
+        "type": "select",
+        "label": "Color study",
+        "options": [
+          {
+            "value": "reference",
+            "label": "Reference green"
+          },
+          {
+            "value": "amber",
+            "label": "Amber glow"
+          },
+          {
+            "value": "dusk",
+            "label": "Dusk / rose"
+          },
+          {
+            "value": "violet",
+            "label": "Violet chamber"
+          },
+          {
+            "value": "ice",
+            "label": "Glacial light"
+          },
+          {
+            "value": "eclipse",
+            "label": "Ember eclipse"
+          },
+          {
+            "value": "silver",
+            "label": "Silver light"
+          },
+          {
+            "value": "custom",
+            "label": "Adjusted"
+          }
+        ]
+      },
+      {
+        "id": "paletteStyle",
+        "key": "paletteStyle",
+        "type": "select",
+        "label": "Palette style",
+        "options": [
+          {
+            "value": "reference",
+            "label": "Reference green"
+          },
+          {
+            "value": "custom",
+            "label": "Custom colors"
+          },
+          {
+            "value": "monochrome",
+            "label": "Quasi monochrome"
+          },
+          {
+            "value": "analogous",
+            "label": "Analogous"
+          },
+          {
+            "value": "complementary",
+            "label": "Complementary"
+          },
+          {
+            "value": "split",
+            "label": "Split complementary"
+          },
+          {
+            "value": "triadic",
+            "label": "Triadic"
+          },
+          {
+            "value": "random",
+            "label": "Seeded random"
+          },
+          {
+            "value": "ocean",
+            "label": "Ocean"
+          },
+          {
+            "value": "sunset",
+            "label": "Sunset"
+          },
+          {
+            "value": "candy",
+            "label": "Candy"
+          },
+          {
+            "value": "forest",
+            "label": "Forest"
+          },
+          {
+            "value": "neon",
+            "label": "Neon"
+          },
+          {
+            "value": "grayscale",
+            "label": "Grayscale"
+          }
+        ]
+      },
+      {
+        "id": "baseHue",
+        "key": "baseHue",
+        "type": "range",
+        "label": "Base hue",
+        "min": "0",
+        "max": "360",
+        "step": "1"
+      },
+      {
+        "id": "colorVariation",
+        "key": "colorVariation",
+        "type": "range",
+        "label": "Color variation",
+        "min": "0",
+        "max": "100",
+        "step": "1"
+      },
+      {
+        "id": "hueRotation",
+        "key": "hueRotation",
+        "type": "range",
+        "label": "Hue rotation",
+        "min": "-180",
+        "max": "180",
+        "step": "1"
+      },
+      {
+        "id": "saturation",
+        "key": "saturation",
+        "type": "range",
+        "label": "Saturation",
+        "min": "0",
+        "max": "150",
+        "step": "1"
+      },
+      {
+        "id": "brightness",
+        "key": "brightness",
+        "type": "range",
+        "label": "Lightness shift",
+        "min": "-40",
+        "max": "40",
+        "step": "1"
+      },
+      {
+        "id": "newPalette",
+        "key": "newPalette",
+        "type": "button",
+        "label": "New variation"
+      },
+      {
+        "id": "resetColors",
+        "key": "resetColors",
+        "type": "button",
+        "label": "Reset colors"
+      },
+      {
+        "id": "progression",
+        "key": "progression",
+        "type": "select",
+        "label": "Progression",
+        "options": [
+          {
+            "value": "sequence",
+            "label": "Even progression"
+          },
+          {
+            "value": "ease-in",
+            "label": "Change near the core"
+          },
+          {
+            "value": "ease-out",
+            "label": "Change near the outside"
+          },
+          {
+            "value": "return",
+            "label": "Out and back"
+          },
+          {
+            "value": "alternating",
+            "label": "Alternating hues"
+          }
+        ]
+      },
+      {
+        "id": "reversePalette",
+        "key": "reversePalette",
+        "type": "checkbox",
+        "label": "Reverse palette direction"
+      },
+      {
+        "id": "paletteSpan",
+        "key": "paletteSpan",
+        "type": "range",
+        "label": "Palette range",
+        "min": "10",
+        "max": "100",
+        "step": "1"
+      },
+      {
+        "id": "paletteOffset",
+        "key": "paletteOffset",
+        "type": "range",
+        "label": "Palette offset",
+        "min": "-100",
+        "max": "100",
+        "step": "1"
+      },
+      {
+        "id": "colorBlend",
+        "key": "colorBlend",
+        "type": "select",
+        "label": "Color blending",
+        "options": [
+          {
+            "value": "hsl",
+            "label": "Hue interpolation"
+          },
+          {
+            "value": "rgb",
+            "label": "Linear light RGB"
+          },
+          {
+            "value": "steps",
+            "label": "Discrete colors"
+          }
+        ]
+      },
+      {
+        "id": "lightProfile",
+        "key": "lightProfile",
+        "type": "select",
+        "label": "Lightness profile",
+        "options": [
+          {
+            "value": "palette",
+            "label": "Palette lightness"
+          },
+          {
+            "value": "luminous",
+            "label": "Luminous core"
+          },
+          {
+            "value": "dark-core",
+            "label": "Dark core"
+          },
+          {
+            "value": "alternating",
+            "label": "Alternating light / dark"
+          }
+        ]
+      },
+      {
+        "id": "lightStrength",
+        "key": "lightStrength",
+        "type": "range",
+        "label": "Profile strength",
+        "min": "0",
+        "max": "100",
+        "step": "1"
+      },
+      {
+        "id": "backgroundMode",
+        "key": "backgroundMode",
+        "type": "select",
+        "label": "Background",
+        "options": [
+          {
+            "value": "related",
+            "label": "Related to outer ellipse"
+          },
+          {
+            "value": "opposite",
+            "label": "Complementary surround"
+          },
+          {
+            "value": "manual",
+            "label": "Independent color"
+          }
+        ]
+      },
+      {
+        "id": "backgroundOffset",
+        "key": "backgroundOffset",
+        "type": "range",
+        "label": "Background shift",
+        "min": "-60",
+        "max": "40",
+        "step": "1"
+      },
+      {
+        "id": "bg",
+        "key": "bg",
+        "type": "color",
+        "label": "Background"
+      },
+      {
+        "id": "c1",
+        "key": "c1",
+        "type": "color",
+        "label": "Outer ellipse"
+      },
+      {
+        "id": "c2",
+        "key": "c2",
+        "type": "color",
+        "label": "Ring 2"
+      },
+      {
+        "id": "c3",
+        "key": "c3",
+        "type": "color",
+        "label": "Ring 3"
+      },
+      {
+        "id": "c4",
+        "key": "c4",
+        "type": "color",
+        "label": "Ring 4"
+      },
+      {
+        "id": "c5",
+        "key": "c5",
+        "type": "color",
+        "label": "Core"
+      },
+      {
+        "id": "centerX",
+        "key": "centerX",
+        "type": "range",
+        "label": "Center X",
+        "min": "0",
+        "max": "1",
+        "step": "0.001"
+      },
+      {
+        "id": "centerY",
+        "key": "centerY",
+        "type": "range",
+        "label": "Center Y",
+        "min": "0",
+        "max": "1",
+        "step": "0.001"
+      },
+      {
+        "id": "radiusX",
+        "key": "radiusX",
+        "type": "range",
+        "label": "Outer radius X",
+        "min": "0.1",
+        "max": "0.7",
+        "step": "0.001"
+      },
+      {
+        "id": "radiusY",
+        "key": "radiusY",
+        "type": "range",
+        "label": "Outer radius Y",
+        "min": "0.1",
+        "max": "0.7",
+        "step": "0.001"
+      },
+      {
+        "id": "rotation",
+        "key": "rotation",
+        "type": "range",
+        "label": "Rotation",
+        "min": "-30",
+        "max": "30",
+        "step": "0.1"
+      },
+      {
+        "id": "ring2",
+        "key": "ring2",
+        "type": "range",
+        "label": "Ring 2 radius",
+        "min": "0.2",
+        "max": "0.95",
+        "step": "0.001"
+      },
+      {
+        "id": "ring3",
+        "key": "ring3",
+        "type": "range",
+        "label": "Ring 3 radius",
+        "min": "0.1",
+        "max": "0.9",
+        "step": "0.001"
+      },
+      {
+        "id": "ring4",
+        "key": "ring4",
+        "type": "range",
+        "label": "Ring 4 radius",
+        "min": "0.08",
+        "max": "0.8",
+        "step": "0.001"
+      },
+      {
+        "id": "core",
+        "key": "core",
+        "type": "range",
+        "label": "Core radius",
+        "min": "0.03",
+        "max": "0.5",
+        "step": "0.001"
+      },
+      {
+        "id": "coreRoundness",
+        "key": "coreRoundness",
+        "type": "range",
+        "label": "Core roundness",
+        "min": "0.65",
+        "max": "1.35",
+        "step": "0.001"
+      },
+      {
+        "id": "softness",
+        "key": "softness",
+        "type": "range",
+        "label": "Edge softness",
+        "min": "0.001",
+        "max": "0.08",
+        "step": "0.001"
+      },
+      {
+        "id": "coreSoftness",
+        "key": "coreSoftness",
+        "type": "range",
+        "label": "Core softness",
+        "min": "0.001",
+        "max": "0.16",
+        "step": "0.001"
+      },
+      {
+        "id": "coreGlow",
+        "key": "coreGlow",
+        "type": "range",
+        "label": "Center glow",
+        "min": "0",
+        "max": "1",
+        "step": "0.001"
+      },
+      {
+        "id": "exposure",
+        "key": "exposure",
+        "type": "range",
+        "label": "Exposure",
+        "min": "0.5",
+        "max": "1.8",
+        "step": "0.001"
+      },
+      {
+        "id": "bottomFalloff",
+        "key": "bottomFalloff",
+        "type": "range",
+        "label": "Bottom falloff",
+        "min": "0",
+        "max": "0.5",
+        "step": "0.001"
+      },
+      {
+        "id": "vignette",
+        "key": "vignette",
+        "type": "range",
+        "label": "Vignette",
+        "min": "0",
+        "max": "0.5",
+        "step": "0.001"
+      },
+      {
+        "id": "halo",
+        "key": "halo",
+        "type": "range",
+        "label": "Ambient halo",
+        "min": "0",
+        "max": "0.7",
+        "step": "0.001"
+      },
+      {
+        "id": "grain",
+        "key": "grain",
+        "type": "range",
+        "label": "Grain",
+        "min": "0",
+        "max": "0.08",
+        "step": "0.001"
+      },
+      {
+        "id": "irregularity",
+        "key": "irregularity",
+        "type": "range",
+        "label": "Band irregularity",
+        "min": "0",
+        "max": "0.04",
+        "step": "0.0005"
+      },
+      {
+        "id": "breathing",
+        "key": "breathing",
+        "type": "range",
+        "label": "Breathing",
+        "min": "0",
+        "max": "0.04",
+        "step": "0.0005"
+      },
+      {
+        "id": "breathingSpeed",
+        "key": "breathingSpeed",
+        "type": "range",
+        "label": "Breathing speed",
+        "min": "0.05",
+        "max": "1.5",
+        "step": "0.01"
+      },
+      {
+        "id": "renderScale",
+        "key": "renderScale",
+        "type": "range",
+        "label": "Render scale",
+        "min": "0.5",
+        "max": "2",
+        "step": "0.05"
+      },
+      {
+        "id": "exportWidth",
+        "key": "exportWidth",
+        "type": "number",
+        "label": "Export width",
+        "min": "512",
+        "max": "8192",
+        "step": "1"
+      },
+      {
+        "id": "exportBtn",
+        "key": "exportBtn",
+        "type": "button",
+        "label": "Export PNG"
+      },
+      {
+        "id": "saveBtn",
+        "key": "saveBtn",
+        "type": "button",
+        "label": "Save JSON"
+      },
+      {
+        "id": "loadBtn",
+        "key": "loadBtn",
+        "type": "button",
+        "label": "Load JSON"
+      },
+      {
+        "id": "resetBtn",
+        "key": "resetBtn",
+        "type": "button",
+        "label": "Reset reference"
+      },
+      {
+        "id": "fileInput",
+        "key": "fileInput",
+        "type": "file",
+        "label": ""
+      }
+    ]
+  },
+  "triangle": {
+    "source": "triangle-light/index.html",
+    "controls": [
+      {
+        "id": "reset",
+        "key": "reset",
+        "type": "button",
+        "label": "Reference reset"
+      },
+      {
+        "id": "hide",
+        "key": "hide",
+        "type": "button",
+        "label": "Hide UI · H"
+      },
+      {
+        "id": "fullscreen",
+        "key": "fullscreen",
+        "type": "button",
+        "label": "Fullscreen · F"
+      },
+      {
+        "id": "exportWidth",
+        "key": "exportWidth",
+        "type": "number",
+        "label": "PNG width",
+        "min": "320",
+        "max": "4096",
+        "step": "1"
+      },
+      {
+        "id": "export",
+        "key": "export",
+        "type": "button",
+        "label": "Export PNG"
+      },
+      {
+        "id": "save",
+        "key": "save",
+        "type": "button",
+        "label": "Save settings"
+      },
+      {
+        "id": "load",
+        "key": "load",
+        "type": "button",
+        "label": "Load settings"
+      },
+      {
+        "id": "file",
+        "key": "file",
+        "type": "file",
+        "label": ""
+      },
+      {
+        "id": "restore",
+        "key": "restore",
+        "type": "button",
+        "label": "Controls · H"
+      },
+      {
+        "id": "p-aspect",
+        "key": "aspect",
+        "group": "Composition",
+        "label": "Frame",
+        "type": "select",
+        "options": [
+          {
+            "value": "reference",
+            "label": "Reference · 1.526:1"
+          },
+          {
+            "value": "16:9",
+            "label": "16:9"
+          },
+          {
+            "value": "4:3",
+            "label": "4:3"
+          },
+          {
+            "value": "1:1",
+            "label": "Square"
+          },
+          {
+            "value": "viewport",
+            "label": "Fill available space"
+          }
+        ]
+      },
+      {
+        "id": "p-posX",
+        "key": "posX",
+        "group": "Composition",
+        "label": "Position X",
+        "type": "range",
+        "min": 0.05,
+        "max": 0.95,
+        "step": 0.001
+      },
+      {
+        "id": "p-posY",
+        "key": "posY",
+        "group": "Composition",
+        "label": "Base height",
+        "type": "range",
+        "min": 0.2,
+        "max": 1.05,
+        "step": 0.001
+      },
+      {
+        "id": "p-width",
+        "key": "width",
+        "group": "Composition",
+        "label": "Triangle width",
+        "type": "range",
+        "min": 0.1,
+        "max": 1.15,
+        "step": 0.001
+      },
+      {
+        "id": "p-height",
+        "key": "height",
+        "group": "Composition",
+        "label": "Triangle height",
+        "type": "range",
+        "min": 0.12,
+        "max": 0.95,
+        "step": 0.001
+      },
+      {
+        "id": "p-apexLean",
+        "key": "apexLean",
+        "group": "Composition",
+        "label": "Apex offset",
+        "type": "range",
+        "min": -0.45,
+        "max": 0.45,
+        "step": 0.001
+      },
+      {
+        "id": "p-roll",
+        "key": "roll",
+        "group": "Composition",
+        "label": "Roll (degrees)",
+        "type": "range",
+        "min": -30,
+        "max": 30,
+        "step": 0.1
+      },
+      {
+        "id": "p-intensity",
+        "key": "intensity",
+        "group": "Light / three vertices",
+        "label": "Light intensity",
+        "type": "range",
+        "min": 0,
+        "max": 3,
+        "step": 0.01
+      },
+      {
+        "id": "p-vertexTop",
+        "key": "vertexTop",
+        "group": "Light / three vertices",
+        "label": "Top vertex",
+        "type": "range",
+        "min": 0,
+        "max": 3,
+        "step": 0.01
+      },
+      {
+        "id": "p-vertexLeft",
+        "key": "vertexLeft",
+        "group": "Light / three vertices",
+        "label": "Left vertex",
+        "type": "range",
+        "min": 0,
+        "max": 3,
+        "step": 0.01
+      },
+      {
+        "id": "p-vertexRight",
+        "key": "vertexRight",
+        "group": "Light / three vertices",
+        "label": "Right vertex",
+        "type": "range",
+        "min": 0,
+        "max": 3,
+        "step": 0.01
+      },
+      {
+        "id": "p-vertexReach",
+        "key": "vertexReach",
+        "group": "Light / three vertices",
+        "label": "Vertex reach",
+        "type": "range",
+        "min": 0.008,
+        "max": 0.16,
+        "step": 0.001
+      },
+      {
+        "id": "p-vertexFocus",
+        "key": "vertexFocus",
+        "group": "Light / three vertices",
+        "label": "Vertex focus",
+        "type": "range",
+        "min": 0.25,
+        "max": 3,
+        "step": 0.01
+      },
+      {
+        "id": "p-seamStrength",
+        "key": "seamStrength",
+        "group": "Light / three vertices",
+        "label": "Y-seam light",
+        "type": "range",
+        "min": 0,
+        "max": 2.5,
+        "step": 0.01
+      },
+      {
+        "id": "p-seamWidth",
+        "key": "seamWidth",
+        "group": "Light / three vertices",
+        "label": "Y-seam width",
+        "type": "range",
+        "min": 0.002,
+        "max": 0.06,
+        "step": 0.001
+      },
+      {
+        "id": "p-junctionDepth",
+        "key": "junctionDepth",
+        "group": "Interior / optical edge",
+        "label": "Junction depth",
+        "type": "range",
+        "min": 0.45,
+        "max": 0.97,
+        "step": 0.001
+      },
+      {
+        "id": "p-junctionX",
+        "key": "junctionX",
+        "group": "Interior / optical edge",
+        "label": "Junction offset",
+        "type": "range",
+        "min": -0.55,
+        "max": 0.55,
+        "step": 0.001
+      },
+      {
+        "id": "p-facet",
+        "key": "facet",
+        "group": "Interior / optical edge",
+        "label": "Lower plane",
+        "type": "range",
+        "min": 0,
+        "max": 2,
+        "step": 0.01
+      },
+      {
+        "id": "p-edgeSoftness",
+        "key": "edgeSoftness",
+        "group": "Interior / optical edge",
+        "label": "Edge softness",
+        "type": "range",
+        "min": 0.0002,
+        "max": 0.008,
+        "step": 0.0001
+      },
+      {
+        "id": "p-paletteStyle",
+        "key": "paletteStyle",
+        "group": "Color / palette",
+        "label": "Palette style",
+        "type": "select",
+        "options": [
+          {
+            "value": "reference",
+            "label": "Original blue"
+          },
+          {
+            "value": "monochrome",
+            "label": "Near monochrome"
+          },
+          {
+            "value": "analogous",
+            "label": "Analogous"
+          },
+          {
+            "value": "complementary",
+            "label": "Complementary"
+          },
+          {
+            "value": "split",
+            "label": "Split complementary"
+          },
+          {
+            "value": "triadic",
+            "label": "Triadic"
+          },
+          {
+            "value": "sunset",
+            "label": "Sunset"
+          },
+          {
+            "value": "forest",
+            "label": "Forest"
+          },
+          {
+            "value": "neon",
+            "label": "Neon"
+          },
+          {
+            "value": "ocean",
+            "label": "Ocean"
+          },
+          {
+            "value": "candy",
+            "label": "Candy"
+          },
+          {
+            "value": "grayscale",
+            "label": "Grayscale"
+          },
+          {
+            "value": "random",
+            "label": "Random harmony"
+          },
+          {
+            "value": "custom",
+            "label": "Custom"
+          }
+        ]
+      },
+      {
+        "id": "p-baseHue",
+        "key": "baseHue",
+        "group": "Color / palette",
+        "label": "Base hue",
+        "type": "range",
+        "min": 0,
+        "max": 360,
+        "step": 1
+      },
+      {
+        "id": "p-colorVariation",
+        "key": "colorVariation",
+        "group": "Color / palette",
+        "label": "Color variation",
+        "type": "range",
+        "min": 0,
+        "max": 100,
+        "step": 1
+      },
+      {
+        "id": "p-coreColor",
+        "key": "coreColor",
+        "group": "Color / palette",
+        "label": "Triangle color",
+        "type": "color"
+      },
+      {
+        "id": "p-seamColor",
+        "key": "seamColor",
+        "group": "Color / palette",
+        "label": "Vertex / seam",
+        "type": "color"
+      },
+      {
+        "id": "p-spillColor",
+        "key": "spillColor",
+        "group": "Color / palette",
+        "label": "Wall spill",
+        "type": "color"
+      },
+      {
+        "id": "p-ambientColor",
+        "key": "ambientColor",
+        "group": "Color / palette",
+        "label": "Unlit wall",
+        "type": "color"
+      },
+      {
+        "id": "p-saturation",
+        "key": "saturation",
+        "group": "Color / palette",
+        "label": "Saturation",
+        "type": "range",
+        "min": 0,
+        "max": 1.5,
+        "step": 0.01
+      },
+      {
+        "id": "p-floorEnabled",
+        "key": "floorEnabled",
+        "group": "Room / spill / floor",
+        "label": "Show floor",
+        "type": "checkbox"
+      },
+      {
+        "id": "p-spillStrength",
+        "key": "spillStrength",
+        "group": "Room / spill / floor",
+        "label": "Wall spill",
+        "type": "range",
+        "min": 0,
+        "max": 2.5,
+        "step": 0.01
+      },
+      {
+        "id": "p-spillReach",
+        "key": "spillReach",
+        "group": "Room / spill / floor",
+        "label": "Spill reach",
+        "type": "range",
+        "min": 0.35,
+        "max": 2.5,
+        "step": 0.01
+      },
+      {
+        "id": "p-ambient",
+        "key": "ambient",
+        "group": "Room / spill / floor",
+        "label": "Wall ambient",
+        "type": "range",
+        "min": 0,
+        "max": 2.5,
+        "step": 0.01
+      },
+      {
+        "id": "p-floorSlope",
+        "key": "floorSlope",
+        "group": "Room / spill / floor",
+        "label": "Floor perspective",
+        "type": "range",
+        "min": 0,
+        "max": 0.65,
+        "step": 0.005
+      },
+      {
+        "id": "p-floorBounce",
+        "key": "floorBounce",
+        "group": "Room / spill / floor",
+        "label": "Floor bounce",
+        "type": "range",
+        "min": 0,
+        "max": 0.6,
+        "step": 0.005
+      },
+      {
+        "id": "p-floorDepth",
+        "key": "floorDepth",
+        "group": "Room / spill / floor",
+        "label": "Bounce depth",
+        "type": "range",
+        "min": 0.012,
+        "max": 0.2,
+        "step": 0.001
+      },
+      {
+        "id": "p-bloom",
+        "key": "bloom",
+        "group": "Camera / rendering",
+        "label": "Optical bloom",
+        "type": "range",
+        "min": 0,
+        "max": 0.5,
+        "step": 0.005
+      },
+      {
+        "id": "p-bloomRadius",
+        "key": "bloomRadius",
+        "group": "Camera / rendering",
+        "label": "Bloom radius",
+        "type": "range",
+        "min": 0.35,
+        "max": 3,
+        "step": 0.01
+      },
+      {
+        "id": "p-exposure",
+        "key": "exposure",
+        "group": "Camera / rendering",
+        "label": "Exposure (EV)",
+        "type": "range",
+        "min": -3,
+        "max": 2,
+        "step": 0.01
+      },
+      {
+        "id": "p-vignette",
+        "key": "vignette",
+        "group": "Camera / rendering",
+        "label": "Vignette",
+        "type": "range",
+        "min": 0,
+        "max": 0.6,
+        "step": 0.01
+      },
+      {
+        "id": "p-grain",
+        "key": "grain",
+        "group": "Camera / rendering",
+        "label": "Photo grain",
+        "type": "range",
+        "min": 0,
+        "max": 2,
+        "step": 0.01
+      },
+      {
+        "id": "p-quality",
+        "key": "quality",
+        "group": "Camera / rendering",
+        "label": "Render scale",
+        "type": "select",
+        "options": [
+          {
+            "value": "0.75",
+            "label": "0.75×"
+          },
+          {
+            "value": "1",
+            "label": "1× / device pixels"
+          },
+          {
+            "value": "1.5",
+            "label": "1.5×"
+          },
+          {
+            "value": "2",
+            "label": "2× supersampling"
+          }
+        ]
+      }
+    ]
+  },
+  "canvas": {
+    "source": "canvas_light_columns_demo.html",
+    "controls": [
+      {
+        "id": "aesthetic",
+        "key": "aesthetic",
+        "type": "select",
+        "label": "Aesthetic",
+        "options": [
+          {
+            "value": "palette",
+            "label": "Palette-mapped"
+          },
+          {
+            "value": "blended",
+            "label": "Blended light"
+          },
+          {
+            "value": "staggered",
+            "label": "Staggered fade"
+          },
+          {
+            "value": "split",
+            "label": "Two-color split · hover"
+          },
+          {
+            "value": "triangle",
+            "label": "Flat triangle · hover"
+          }
+        ]
+      },
+      {
+        "id": "geometry-family",
+        "key": "geometry-family",
+        "type": "select",
+        "label": "Geometry family",
+        "options": [
+          {
+            "value": "columns",
+            "label": "Columns"
+          },
+          {
+            "value": "rings",
+            "label": "Concentric rings"
+          },
+          {
+            "value": "sectors",
+            "label": "Radial sectors"
+          },
+          {
+            "value": "polar",
+            "label": "Polar grid"
+          },
+          {
+            "value": "moving",
+            "label": "Moving composition"
+          },
+          {
+            "value": "nested",
+            "label": "Nested squares"
+          },
+          {
+            "value": "triangle",
+            "label": "Triangle"
+          }
+        ]
+      },
+      {
+        "id": "columns",
+        "key": "columns",
+        "type": "range",
+        "label": "Columns 8",
+        "min": "2",
+        "max": "20"
+      },
+      {
+        "id": "split-color-a",
+        "key": "split-color-a",
+        "type": "color",
+        "label": "First color"
+      },
+      {
+        "id": "split-color-b",
+        "key": "split-color-b",
+        "type": "color",
+        "label": "Second color"
+      },
+      {
+        "id": "split-angle",
+        "key": "split-angle",
+        "type": "range",
+        "label": "Divider angle30°",
+        "min": "0",
+        "max": "360",
+        "step": "any"
+      },
+      {
+        "id": "split-offset",
+        "key": "split-offset",
+        "type": "range",
+        "label": "Divider offset0%",
+        "min": "-95",
+        "max": "95"
+      },
+      {
+        "id": "split-hover",
+        "key": "split-hover",
+        "type": "checkbox",
+        "label": "Hover animation"
+      },
+      {
+        "id": "split-smoothing",
+        "key": "split-smoothing",
+        "type": "range",
+        "label": "Motion smoothing65%",
+        "min": "0",
+        "max": "100"
+      },
+      {
+        "id": "triangle-color",
+        "key": "triangle-color",
+        "type": "color",
+        "label": "Triangle color"
+      },
+      {
+        "id": "triangle-background",
+        "key": "triangle-background",
+        "type": "color",
+        "label": "Background color"
+      },
+      {
+        "id": "triangle-size",
+        "key": "triangle-size",
+        "type": "range",
+        "label": "Size150%",
+        "min": "20",
+        "max": "300"
+      },
+      {
+        "id": "triangle-x",
+        "key": "triangle-x",
+        "type": "range",
+        "label": "Horizontal position55%",
+        "min": "0",
+        "max": "100"
+      },
+      {
+        "id": "triangle-y",
+        "key": "triangle-y",
+        "type": "range",
+        "label": "Vertical position55%",
+        "min": "0",
+        "max": "100"
+      },
+      {
+        "id": "triangle-angle",
+        "key": "triangle-angle",
+        "type": "range",
+        "label": "Rotation280°",
+        "min": "0",
+        "max": "360",
+        "step": "any"
+      },
+      {
+        "id": "triangle-hover",
+        "key": "triangle-hover",
+        "type": "checkbox",
+        "label": "Hover animation"
+      },
+      {
+        "id": "triangle-smoothing",
+        "key": "triangle-smoothing",
+        "type": "range",
+        "label": "Motion smoothing75%",
+        "min": "0",
+        "max": "100"
+      },
+      {
+        "id": "triangle-light-study",
+        "key": "triangle-light-study",
+        "type": "button",
+        "label": "Apply luminous triangle"
+      },
+      {
+        "id": "nested-shape",
+        "key": "nested-shape",
+        "type": "select",
+        "label": "Shape",
+        "options": [
+          {
+            "value": "square",
+            "label": "Squares"
+          },
+          {
+            "value": "rectangle",
+            "label": "Frame-proportioned rectangles"
+          }
+        ]
+      },
+      {
+        "id": "nested-count",
+        "key": "nested-count",
+        "type": "range",
+        "label": "Shapes4",
+        "min": "2",
+        "max": "8",
+        "step": "1"
+      },
+      {
+        "id": "nested-scale",
+        "key": "nested-scale",
+        "type": "range",
+        "label": "Outer size90%",
+        "min": "30",
+        "max": "100",
+        "step": "1"
+      },
+      {
+        "id": "nested-ratio",
+        "key": "nested-ratio",
+        "type": "range",
+        "label": "Successive size ratio75%",
+        "min": "20",
+        "max": "95",
+        "step": "1"
+      },
+      {
+        "id": "nested-ratio-change",
+        "key": "nested-ratio-change",
+        "type": "range",
+        "label": "Ratio change per layer0 pp",
+        "min": "-25",
+        "max": "25",
+        "step": "1"
+      },
+      {
+        "id": "nested-offset-x",
+        "key": "nested-offset-x",
+        "type": "range",
+        "label": "Horizontal offset0%",
+        "min": "-90",
+        "max": "90",
+        "step": "1"
+      },
+      {
+        "id": "nested-offset-y",
+        "key": "nested-offset-y",
+        "type": "range",
+        "label": "Vertical offset40%",
+        "min": "-90",
+        "max": "90",
+        "step": "1"
+      },
+      {
+        "id": "nested-color-study",
+        "key": "nested-color-study",
+        "type": "button",
+        "label": "Apply flat color study"
+      },
+      {
+        "id": "moving-count",
+        "key": "moving-count",
+        "type": "range",
+        "label": "Number of shapes18",
+        "min": "2",
+        "max": "60"
+      },
+      {
+        "id": "moving-breathing",
+        "key": "moving-breathing",
+        "type": "range",
+        "label": "Size breathing65%",
+        "min": "0",
+        "max": "100"
+      },
+      {
+        "id": "moving-speed",
+        "key": "moving-speed",
+        "type": "range",
+        "label": "Motion speed100%",
+        "min": "10",
+        "max": "300"
+      },
+      {
+        "id": "moving-animated",
+        "key": "moving-animated",
+        "type": "checkbox",
+        "label": "Animate composition"
+      },
+      {
+        "id": "moving-time",
+        "key": "moving-time",
+        "type": "number",
+        "label": "",
+        "min": "0",
+        "step": "any"
+      },
+      {
+        "id": "moving-regenerate",
+        "key": "moving-regenerate",
+        "type": "button",
+        "label": "Regenerate composition"
+      },
+      {
+        "id": "event-copy-variant",
+        "key": "event-copy-variant",
+        "type": "select",
+        "label": "Event copy",
+        "options": [
+          {
+            "value": "museum",
+            "label": "Museum invitation"
+          },
+          {
+            "value": "renaissance",
+            "label": "The New Renaissance"
+          },
+          {
+            "value": "logo-renaissance",
+            "label": "BE ART + NEW RENAISSANCE"
+          },
+          {
+            "value": "manifesto",
+            "label": "MANIFESTO"
+          },
+          {
+            "value": "manifesto-title",
+            "label": "NO SOMOS ESPECTADORES · Solea"
+          }
+        ]
+      },
+      {
+        "id": "manifesto-font-size",
+        "key": "manifesto-font-size",
+        "type": "range",
+        "label": "Font size132 px",
+        "min": "24",
+        "max": "180",
+        "step": "1"
+      },
+      {
+        "id": "manifesto-font-weight",
+        "key": "manifesto-font-weight",
+        "type": "range",
+        "label": "Font weight400",
+        "min": "100",
+        "max": "900",
+        "step": "100"
+      },
+      {
+        "id": "text-vertical-align",
+        "key": "text-vertical-align",
+        "type": "select",
+        "label": "Text vertical position",
+        "options": [
+          {
+            "value": "original",
+            "label": "Original layout"
+          },
+          {
+            "value": "center",
+            "label": "Centered as a whole"
+          }
+        ]
+      },
+      {
+        "id": "event-text-effect",
+        "key": "event-text-effect",
+        "type": "select",
+        "label": "Event text effect",
+        "options": [
+          {
+            "value": "solid-black",
+            "label": "Solid black"
+          },
+          {
+            "value": "solid-white",
+            "label": "Solid white"
+          },
+          {
+            "value": "invert",
+            "label": "Invert"
+          },
+          {
+            "value": "difference",
+            "label": "Difference"
+          },
+          {
+            "value": "accent",
+            "label": "Accent color"
+          }
+        ]
+      },
+      {
+        "id": "event-text-accent",
+        "key": "event-text-accent",
+        "type": "color",
+        "label": "Text accent #7C5CFF"
+      },
+      {
+        "id": "event-text-opacity",
+        "key": "event-text-opacity",
+        "type": "range",
+        "label": "Event text opacity 100%",
+        "min": "0",
+        "max": "100"
+      },
+      {
+        "id": "logo-effect",
+        "key": "logo-effect",
+        "type": "select",
+        "label": "Logo effect",
+        "options": [
+          {
+            "value": "solid-black",
+            "label": "Solid black"
+          },
+          {
+            "value": "solid-white",
+            "label": "Solid white"
+          },
+          {
+            "value": "accent",
+            "label": "Solid accent"
+          },
+          {
+            "value": "invert",
+            "label": "Invert"
+          },
+          {
+            "value": "difference",
+            "label": "Difference"
+          },
+          {
+            "value": "glass",
+            "label": "Glass"
+          },
+          {
+            "value": "hypercolor",
+            "label": "Hypercolor"
+          },
+          {
+            "value": "hue",
+            "label": "Hue shift"
+          }
+        ]
+      },
+      {
+        "id": "logo-accent",
+        "key": "logo-accent",
+        "type": "color",
+        "label": "Logo accent #7C5CFF"
+      },
+      {
+        "id": "match-text-accent",
+        "key": "match-text-accent",
+        "type": "checkbox",
+        "label": "Match text accent"
+      },
+      {
+        "id": "logo-effect-strength",
+        "key": "logo-effect-strength",
+        "type": "range",
+        "label": "Effect strength 100%",
+        "min": "0",
+        "max": "100"
+      },
+      {
+        "id": "logo-effect-blur",
+        "key": "logo-effect-blur",
+        "type": "range",
+        "label": "Blur 10 px",
+        "min": "0",
+        "max": "30"
+      },
+      {
+        "id": "logo-effect-hue",
+        "key": "logo-effect-hue",
+        "type": "range",
+        "label": "Hue shift 90°",
+        "min": "0",
+        "max": "360"
+      },
+      {
+        "id": "logo-effect-opacity",
+        "key": "logo-effect-opacity",
+        "type": "range",
+        "label": "Logo opacity 100%",
+        "min": "0",
+        "max": "100"
+      },
+      {
+        "id": "background-image-enabled",
+        "key": "background-image-enabled",
+        "type": "checkbox",
+        "label": "Enable image"
+      },
+      {
+        "id": "light-geometry-enabled",
+        "key": "light-geometry-enabled",
+        "type": "checkbox",
+        "label": "Show light geometry"
+      },
+      {
+        "id": "background-image-file",
+        "key": "background-image-file",
+        "type": "file",
+        "label": "Local image"
+      },
+      {
+        "id": "background-image-reset",
+        "key": "background-image-reset",
+        "type": "button",
+        "label": "Reset to Botticelli image"
+      },
+      {
+        "id": "image-overlay-enabled",
+        "key": "image-overlay-enabled",
+        "type": "checkbox",
+        "label": "Color overlay"
+      },
+      {
+        "id": "image-overlay-color",
+        "key": "image-overlay-color",
+        "type": "color",
+        "label": "Overlay color"
+      },
+      {
+        "id": "image-overlay-opacity",
+        "key": "image-overlay-opacity",
+        "type": "range",
+        "label": "Overlay opacity 35%",
+        "min": "0",
+        "max": "100"
+      },
+      {
+        "id": "image-overlay-blend",
+        "key": "image-overlay-blend",
+        "type": "select",
+        "label": "Overlay blend mode",
+        "options": [
+          {
+            "value": "normal",
+            "label": "Normal"
+          },
+          {
+            "value": "multiply",
+            "label": "Multiply"
+          },
+          {
+            "value": "screen",
+            "label": "Screen"
+          },
+          {
+            "value": "overlay",
+            "label": "Overlay"
+          },
+          {
+            "value": "soft-light",
+            "label": "Soft light"
+          },
+          {
+            "value": "color",
+            "label": "Color"
+          },
+          {
+            "value": "luminosity",
+            "label": "Luminosity"
+          }
+        ]
+      },
+      {
+        "id": "background-image-fit",
+        "key": "background-image-fit",
+        "type": "select",
+        "label": "Image fit",
+        "options": [
+          {
+            "value": "cover",
+            "label": "Cover"
+          },
+          {
+            "value": "contain",
+            "label": "Contain"
+          },
+          {
+            "value": "stretch",
+            "label": "Stretch"
+          }
+        ]
+      },
+      {
+        "id": "background-image-position-x",
+        "key": "background-image-position-x",
+        "type": "range",
+        "label": "Horizontal position 50%",
+        "min": "0",
+        "max": "100"
+      },
+      {
+        "id": "background-image-position-y",
+        "key": "background-image-position-y",
+        "type": "range",
+        "label": "Vertical position 50%",
+        "min": "0",
+        "max": "100"
+      },
+      {
+        "id": "background-image-scale",
+        "key": "background-image-scale",
+        "type": "range",
+        "label": "Scale 100%",
+        "min": "10",
+        "max": "400"
+      },
+      {
+        "id": "background-image-opacity",
+        "key": "background-image-opacity",
+        "type": "range",
+        "label": "Image opacity 100%",
+        "min": "0",
+        "max": "100"
+      },
+      {
+        "id": "background-image-blend",
+        "key": "background-image-blend",
+        "type": "select",
+        "label": "Image blend mode",
+        "options": [
+          {
+            "value": "normal",
+            "label": "Normal"
+          },
+          {
+            "value": "multiply",
+            "label": "Multiply"
+          },
+          {
+            "value": "screen",
+            "label": "Screen"
+          },
+          {
+            "value": "overlay",
+            "label": "Overlay"
+          },
+          {
+            "value": "soft-light",
+            "label": "Soft light"
+          },
+          {
+            "value": "color",
+            "label": "Color"
+          },
+          {
+            "value": "luminosity",
+            "label": "Luminosity"
+          }
+        ]
+      },
+      {
+        "id": "background-image-blur",
+        "key": "background-image-blur",
+        "type": "range",
+        "label": "Blur 0 px",
+        "min": "0",
+        "max": "40"
+      },
+      {
+        "id": "background-image-brightness",
+        "key": "background-image-brightness",
+        "type": "range",
+        "label": "Brightness 100%",
+        "min": "0",
+        "max": "200"
+      },
+      {
+        "id": "background-image-contrast",
+        "key": "background-image-contrast",
+        "type": "range",
+        "label": "Contrast 100%",
+        "min": "0",
+        "max": "200"
+      },
+      {
+        "id": "background-image-saturation",
+        "key": "background-image-saturation",
+        "type": "range",
+        "label": "Saturation 100%",
+        "min": "0",
+        "max": "200"
+      },
+      {
+        "id": "background-image-hue",
+        "key": "background-image-hue",
+        "type": "range",
+        "label": "Hue shift 0°",
+        "min": "-180",
+        "max": "180"
+      },
+      {
+        "id": "background-image-grayscale",
+        "key": "background-image-grayscale",
+        "type": "range",
+        "label": "Grayscale 0%",
+        "min": "0",
+        "max": "100"
+      },
+      {
+        "id": "background-image-filters-reset",
+        "key": "background-image-filters-reset",
+        "type": "button",
+        "label": "Reset image filters"
+      },
+      {
+        "id": "center-x",
+        "key": "center-x",
+        "type": "range",
+        "label": "Center X 50%",
+        "min": "-50",
+        "max": "150"
+      },
+      {
+        "id": "center-y",
+        "key": "center-y",
+        "type": "range",
+        "label": "Center Y 50%",
+        "min": "-50",
+        "max": "150"
+      },
+      {
+        "id": "ellipse-ratio",
+        "key": "ellipse-ratio",
+        "type": "range",
+        "label": "Ellipse proportion 1.00",
+        "min": "25",
+        "max": "200"
+      },
+      {
+        "id": "ring-count",
+        "key": "ring-count",
+        "type": "range",
+        "label": "Ring count 8",
+        "min": "2",
+        "max": "24"
+      },
+      {
+        "id": "inner-radius",
+        "key": "inner-radius",
+        "type": "range",
+        "label": "Inner radius 0%",
+        "min": "0",
+        "max": "60"
+      },
+      {
+        "id": "ring-thickness",
+        "key": "ring-thickness",
+        "type": "range",
+        "label": "Ring thickness 100%",
+        "min": "25",
+        "max": "180"
+      },
+      {
+        "id": "ring-gap",
+        "key": "ring-gap",
+        "type": "range",
+        "label": "Ring gap 0 px",
+        "min": "0",
+        "max": "40"
+      },
+      {
+        "id": "radial-offset",
+        "key": "radial-offset",
+        "type": "range",
+        "label": "Radial offset 0%",
+        "min": "-100",
+        "max": "100"
+      },
+      {
+        "id": "ring-phase",
+        "key": "ring-phase",
+        "type": "range",
+        "label": "Per-ring phase 0%",
+        "min": "-100",
+        "max": "100"
+      },
+      {
+        "id": "ring-variation",
+        "key": "ring-variation",
+        "type": "select",
+        "label": "Ring variation",
+        "options": [
+          {
+            "value": "flat",
+            "label": "Flat"
+          },
+          {
+            "value": "alternating",
+            "label": "Alternating"
+          },
+          {
+            "value": "wave",
+            "label": "Wave"
+          },
+          {
+            "value": "random",
+            "label": "Seeded random"
+          }
+        ]
+      },
+      {
+        "id": "ring-variation-amount",
+        "key": "ring-variation-amount",
+        "type": "range",
+        "label": "Variation amount 15%",
+        "min": "0",
+        "max": "50"
+      },
+      {
+        "id": "sector-count",
+        "key": "sector-count",
+        "type": "range",
+        "label": "Sector count 12",
+        "min": "2",
+        "max": "36"
+      },
+      {
+        "id": "sector-rotation",
+        "key": "sector-rotation",
+        "type": "range",
+        "label": "Rotation −90°",
+        "min": "-180",
+        "max": "180"
+      },
+      {
+        "id": "inner-opening",
+        "key": "inner-opening",
+        "type": "range",
+        "label": "Inner opening 0%",
+        "min": "0",
+        "max": "60"
+      },
+      {
+        "id": "angular-gap",
+        "key": "angular-gap",
+        "type": "range",
+        "label": "Angular gap 0°",
+        "min": "0",
+        "max": "20"
+      },
+      {
+        "id": "sector-direction",
+        "key": "sector-direction",
+        "type": "select",
+        "label": "Direction",
+        "options": [
+          {
+            "value": "clockwise",
+            "label": "Clockwise"
+          },
+          {
+            "value": "counterclockwise",
+            "label": "Counterclockwise"
+          }
+        ]
+      },
+      {
+        "id": "sector-variation",
+        "key": "sector-variation",
+        "type": "select",
+        "label": "Sector variation",
+        "options": [
+          {
+            "value": "flat",
+            "label": "None"
+          },
+          {
+            "value": "alternating",
+            "label": "Alternating"
+          },
+          {
+            "value": "mirrored",
+            "label": "Mirrored"
+          },
+          {
+            "value": "spiral",
+            "label": "Spiral offset"
+          },
+          {
+            "value": "random",
+            "label": "Seeded random"
+          }
+        ]
+      },
+      {
+        "id": "mirror-symmetry",
+        "key": "mirror-symmetry",
+        "type": "checkbox",
+        "label": "Mirror symmetry"
+      },
+      {
+        "id": "polar-mapping",
+        "key": "polar-mapping",
+        "type": "select",
+        "label": "Palette mapping",
+        "options": [
+          {
+            "value": "combined",
+            "label": "Radial + angular"
+          },
+          {
+            "value": "radial",
+            "label": "Radial"
+          },
+          {
+            "value": "angular",
+            "label": "Angular"
+          }
+        ]
+      },
+      {
+        "id": "polar-assignment",
+        "key": "polar-assignment",
+        "type": "select",
+        "label": "Cell assignment",
+        "options": [
+          {
+            "value": "continuous",
+            "label": "Continuous"
+          },
+          {
+            "value": "alternating",
+            "label": "Alternating rings"
+          },
+          {
+            "value": "checkerboard",
+            "label": "Checkerboard"
+          }
+        ]
+      },
+      {
+        "id": "column-reach",
+        "key": "column-reach",
+        "type": "range",
+        "label": "Average reach 92%",
+        "min": "25",
+        "max": "150"
+      },
+      {
+        "id": "height-pattern",
+        "key": "height-pattern",
+        "type": "select",
+        "label": "Top pattern",
+        "options": [
+          {
+            "value": "flat",
+            "label": "Flat"
+          },
+          {
+            "value": "alternating",
+            "label": "Alternating"
+          },
+          {
+            "value": "wave",
+            "label": "Wave"
+          },
+          {
+            "value": "ascending",
+            "label": "Diagonal rising"
+          },
+          {
+            "value": "descending",
+            "label": "Diagonal falling"
+          },
+          {
+            "value": "arch",
+            "label": "Arch"
+          },
+          {
+            "value": "valley",
+            "label": "Valley"
+          },
+          {
+            "value": "random",
+            "label": "Seeded random"
+          }
+        ]
+      },
+      {
+        "id": "height-variation",
+        "key": "height-variation",
+        "type": "range",
+        "label": "Height variation 24%",
+        "min": "0",
+        "max": "60"
+      },
+      {
+        "id": "column-shape",
+        "key": "column-shape",
+        "type": "select",
+        "label": "Column shape",
+        "options": [
+          {
+            "value": "straight",
+            "label": "Straight"
+          },
+          {
+            "value": "tapered",
+            "label": "Tapered"
+          },
+          {
+            "value": "slanted",
+            "label": "Slanted tops"
+          },
+          {
+            "value": "rounded",
+            "label": "Rounded tops"
+          }
+        ]
+      },
+      {
+        "id": "column-gap",
+        "key": "column-gap",
+        "type": "range",
+        "label": "Column gap 0%",
+        "min": "0",
+        "max": "40"
+      },
+      {
+        "id": "palette-source",
+        "key": "palette-source",
+        "type": "select",
+        "label": "Palette source",
+        "options": [
+          {
+            "value": "manual",
+            "label": "Manual colors"
+          },
+          {
+            "value": "generated",
+            "label": "Generated palette"
+          }
+        ]
+      },
+      {
+        "id": "palette-count",
+        "key": "palette-count",
+        "type": "range",
+        "label": "Colors per palette 4",
+        "min": "2",
+        "max": "8"
+      },
+      {
+        "id": null,
+        "key": null,
+        "type": "color",
+        "label": "1"
+      },
+      {
+        "id": null,
+        "key": null,
+        "type": "color",
+        "label": "2"
+      },
+      {
+        "id": null,
+        "key": null,
+        "type": "color",
+        "label": "3"
+      },
+      {
+        "id": null,
+        "key": null,
+        "type": "color",
+        "label": "4"
+      },
+      {
+        "id": null,
+        "key": null,
+        "type": "color",
+        "label": "5"
+      },
+      {
+        "id": null,
+        "key": null,
+        "type": "color",
+        "label": "6"
+      },
+      {
+        "id": null,
+        "key": null,
+        "type": "color",
+        "label": "7"
+      },
+      {
+        "id": null,
+        "key": null,
+        "type": "color",
+        "label": "8"
+      },
+      {
+        "id": "palette-shift-left",
+        "key": "palette-shift-left",
+        "type": "button",
+        "label": "Shift left"
+      },
+      {
+        "id": "palette-shift-right",
+        "key": "palette-shift-right",
+        "type": "button",
+        "label": "Shift right"
+      },
+      {
+        "id": "palette-reverse",
+        "key": "palette-reverse",
+        "type": "button",
+        "label": "Reverse"
+      },
+      {
+        "id": "palette-type",
+        "key": "palette-type",
+        "type": "select",
+        "label": "Palette type",
+        "options": [
+          {
+            "value": "random",
+            "label": "Random"
+          },
+          {
+            "value": "monochrome",
+            "label": "Near monochrome"
+          },
+          {
+            "value": "analogous",
+            "label": "Analogous"
+          },
+          {
+            "value": "complementary",
+            "label": "Complementary"
+          },
+          {
+            "value": "split",
+            "label": "Split complementary"
+          },
+          {
+            "value": "triadic",
+            "label": "Triadic"
+          },
+          {
+            "value": "ocean",
+            "label": "Ocean"
+          },
+          {
+            "value": "sunset",
+            "label": "Sunset"
+          },
+          {
+            "value": "candy",
+            "label": "Candy"
+          },
+          {
+            "value": "forest",
+            "label": "Forest"
+          },
+          {
+            "value": "neon",
+            "label": "Neon"
+          },
+          {
+            "value": "grayscale",
+            "label": "Grayscale"
+          }
+        ]
+      },
+      {
+        "id": "base-hue",
+        "key": "base-hue",
+        "type": "range",
+        "label": "Base hue 220°",
+        "min": "0",
+        "max": "359"
+      },
+      {
+        "id": "palette-variability",
+        "key": "palette-variability",
+        "type": "range",
+        "label": "Color variability 40%",
+        "min": "0",
+        "max": "100"
+      },
+      {
+        "id": "palette-seed",
+        "key": "palette-seed",
+        "type": "number",
+        "label": "Palette seed",
+        "min": "0",
+        "max": "999999999"
+      },
+      {
+        "id": "shuffle-generated-palette",
+        "key": "shuffle-generated-palette",
+        "type": "button",
+        "label": "Shuffle variation"
+      },
+      {
+        "id": "palette-interpolation",
+        "key": "palette-interpolation",
+        "type": "select",
+        "label": "Transition",
+        "options": [
+          {
+            "value": "hard",
+            "label": "Hard bands"
+          },
+          {
+            "value": "linear",
+            "label": "Linear"
+          },
+          {
+            "value": "smooth",
+            "label": "Soft luminous"
+          }
+        ]
+      },
+      {
+        "id": "gradient-treatment",
+        "key": "gradient-treatment",
+        "type": "select",
+        "label": "Color treatment",
+        "options": [
+          {
+            "value": "continuous",
+            "label": "Continuous gradient"
+          },
+          {
+            "value": "solid",
+            "label": "Solid per shape"
+          }
+        ]
+      },
+      {
+        "id": "gradient-flow",
+        "key": "gradient-flow",
+        "type": "select",
+        "label": "Gradient flow",
+        "options": [
+          {
+            "value": "along",
+            "label": "Along shape"
+          },
+          {
+            "value": "across",
+            "label": "Across shapes"
+          },
+          {
+            "value": "radial",
+            "label": "Radial"
+          },
+          {
+            "value": "angular",
+            "label": "Angular"
+          },
+          {
+            "value": "horizontal",
+            "label": "Horizontal"
+          },
+          {
+            "value": "vertical",
+            "label": "Vertical"
+          },
+          {
+            "value": "diagonal",
+            "label": "Diagonal"
+          },
+          {
+            "value": "radial-angular",
+            "label": "Radial + angular"
+          }
+        ]
+      },
+      {
+        "id": "gradient-continuity",
+        "key": "gradient-continuity",
+        "type": "select",
+        "label": "Gradient continuity",
+        "options": [
+          {
+            "value": "reset",
+            "label": "Reset per shape"
+          },
+          {
+            "value": "continuous",
+            "label": "Continuous field"
+          },
+          {
+            "value": "phase",
+            "label": "Phase shifted"
+          }
+        ]
+      },
+      {
+        "id": "angular-wrap",
+        "key": "angular-wrap",
+        "type": "select",
+        "label": "Angular seam",
+        "options": [
+          {
+            "value": "seamless",
+            "label": "Seamless loop"
+          },
+          {
+            "value": "mirror",
+            "label": "Mirror loop"
+          },
+          {
+            "value": "repeat",
+            "label": "Repeat twice"
+          }
+        ]
+      },
+      {
+        "id": "mapping-space",
+        "key": "mapping-space",
+        "type": "select",
+        "label": "Mapping space",
+        "options": [
+          {
+            "value": "canvas",
+            "label": "Canvas-wide"
+          },
+          {
+            "value": "shape",
+            "label": "Per geometry cell"
+          }
+        ]
+      },
+      {
+        "id": "palette-direction",
+        "key": "palette-direction",
+        "type": "select",
+        "label": "Direction",
+        "options": [
+          {
+            "value": "down",
+            "label": "Top to bottom"
+          },
+          {
+            "value": "up",
+            "label": "Bottom to top"
+          }
+        ]
+      },
+      {
+        "id": "palette-offset",
+        "key": "palette-offset",
+        "type": "range",
+        "label": "Palette offset 0%",
+        "min": "-200",
+        "max": "200"
+      },
+      {
+        "id": "palette-span",
+        "key": "palette-span",
+        "type": "range",
+        "label": "Palette span 100%",
+        "min": "25",
+        "max": "300"
+      },
+      {
+        "id": "palette-overflow",
+        "key": "palette-overflow",
+        "type": "select",
+        "label": "Outside palette",
+        "options": [
+          {
+            "value": "mirror",
+            "label": "Mirror"
+          },
+          {
+            "value": "repeat",
+            "label": "Repeat"
+          },
+          {
+            "value": "extend",
+            "label": "Extend edge color"
+          }
+        ]
+      },
+      {
+        "id": "background-color",
+        "key": "background-color",
+        "type": "color",
+        "label": "Background"
+      },
+      {
+        "id": "column-softness",
+        "key": "column-softness",
+        "type": "range",
+        "label": "Top-fade softness 90 px",
+        "min": "0",
+        "max": "250"
+      },
+      {
+        "id": "column-opacity",
+        "key": "column-opacity",
+        "type": "range",
+        "label": "Column opacity 0.94",
+        "min": "0.2",
+        "max": "1",
+        "step": "0.01"
+      },
+      {
+        "id": "column-glow",
+        "key": "column-glow",
+        "type": "range",
+        "label": "Glow 18 px",
+        "min": "0",
+        "max": "60"
+      },
+      {
+        "id": "column-blend",
+        "key": "column-blend",
+        "type": "select",
+        "label": "Blend mode",
+        "options": [
+          {
+            "value": "source-over",
+            "label": "Normal"
+          },
+          {
+            "value": "screen",
+            "label": "Screen"
+          },
+          {
+            "value": "lighter",
+            "label": "Add"
+          },
+          {
+            "value": "multiply",
+            "label": "Multiply"
+          }
+        ]
+      },
+      {
+        "id": "phase-step",
+        "key": "phase-step",
+        "type": "range",
+        "label": "Phase per column 12%",
+        "min": "-100",
+        "max": "100"
+      },
+      {
+        "id": "phase-jitter",
+        "key": "phase-jitter",
+        "type": "range",
+        "label": "Phase randomness 4%",
+        "min": "0",
+        "max": "100"
+      },
+      {
+        "id": "brightness-variation",
+        "key": "brightness-variation",
+        "type": "range",
+        "label": "Brightness variation 4%",
+        "min": "0",
+        "max": "30"
+      },
+      {
+        "id": "opacity-variation",
+        "key": "opacity-variation",
+        "type": "range",
+        "label": "Opacity variation 5%",
+        "min": "0",
+        "max": "50"
+      },
+      {
+        "id": "blur",
+        "key": "blur",
+        "type": "range",
+        "label": "Blend softness 28",
+        "min": "0",
+        "max": "70"
+      },
+      {
+        "id": "bloom",
+        "key": "bloom",
+        "type": "range",
+        "label": "Color-field strength 0.86",
+        "min": "0",
+        "max": "1.5",
+        "step": "0.01"
+      },
+      {
+        "id": "fade",
+        "key": "fade",
+        "type": "range",
+        "label": "Pale-top depth 34%",
+        "min": "-40",
+        "max": "70"
+      },
+      {
+        "id": "transition",
+        "key": "transition",
+        "type": "range",
+        "label": "Color transition 54%",
+        "min": "25",
+        "max": "80"
+      },
+      {
+        "id": "staggered-reach",
+        "key": "staggered-reach",
+        "type": "range",
+        "label": "Average upper reach 78%",
+        "min": "25",
+        "max": "160"
+      },
+      {
+        "id": "staggered-height-variation",
+        "key": "staggered-height-variation",
+        "type": "range",
+        "label": "Height variation 72%",
+        "min": "0",
+        "max": "100"
+      },
+      {
+        "id": "staggered-softness",
+        "key": "staggered-softness",
+        "type": "range",
+        "label": "Top-fade softness 110 px",
+        "min": "0",
+        "max": "220"
+      },
+      {
+        "id": "staggered-opacity",
+        "key": "staggered-opacity",
+        "type": "range",
+        "label": "Column opacity 0.90",
+        "min": "0.2",
+        "max": "1",
+        "step": "0.01"
+      },
+      {
+        "id": "staggered-sequence",
+        "key": "staggered-sequence",
+        "type": "select",
+        "label": "Height sequence",
+        "options": [
+          {
+            "value": "random",
+            "label": "Random"
+          },
+          {
+            "value": "alternating",
+            "label": "Alternating"
+          },
+          {
+            "value": "wave",
+            "label": "Wave"
+          },
+          {
+            "value": "ascending",
+            "label": "Ascending"
+          }
+        ]
+      },
+      {
+        "id": "hue",
+        "key": "hue",
+        "type": "range",
+        "label": "Hue shift 0°",
+        "min": "-180",
+        "max": "180"
+      },
+      {
+        "id": "spread",
+        "key": "spread",
+        "type": "range",
+        "label": "Hue spread 36°",
+        "min": "0",
+        "max": "140"
+      },
+      {
+        "id": "warmth",
+        "key": "warmth",
+        "type": "range",
+        "label": "Warm lower field 0.84",
+        "min": "0",
+        "max": "1",
+        "step": "0.01"
+      },
+      {
+        "id": "variation",
+        "key": "variation",
+        "type": "range",
+        "label": "Per-shape variation 0.55",
+        "min": "0",
+        "max": "1",
+        "step": "0.01"
+      },
+      {
+        "id": "download-settings",
+        "key": "download-settings",
+        "type": "button",
+        "label": "Download current settings"
+      },
+      {
+        "id": "load-settings-file",
+        "key": "load-settings-file",
+        "type": "file",
+        "label": "Load settings"
+      },
+      {
+        "id": "export-scale",
+        "key": "export-scale",
+        "type": "select",
+        "label": "PNG resolution",
+        "options": [
+          {
+            "value": "1",
+            "label": "1× · 1200 × 750"
+          },
+          {
+            "value": "2",
+            "label": "2× · 2400 × 1500"
+          },
+          {
+            "value": "4",
+            "label": "4× · 4800 × 3000"
+          }
+        ]
+      },
+      {
+        "id": "export-png",
+        "key": "export-png",
+        "type": "button",
+        "label": "Export poster as PNG"
+      },
+      {
+        "id": "preset",
+        "key": "preset",
+        "type": "select",
+        "label": "Preset",
+        "options": [
+          {
+            "value": "saturated",
+            "label": "Saturated spectrum"
+          },
+          {
+            "value": "referencePale",
+            "label": "Reference pale"
+          },
+          {
+            "value": "coolMirror",
+            "label": "Cool mirror"
+          },
+          {
+            "value": "graphicBands",
+            "label": "Graphic bands"
+          },
+          {
+            "value": "nestedStudy",
+            "label": "Nested color study"
+          },
+          {
+            "value": "triangleLight",
+            "label": "Luminous triangle"
+          },
+          {
+            "value": "luminousRings",
+            "label": "Luminous rings"
+          },
+          {
+            "value": "graphicRings",
+            "label": "Graphic rings"
+          },
+          {
+            "value": "radialRays",
+            "label": "Radial rays"
+          },
+          {
+            "value": "mirroredSectors",
+            "label": "Mirrored sectors"
+          },
+          {
+            "value": "polarCheckerboard",
+            "label": "Polar checkerboard"
+          },
+          {
+            "value": "reference",
+            "label": "Reference-like"
+          },
+          {
+            "value": "cool",
+            "label": "Cool spectrum"
+          },
+          {
+            "value": "dusk",
+            "label": "Dusk spectrum"
+          },
+          {
+            "value": "soft",
+            "label": "Soft pastel"
+          }
+        ]
+      },
+      {
+        "id": "seed",
+        "key": "seed",
+        "type": "number",
+        "label": "Variation seed",
+        "min": "0",
+        "max": "999999999"
+      },
+      {
+        "id": "randomize",
+        "key": "randomize",
+        "type": "button",
+        "label": "New variation seed"
+      }
+    ]
+  },
+  "moving": {
+    "source": "moving_shapes/moving_shapes.html",
+    "controls": [
+      {
+        "id": "sidebar-toggle",
+        "key": "sidebar-toggle",
+        "type": "button",
+        "label": "Moving shapesA composition in motion −"
+      },
+      {
+        "id": "shape-count",
+        "key": "shape-count",
+        "type": "range",
+        "label": "Number of shapes",
+        "min": "2",
+        "max": "60",
+        "step": "1"
+      },
+      {
+        "id": "palette-type",
+        "key": "palette-type",
+        "type": "select",
+        "label": "Palette type",
+        "options": [
+          {
+            "value": "random",
+            "label": "Random"
+          },
+          {
+            "value": "monochrome",
+            "label": "Near monochrome"
+          },
+          {
+            "value": "analogous",
+            "label": "Analogous"
+          },
+          {
+            "value": "complementary",
+            "label": "Complementary"
+          },
+          {
+            "value": "split",
+            "label": "Split complementary"
+          },
+          {
+            "value": "triadic",
+            "label": "Triadic"
+          },
+          {
+            "value": "ocean",
+            "label": "Ocean"
+          },
+          {
+            "value": "sunset",
+            "label": "Sunset"
+          },
+          {
+            "value": "candy",
+            "label": "Candy"
+          },
+          {
+            "value": "forest",
+            "label": "Forest"
+          },
+          {
+            "value": "neon",
+            "label": "Neon"
+          },
+          {
+            "value": "grayscale",
+            "label": "Grayscale"
+          }
+        ]
+      },
+      {
+        "id": "base-hue",
+        "key": "base-hue",
+        "type": "range",
+        "label": "Base hue",
+        "min": "0",
+        "max": "359"
+      },
+      {
+        "id": "color-count",
+        "key": "color-count",
+        "type": "range",
+        "label": "Color count",
+        "min": "2",
+        "max": "16"
+      },
+      {
+        "id": "color-variability",
+        "key": "color-variability",
+        "type": "range",
+        "label": "Color variability",
+        "min": "0",
+        "max": "100"
+      },
+      {
+        "id": "color-arrangement",
+        "key": "color-arrangement",
+        "type": "select",
+        "label": "Arrangement",
+        "options": [
+          {
+            "value": "random",
+            "label": "Random cells"
+          },
+          {
+            "value": "rings",
+            "label": "By ring"
+          },
+          {
+            "value": "sectors",
+            "label": "By sector"
+          },
+          {
+            "value": "checker",
+            "label": "Checker"
+          },
+          {
+            "value": "radial",
+            "label": "Radial gradient"
+          }
+        ]
+      },
+      {
+        "id": "shuffle-palette",
+        "key": "shuffle-palette",
+        "type": "button",
+        "label": "Shuffle palette"
+      },
+      {
+        "id": "motion-speed",
+        "key": "motion-speed",
+        "type": "range",
+        "label": "Motion speed",
+        "min": "0.1",
+        "max": "3",
+        "step": "0.1"
+      },
+      {
+        "id": "breathing",
+        "key": "breathing",
+        "type": "range",
+        "label": "Size breathing",
+        "min": "0",
+        "max": "100",
+        "step": "1"
+      },
+      {
+        "id": "pause",
+        "key": "pause",
+        "type": "button",
+        "label": "Pause"
+      },
+      {
+        "id": "regenerate",
+        "key": "regenerate",
+        "type": "button",
+        "label": "Regenerate"
+      }
+    ]
+  }
+}

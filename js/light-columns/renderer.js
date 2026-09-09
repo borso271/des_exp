@@ -93,7 +93,9 @@
       this.lastSolidFillCount = 0;
     }
 
-    resize(pixelRatio) {
+    resize(pixelRatio, width = this.width, height = this.height) {
+      this.width = width;
+      this.height = height;
       this.pixelRatio = pixelRatio;
       [this.canvas, this.layer, this.shapeLayer].forEach((surface) => {
         surface.width = Math.round(this.width * pixelRatio);

@@ -225,6 +225,7 @@
       this.objectUrl = null;
       this.loadToken = 0;
       this.usingDefault = true;
+      this.portableSource = null;
     }
 
     snapshot() {
@@ -234,7 +235,8 @@
         source: this.source,
         image: this.status === "ready" ? this.image : null,
         error: this.error,
-        usingDefault: this.usingDefault
+        usingDefault: this.usingDefault,
+        portableSource: this.portableSource
       };
     }
 
@@ -256,6 +258,7 @@
       this.releaseObjectUrl(objectUrl);
       this.objectUrl = objectUrl;
       this.source = source;
+      this.portableSource = source.startsWith('data:image/') ? source : null;
       this.filename = filename || source || "No image";
       this.usingDefault = Boolean(options.usingDefault);
       this.status = "loading";
@@ -335,9 +338,23 @@
         return Promise.resolve(false);
       }
 
-      return this.loadSource(objectUrl, file.name || "Uploaded image", {
+      const loaded=this.loadSource(objectUrl, file.name || "Uploaded image", {
         objectUrl,
         usingDefault: false
+      });
+      const token=this.loadToken;
+      if(typeof file.arrayBuffer!=='function')return loaded;
+      // Keep original image bytes for complete configuration downloads (including
+      // vector images), instead of flattening an uploaded asset into a screenshot.
+      const portable=file.arrayBuffer().then(buffer=>{
+        const bytes=new Uint8Array(buffer),chunks=[];
+        for(let offset=0;offset<bytes.length;offset+=16384)chunks.push(String.fromCharCode(...bytes.subarray(offset,offset+16384)));
+        const mime=file.type?.startsWith('image/')?file.type:'image/png';
+        return `data:${mime};base64,${window.btoa(chunks.join(''))}`;
+      }).catch(()=>null);
+      return Promise.all([loaded,portable]).then(([success,source])=>{
+        if(success&&token===this.loadToken){this.portableSource=source;this.notify();}
+        return success&&token===this.loadToken;
       });
     }
 
@@ -345,6 +362,7 @@
       this.loadToken += 1;
       this.releaseObjectUrl();
       this.source = "";
+      this.portableSource = null;
       this.filename = filename;
       this.usingDefault = false;
       this.image = null;
@@ -353,10 +371,27 @@
       this.notify();
     }
 
+    // Commit an already decoded image only after the entire configuration has
+    // passed validation. Used by the lab's complete host configuration API.
+    adoptPrepared(snapshot) {
+      this.loadToken += 1;
+      this.releaseObjectUrl();
+      this.source=snapshot.source;
+      this.portableSource=snapshot.portableSource;
+      this.filename=snapshot.filename;
+      this.usingDefault=snapshot.usingDefault;
+      this.image=snapshot.image;
+      this.status=snapshot.status;
+      this.error=null;
+      this.notify();
+    }
+
     destroy() {
       this.loadToken += 1;
       this.releaseObjectUrl();
       this.image = null;
+      this.source = "";
+      this.portableSource = null;
       this.status = "idle";
       this.error = null;
     }

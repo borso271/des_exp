@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="./showcase/styles/page.css">
 <link rel="stylesheet" href="./showcase/styles/footer.css">
 <link rel="stylesheet" href="./showcase/styles/menu.css">
-<link rel="stylesheet" href="./showcase/styles/showcase.css">
+<link rel="stylesheet" href="./showcase/styles/showcase.css?v=native-1">
 </head>
 <body>
 <header class="header-header" data-site-header="true">
@@ -93,14 +93,11 @@
 </header>
 <main id="main-content" class="page-homeMain" data-page="home">
 <figure class="page-homeHero">
-<div class="page-homeHeroVisual" id="hero-art" data-render-state="original" data-preset="original" role="img" aria-label="BE ART. Retrato artístico de una figura con vestuario escultórico.">
+<div class="page-homeHeroVisual" id="hero-art" data-render-state="original" data-preset="original" role="region" aria-label="Banner artístico">
 <picture class="page-homeHeroPicture">
 <source media="(max-width: 47.9375rem)" srcset="./showcase/assets/home-iris-hires-mobile-v4.webp" sizes="calc(100vw - 32px)" width="1750" height="2000">
 <img alt="Retrato artístico de una figura con vestuario escultórico" loading="eager" fetchpriority="high" width="2400" height="1156" decoding="async" style="color:transparent" sizes="(max-width: 767px) calc(100vw - 32px), min(calc(100vw - clamp(32px, 6.4vw, 96px)), 1440px)" srcset="./showcase/assets/home-iris-hires-v8.webp" src="./showcase/assets/home-iris-hires-v8.webp" class="page-homeHeroImage">
 </picture>
-<div class="art-fallback" id="art-fallback" aria-hidden="true"></div>
-<div class="art-canvas" id="art-canvas" aria-hidden="true"></div>
-<div class="art-shade" aria-hidden="true"></div>
 <div class="page-homeHeroBrand">
 <span class="page-homeHeroBrandLogo" role="img" aria-label="BE ART">
 </span>
@@ -205,26 +202,16 @@
       <option value="moving">Composición viva</option>
     </select>
   </div>
-  <button id="edit-banner" type="button" aria-expanded="false" aria-controls="banner-editor">Editar banner</button>
+  <button id="edit-banner" type="button" aria-expanded="false" aria-controls="banner-editor">Mostrar parámetros</button>
   <button id="pause-art" type="button" hidden>Pausar</button>
 </aside>
 <aside id="banner-editor" class="banner-editor" aria-label="Editor del banner" hidden>
   <div class="editor-heading"><div><p class="editor-eyebrow">ESTUDIO / BE ART</p><h2 id="editor-current">Editor del banner</h2></div><button id="close-editor" type="button" aria-label="Cerrar editor">×</button></div>
-  <div class="editor-tabs" role="tablist" aria-label="Controles del banner">
-    <button type="button" role="tab" id="tab-art" data-editor-tab="art" aria-controls="editor-art" aria-selected="true">Arte</button>
-    <button type="button" role="tab" id="tab-text" data-editor-tab="text" aria-controls="editor-text" aria-selected="false" tabindex="-1">Texto</button>
-    <button type="button" role="tab" id="tab-parameters" data-editor-tab="parameters" aria-controls="editor-parameters" aria-selected="false" tabindex="-1">Parámetros</button>
-  </div>
-  <div class="editor-scroll">
-    <div id="editor-art" role="tabpanel" aria-labelledby="tab-art"></div>
-    <div id="editor-text" role="tabpanel" aria-labelledby="tab-text" hidden></div>
-    <div id="editor-parameters" role="tabpanel" aria-labelledby="tab-parameters" hidden></div>
-  </div>
   <div class="editor-actions"><button id="download-banner" type="button">Descargar JSON</button><button id="load-banner" type="button">Cargar JSON</button><button id="reset-banner" type="button">Restaurar dirección</button></div>
   <input id="import-banner" type="file" accept=".json,application/json" hidden>
-  <p id="editor-message" class="editor-message" role="status" aria-live="polite">Edita el arte o el texto directamente en el banner.</p>
+  <p id="editor-message" class="editor-message" role="status" aria-live="polite">La URL comparte la dirección inicial. Descarga JSON para guardar todos los ajustes.</p>
 </aside>
 <p id="art-status" class="visually-hidden" role="status" aria-live="polite"></p>
-<script type="module" src="./showcase/app.js"></script>
+<script type="module" src="./showcase/app.js?v=native-1"></script>
 </body>
 </html>

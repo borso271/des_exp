@@ -116,6 +116,23 @@
     return result;
   }
 
+  // Full-document imports use the native controls as their schema. Validate on
+  // detached elements so a rejected import cannot change the current poster.
+  function validateCompleteControls(controls, values, limits = {}) {
+    const expected=serializeControls(controls);
+    if (!isRecord(values) || Object.keys(values).length!==Object.keys(expected).length ||
+        Object.keys(expected).some(key=>!Object.hasOwn(values,key))) throw new Error('Expected complete native controls.');
+    for (const [key,value] of Object.entries(values)) {
+      const control=controls[key].cloneNode(true);
+      Object.assign(control,limits[key]||{});
+      const normalized=normalizeControlValue(control,value);
+      if (normalized!==value) throw new Error(`Invalid native setting: ${key}.`);
+      if(control.type==='checkbox')control.checked=value;else control.value=String(value);
+      if(serializeControls({[key]:control})[key]!==value) throw new Error(`Unsupported native value: ${key}.`);
+    }
+    return {...values};
+  }
+
   function createDocument(settings = {}) {
     const image = isRecord(settings.image) ? settings.image : {};
     const paletteCounts = isRecord(settings.paletteCounts)
@@ -260,6 +277,7 @@
     parse,
     readFile,
     serializeControls,
+    validateCompleteControls,
     version
   };
 })();

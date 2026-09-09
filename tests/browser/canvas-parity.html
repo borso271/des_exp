@@ -1,0 +1,42 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Native Canvas parity</title><style>body{margin:8px;font:13px sans-serif}.lab-frame,iframe{border:0;width:880px;height:424px}#embedded{width:880px;height:424px}pre{white-space:pre-wrap}</style></head><body><pre id="result">Checking native Canvas parity…</pre><div id="embedded"></div><iframe id="standalone" src="../../canvas_light_columns_demo.html?parity=native3"></iframe><script type="module">
+import {createLabHost} from '../../showcase/lab-host.js';
+const result=document.getElementById('result'),standalone=document.getElementById('standalone');
+const host=createLabHost({container:document.getElementById('embedded'),onError:e=>{result.dataset.status='failed';result.textContent=e;}});
+host.layout({editing:false,art:{x:0,y:0,width:880,height:424}});host.setHost({paused:true});
+const wait=async fn=>{const start=performance.now();while(!fn()){if(performance.now()-start>20000)throw Error('Native lab did not load');await new Promise(r=>setTimeout(r,30));}};
+const equal=(a,b,label)=>{if(JSON.stringify(a)!==JSON.stringify(b))throw Error(label);};
+const checks=[];
+try{
+ await host.load({lab:'canvas',url:'../../canvas_light_columns_demo.html?embed=1&parity=native3'});
+ await wait(()=>standalone.contentWindow.canvasLight?.validateState);
+ const a=host.frame.contentWindow,b=standalone.contentWindow;
+ await a.document.fonts.ready;await b.document.fonts.ready;
+ const nativePoster=b.document.querySelector('.poster');Object.assign(nativePoster.style,{position:'fixed',inset:'0',width:'880px',height:'424px',maxHeight:'none',aspectRatio:'auto'});b.canvasLight.resize();
+ const inventory=w=>[...w.document.querySelector('.controls').querySelectorAll('input,select,textarea,button')].map(n=>({id:n.id,type:n.type,min:n.min,max:n.max,step:n.step,options:n.options?[...n.options].map(o=>o.value):null}));
+ equal(inventory(a),inventory(b),'Native Canvas controls differ');
+ const original=a.canvasLight.getState();
+ const cases=[...['columns','rings','sectors','polar','moving','nested','triangle'].map(geometryFamily=>({geometryFamily})),
+ {geometryFamily:'nested',paletteSource:'generated',paletteCount:16,paletteType:'monochrome',baseHue:275,paletteVariability:85},
+ {geometryFamily:'polar',paletteSource:'generated',paletteCount:12,paletteType:'split',baseHue:40},
+ {aesthetic:'blended',geometryFamily:'columns'}, {aesthetic:'staggered',geometryFamily:'moving'},
+ {aesthetic:'split',splitAngle:73,splitOffset:24}, {aesthetic:'triangle',triangleAngle:46}];
+ for(const patch of cases){
+   const settings=JSON.parse(JSON.stringify(original));Object.assign(settings.settings.controls,patch,{movingAnimated:false});
+   if(patch.paletteCount)settings.settings.palette.counts[patch.paletteSource]=patch.paletteCount;
+   await a.canvasLight.setState(settings);await b.canvasLight.setState(settings);
+   for(const time of patch.geometryFamily==='moving'?[0,2.5]:[0]){
+    a.canvasLight.renderAt(time);b.canvasLight.renderAt(time);
+    const ca=a.document.querySelector('canvas'),cb=b.document.querySelector('canvas');
+    equal([ca.width,ca.height],[cb.width,cb.height],'Canvas sizes differ');
+    if(Math.abs(ca.width/ca.height-880/424)>.01)throw Error('Canvas does not match banner ratio');
+    equal(ca.toDataURL(),cb.toDataURL(),'Native pixels differ for '+JSON.stringify(patch));
+    checks.push({...patch,time,identical:true});
+   }
+   const saved=await host.snapshot();await host.restore(JSON.parse(JSON.stringify(saved)));equal((await host.snapshot()),saved,'Native round-trip lost settings');
+ }
+ const before=await host.snapshot(),invalid=JSON.parse(JSON.stringify(before));invalid.native.settings.controls.geometryFamily='unsupported';
+ let rejected=false;try{await host.restore(invalid);}catch{rejected=true;}if(!rejected)throw Error('Invalid settings accepted');
+ equal(await host.snapshot(),before,'Invalid import mutated settings');
+ result.dataset.status='passed';result.textContent=JSON.stringify({controls:inventory(a).length,checks,json:'exact',invalid:'atomic'},null,2);
+}catch(error){result.dataset.status='failed';result.textContent=error.stack;}
+</script></body></html>

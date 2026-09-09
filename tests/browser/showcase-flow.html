@@ -1,0 +1,48 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Native showcase flow verification</title><style>body{margin:8px;font:12px system-ui}iframe#page{border:0;width:1280px;height:900px;transform:scale(.55);transform-origin:0 0}pre{white-space:pre-wrap}</style></head><body><pre id="result">Checking live landing-page flow…</pre><iframe id="page" src="../../?art=ellipses"></iframe><script type="module">
+const page=document.getElementById('page'),result=document.getElementById('result'),checks=[];
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
+async function wait(fn,label){const start=performance.now();while(!fn()){if(performance.now()-start>30000)throw Error('Timed out: '+label);await delay(30);}}
+const equal=(a,b,label)=>{if(JSON.stringify(a)!==JSON.stringify(b))throw Error(label);};
+try{
+await wait(()=>page.contentDocument?.querySelector('.native-banner-host[data-pending=false]'),'initial lab');
+const w=page.contentWindow,d=w.document;
+const child=()=>d.querySelector('.native-banner-host[data-pending=false] iframe').contentWindow;
+const choose=async id=>{const select=d.getElementById('art-direction');select.value=id;select.dispatchEvent(new Event('change',{bubbles:true}));await wait(()=>!select.disabled&&d.getElementById('hero-art').dataset.preset===id,'direction '+id);};
+const input=(id,value,type='input')=>{const node=child().document.getElementById(id)||child().document.querySelector(`[data-k="${id.replace(/^p-/, '')}"]`);if(!node)throw Error('Missing '+id);if(node.type==='checkbox')node.checked=value;else node.value=value;node.dispatchEvent(new Event(type,{bubbles:true}));};
+const textState=()=>JSON.parse(JSON.stringify(child().PosterTextHost.getState()));
+let downloaded;
+w.URL.createObjectURL=blob=>{downloaded=blob;return 'blob:qa-download';};w.URL.revokeObjectURL=()=>{};w.HTMLAnchorElement.prototype.click=function(){};
+const download=async()=>{downloaded=null;d.getElementById('download-banner').click();await wait(()=>downloaded,'JSON download');return JSON.parse(await downloaded.text());};
+const load=async value=>{const target=d.getElementById('import-banner'),source=JSON.stringify(value);Object.defineProperty(target,'files',{configurable:true,value:[{size:source.length,text:async()=>source}]});target.dispatchEvent(new Event('change',{bubbles:true}));await delay(100);await wait(()=>!d.getElementById('art-direction').disabled,'JSON import');};
+d.getElementById('edit-banner').click();await delay(100);
+for(const id of ['ellipses','ellipses-gold','squares','triangle','moving','original']){
+ await choose(id);
+ if(d.querySelectorAll('.native-banner-host iframe').length!==1)throw Error('Inactive lab iframe remained');
+ input('event-copy-variant','custom','change');input('custom-copy','Saved '+id+'\nART');input('event-text-effect','difference','change');input('text-font-family','Poppins','change');input('text-font-weight','200','change');
+ if(id==='ellipses')input('p-progression','return','change');
+ if(id==='squares'){input('geometry-family','polar','change');input('palette-source','generated','change');input('palette-type','split','change');input('palette-count','12');}
+ if(id==='triangle'){input('p-paletteStyle','sunset','change');input('p-baseHue','30');input('p-vertexTop','2');}
+ if(id==='moving'){input('palette-type','monochrome','change');input('color-arrangement','radial','change');if(!d.getElementById('pause-art').hidden)d.getElementById('pause-art').click();}
+ const saved=await download();
+ d.getElementById('edit-banner').click();await delay(60);d.getElementById('edit-banner').click();await delay(60);
+ equal(textState(),saved.state.text,id+' lost text while hiding controls');
+ await load(saved);const restored=await download();equal(restored,saved,id+' JSON round-trip lost state');
+ checks.push({direction:id,json:'exact',toggle:'preserved',frames:1});
+}
+await choose('ellipses');if(child().ellipseLight.getParameters().progression!=='return')throw Error('Ellipse progression lost after switching');if(textState().customCopy!=='Saved ellipses\nART')throw Error('Per-direction text lost');
+const before=await download(),wrong=JSON.parse(JSON.stringify(before));wrong.direction='triangle';wrong.lab='triangle';wrong.state.native={bad:true};
+await load(wrong);if(d.getElementById('hero-art').dataset.preset!=='ellipses')throw Error('Invalid cross-lab import changed direction');equal(await download(),before,'Invalid cross-lab import changed composition');
+checks.push({switching:'complete settings retained',invalidCrossLabImport:'atomic'});
+await choose('moving');const initial=child().movingShapes.getState().time;await delay(180);equal(child().movingShapes.getState().time,initial,'Paused moving frame advanced');
+d.getElementById('pause-art').click();await delay(180);if(child().movingShapes.getState().time<=initial)throw Error('Moving did not resume');d.getElementById('pause-art').click();checks.push({pause:'held frame',resume:'advanced'});
+await choose('ellipses');d.getElementById('reset-banner').click();await wait(()=>!d.getElementById('art-direction').disabled,'reset');if(child().ellipseLight.getParameters().progression==='return'||textState().eventCopyVariant!=='logo')throw Error('Reset did not restore curated art and text');
+for(const [width,height] of [[390,844],[1280,900]]){
+ page.style.width=width+'px';page.style.height=height+'px';await delay(300);
+ const a=child().document.getElementById('lab-art').getBoundingClientRect(),panel=child().document.getElementById('lab-native-panel').getBoundingClientRect();
+ if(a.width<=0||a.height<=0||a.left<0||a.top<0||a.right>width+1)throw Error('Banner outside viewport');
+ if(width<768&&a.bottom>panel.top+1||width>=768&&a.right>panel.left+1)throw Error('Native controls cover the banner');
+ checks.push({viewport:[width,height],bannerVisible:true,controlsSeparate:true});
+}
+result.dataset.status='passed';result.textContent=JSON.stringify(checks,null,2);
+}catch(error){result.dataset.status='failed';result.textContent=error.stack;}
+</script></body></html>

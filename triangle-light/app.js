@@ -605,11 +605,12 @@ const message=document.getElementById('message');
 const status=document.getElementById('status');
 const uiInputs=new Map();
 let params={...DEFAULTS};
-let renderer=null, scheduled=0, exporting=false, contextLost=false;
+let renderer=null, scheduled=0, exporting=false, contextLost=false, disposed=false;
 
 function showMessage(text) { message.textContent=text; }
 function fail(error) {
   console.error(error);
+  window.LabEmbed?.fail(error.message || error);
   const box=document.getElementById('error');
   box.hidden=false;
   box.textContent=error instanceof Error ? error.message : String(error);
@@ -633,6 +634,28 @@ function setParameters(patch) {
   params=window.TrianglePalette.applyChange(sanitize(patch,params),params,patch);
   updateUI();
   requestRender();
+  window.LabEmbed?.changed();
+  return {...params};
+}
+// Validate complete snapshots against the very same schema as the native UI.
+// Unlike the legacy partial-import API, host imports must never silently clamp
+// values, fill missing fields or discard unsupported settings.
+function validateState(input) {
+  if (!input || typeof input !== 'object' || Array.isArray(input) ||
+      Object.keys(input).length !== Object.keys(DEFAULTS).length ||
+      Object.keys(DEFAULTS).some(key => !Object.hasOwn(input,key))) {
+    throw new TypeError('Expected complete Triangle / Light settings.');
+  }
+  const result=sanitize(input);
+  for (const key of Object.keys(result)) {
+    if (result[key] !== input[key]) throw new TypeError(`Invalid triangle setting: ${key}.`);
+  }
+  return result;
+}
+function setState(input) {
+  params=validateState(input);
+  updateUI(); requestRender();
+  window.LabEmbed?.changed();
   return {...params};
 }
 function buildControls() {
@@ -702,12 +725,12 @@ function layout() {
   renderer.resize(Math.max(2,Math.round(w*scale)),Math.max(2,Math.round(h*scale)));
 }
 function drawNow() {
-  if (!renderer || exporting || contextLost) return;
+  if (!renderer || exporting || contextLost || disposed) return;
   layout(); renderer.render(params);
   status.textContent=`${renderer.width} × ${renderer.height} · ${renderer.hdr?'RGBA16F / linear HDR':'RGBA8 / encoded fallback'}\n20 passes · 6 bloom scales · renders only on change`;
 }
 function requestRender() {
-  if (scheduled || exporting || contextLost) return;
+  if (scheduled || exporting || contextLost || disposed) return;
   scheduled=requestAnimationFrame(()=>{
     scheduled=0;
     try { drawNow(); } catch(error) { fail(error); }
@@ -715,6 +738,7 @@ function requestRender() {
 }
 function reset() { params={...DEFAULTS}; updateUI(); showMessage(''); requestRender(); }
 function toggleUI() {
+  if (window.LabEmbed) { window.LabEmbed.close(); return; }
   const hidden=document.body.classList.toggle('hidden-ui');
   document.getElementById('restore').hidden=!hidden;
   requestRender();
@@ -778,7 +802,7 @@ document.getElementById('file').addEventListener('change',async event=>{
         Object.entries(window.TrianglePalette.reference).some(([key,color])=>params[key]!==color)) {
       params.paletteStyle='custom';
     }
-    updateUI(); requestRender(); showMessage('Settings loaded.');
+    updateUI(); requestRender(); showMessage('Settings loaded.'); window.LabEmbed?.changed();
   } catch(error) { showMessage(`Could not load settings: ${error.message}`); }
   finally { input.value=''; }
 });
@@ -832,9 +856,19 @@ try {
   function onDPRChange() { watchDPR(); requestRender(); }
   watchDPR();
   window.lightStudy=Object.freeze({
-    getParameters:()=>({...params}), setParameters, reset,
+    getParameters:()=>({...params}), setParameters, validateState, setState, reset,
     render:()=>{ if (!exporting) { drawNow(); } }, exportPNG,
     getDiagnostics:()=>({width:renderer.width,height:renderer.height,hdr:renderer.hdr,contextLost,passes:20,bloomLevels:6})
+  });
+  window.LabEmbed?.register({
+    getState:window.lightStudy.getParameters, validateState, setState, reset,
+    applyPreset:setParameters, resize:requestRender, syncMotion:requestRender,
+    isAnimated:()=>false, renderAt:drawNow,
+    dispose(){
+      disposed=true; cancelAnimationFrame(scheduled); observer.disconnect();
+      dprQuery?.removeEventListener('change',onDPRChange);
+      renderer.dispose(); renderer.gl.getExtension('WEBGL_lose_context')?.loseContext();
+    }
   });
   requestRender();
 } catch(error) { fail(error); }

@@ -1,153 +1,135 @@
 # Be Art art-direction showcase
 
-The root `index.html` is a static Spanish homepage reproduction with six curated
-hero directions. The selector updates `?art=original|ellipses|ellipses-gold|squares|triangle|moving`;
-copy the browser URL to share a curated selection. Back/forward navigation restores
-the selection and its in-session edits. Custom edits travel in a JSON file, not
-in the URL.
+The root landing page is a fixed Spanish Be Art homepage reproduction. Its
+banner loads the **actual lab document** selected by Dirección artística.
+Mostrar parámetros reveals the original lab controls alongside the banner on
+wide screens and below it on narrow screens. Hiding controls preserves the art.
+No code in `../beartgroup` is modified, built, or run by this project.
 
-## Preview and checks
+The six existing selection URLs remain stable:
+`?art=original|ellipses|ellipses-gold|squares|triangle|moving`.
+A URL shares the curated starting direction. Download JSON to share an edited
+composition, including its complete native settings and text treatments.
 
-From the repository root:
+## Running and publishing
 
 ```sh
 npm ci
 python3 -m http.server 8765 --bind 127.0.0.1
-```
-
-Open `http://127.0.0.1:8765/`. Serving HTTP is required for the ES modules.
-The older standalone prototype pages keep their existing URLs and behavior.
-
-```sh
 npm test
 npm run check:showcase
 npm run build:showcase
 ```
 
-The build stages only `index.html` and the required showcase assets/modules in
-`_site/`, validates relative asset paths, and adds `.nojekyll`. It needs no access
-to the Be Art project. The GitHub Pages workflow tests and publishes this artifact
-on pushes to `main`; it does not publish the prototype pages, tests, docs, or local
-QA files. Repository Settings → Pages must use **GitHub Actions** as its source.
+Open `http://127.0.0.1:8765/`. HTTP is needed for modules, same-origin messages,
+and the canonical text-control markup. The original standalone labs retain their
+URLs. `scripts/build-showcase.mjs` stages the homepage, selected lab documents,
+and their local dependencies in `_site/`. It excludes other experiments, local
+QA files, tests, documentation, and the user's reference PNGs. Nothing requires
+Vercel or a backend. The existing GitHub Actions workflow deploys this artifact
+to GitHub Pages on pushes to `main`.
 
-## Curating directions
+## Native embedding
 
-Edit `presets.js` for names, deterministic seeds, palettes, geometry, shading,
-and motion. Keep the `index.html` selector options in sync. These defaults are the clean starting points. The editor can change the art and
-text while keeping the surrounding page unchanged.
+`showcase/presets.js` maps names and URLs to native starting configurations:
 
-- Original: the existing photographic desktop and mobile hero crops.
-- Elipses azules / Elipses doradas: static shader compositions with palettes
-  recovered from the supplied blue and gold exports. Both preserve the original
-  ellipse proportions and fit the complete soft outer edge within a 6% banner
-  margin on every screen. The default has no dark overlay or breathing animation; both can be edited.
-- Campos de color: four offset, nested squares; static.
-- Umbral azul: the triangle's original WebGL light pipeline, without the floor;
-  static, with portrait geometry fitted to the banner.
-- Composición viva: seeded weighted Voronoi cells, with restrained motion.
+| Direction | Actual source |
+| --- | --- |
+| Original | Existing desktop/mobile homepage photographs |
+| Elipses azules / Elipses doradas | `turrell-ellipse-light/index.html` |
+| Campos de color | `canvas_light_columns_demo.html`, native nested-square preset |
+| Umbral azul | `triangle-light/index.html`, without the floor |
+| Composición viva | `moving_shapes/moving_shapes.html` |
 
-`renderers/` adapts the studies to the banner. `controller.js` owns the canvas,
-animation time, resize/intersection observers, reduced-motion preference,
-visibility handling, and disposal. Only the selected renderer is instantiated.
-Image presets use their local `image` asset directly, without a canvas or animation.
-Animated directions can be paused; reduced motion uses their initial frame.
-Rendering failures and WebGL context loss display a local SVG fallback. Light
-fallbacks approximate the composition; they do not reproduce the GPU bloom exactly.
-The shared `fallback.js` generates parameter-aware SVGs at the current banner
-ratio, so edits and resizing also work without WebGL. These are approximate
-lighting previews. The fixed files in `assets/` remain curated loading fallbacks.
+Blue/gold use the supplied palettes, with the default outer ellipse sized inside
+the banner. Native geometry remains native: changing frame proportions has the
+same effect as resizing the original lab. The moving starting configuration
+stores the actual lab-generated normalized sites and palette noise in
+`compositions/moving.json`; it is reproducible without an alternative generator.
 
-`vendor/` contains rendering-only snapshots extracted from the prototypes. Refresh
-them after deliberately changing their source renderers:
+`js/shared/lab-embed.js` does nothing unless `?embed` is present. In embed mode it
+moves the existing artwork and controls into two regions **within their original
+document**. Their event handlers, conditional controls, palette logic and renderer
+continue to run. `showcase/lab-host.js` mounts that document in a same-origin
+iframe and exchanges layout, complete state, pause/visibility and cleanup
+messages. It does not draw art or select which art parameters are editable.
 
-```sh
-npm run sync:showcase
-```
+The default iframe covers the landing-page banner. Editing expands its viewport
+into an artwork preview plus the original control panel. There are no copied
+shader snapshots, replacement geometry algorithms, or reduced parameter forms.
+The Canvas lab retains every geometry and aesthetic, including its image layer,
+rich gradient mapping, generated/manual palettes and hover effects.
 
-This also regenerates fallback SVGs. `check:showcase` detects stale snapshots and
-fallbacks. Prototype bootstrap and prototype pages are not shipped; the showcase
-has its own shared editor and does not embed labs in iframes.
+A selected lab responds to host pause/reduced motion and page visibility. State
+captures animation time where relevant. The parent waits for the old lab to
+acknowledge disposal before removing its iframe. A replacement lab may briefly
+coexist, paused and hidden, while its settings are validated; this allows an
+invalid import to leave the displayed composition untouched.
 
-## Editing a banner
+## Shared text and effects
 
-Choose **Editar banner** in the direction selector. The editor stays beside the
-banner on desktop and below a fitted portrait preview on mobile. Closing it (or
-pressing Escape) returns to the landing page with the current composition intact.
+`js/shared/poster-text.js` and `.css` are extracted from the original Canvas text
+implementation and are also used by the standalone Canvas page. The canonical
+control fieldset and logo/text markup remain in `canvas_light_columns_demo.html`.
+Other embedded labs load that markup instead of maintaining another form.
 
-- **Arte:** choose a direction, a palette family, or individual colours.
-- **Texto:** BE ART logo, the two-line NO SOMOS / ESPECTADORES treatment, custom
-  multiline copy, or no text. Choose size, colour, line spacing, block width and
-  placement. Vertical centring applies to the complete text block. Manifesto rows
-  share a width, with NO and SOMOS at opposite ends. Custom copy has left, centre
-  and right alignment. Text size is relative to banner width and is capped to fit
-  the available block. The logo has width/colour/placement controls only.
-- **Parámetros:** geometry and light controls depend on the current engine.
-  Ellipses support optional breathing; moving cells support animation speed,
-  initial phase and a deterministic seed. Pause is available outside the panel.
-  Reduced motion disables animation. Other directions are still compositions.
+All original treatments remain: museum invitation, Renaissance copy, BE ART plus
+NEW RENAISSANCE, MANIFESTO, and the two-line Solea NO SOMOS / ESPECTADORES title.
+Logo only, custom multiline text and no text are also available. Typography and
+block placement controls complement the original layout and centering options.
+Solea and Poppins load from local font files.
 
-The local fonts are Solea Regular and Poppins ExtraLight/Light/Regular. Solea's
-unavailable weights are not offered. Font loading triggers a fresh text fit.
+The five original text modes are solid black, solid white, invert, difference,
+and accent. The eight logo modes additionally include glass, hypercolor and hue
+shift, with their native strength, opacity, blur, hue and accent controls. Text is
+inside the same artwork document and compositing surface. Positioned text uses
+layout offsets rather than a transformed overlay that would isolate blending.
 
-Each direction keeps an independent draft (including text) until the page reloads.
-**Restaurar dirección** resets only the active direction, including its text.
-**Descargar JSON** saves the active draft; **Cargar JSON** restores it and selects
-its direction. Files are processed locally. No backend or Be Art site access is
-involved. Downloads contain `format: "be-art-banner"`, `version: 1`, and `config`
-with the direction/engine, seed, palette, geometry, light, motion, shade and text.
-Invalid files are rejected atomically with a visible message. Animations restart
-from the saved initial phase; elapsed playback time and the pause button are not
-part of a saved configuration.
+## Complete configurations
 
-## Adding an engine or preset
+The outer JSON document uses `format: "be-art-native-banner"`, `version: 2`,
+`direction`, `lab`, `paused`, and `state: {native, text}`. It has a 32 MB import
+limit to accommodate embedded local images. Its envelope is validated by
+`showcase/config.js`; each actual lab validates its own complete native state.
+The shared text module validates its whole control set. Unsupported versions,
+missing fields, unknown controls and invalid values are rejected before visible
+state changes. Earlier simplified version-1 showcase files are explicitly
+unsupported, because they do not contain complete native settings.
 
-1. Add a curated object to `presets.js` and a matching option to `index.html`.
-   Keep its ID stable because URLs and saved configurations use it. Blue/gold
-   ellipses demonstrate multiple directions using the same engine.
-2. For a new engine, add a rendering-only adapter in `renderers/` and register its
-   dynamic import in `app.js`. Implement `create(canvas, config)`, returning
-   `update(config)`, `render(width, height, elapsedSeconds)`, and `dispose()`.
-   `update` should change settings without recreating GPU resources. The controller
-   owns sizing, scheduling, pause, visibility and canvas lifecycle. A still engine
-   redraws on selection, settings changes and resize, without an animation loop.
-3. Reuse an existing rendering module or add a deliberate extraction to
-   `scripts/sync-showcase-renderers.mjs`. Keep the original lab functional. Current
-   snapshots reuse triangle light, ellipse shaders, nested geometry and moving
-   cells. The ellipse adapter adds physical-coordinate rotation and containment
-   around the original shader; it does not change the standalone shader.
-4. Define editable fields, labels, bounds and choices in `schema.js`. It drives both
-   the UI and `config.js` validation. Palette sizes follow each preset; triangle
-   colours map to light/edge/spill/ambient roles. Non-editable engine constants stay
-   pinned. Add cross-field checks where necessary (e.g. decreasing ellipse rings).
-5. Extend `fallback.js` for the engine, then run `npm run sync:showcase`. Add any
-   new top-level public module to `scripts/build-showcase.mjs`. Assets/styles and
-   renderer/vendor modules in their existing public folders are already copied.
-6. Cover the new config, update/disposal behaviour and responsive rendering in
-   tests and browser checks. Run the three checks above. If changing the saved
-   configuration contract, deliberately version it and add an import migration.
+Canvas state reuses its existing native settings document and preserves all
+manual palette slots and inactive palette counts. A local background image is
+stored with its original image bytes (including SVG) so it survives switching/reloading without
+reselecting the file. Canvas native and shared text settings must agree. A file
+that references a not-yet-selected image preserves that empty selection state.
 
-`text-layer.js` is shared across all engines; it never draws text into the GPU
-canvas. `editor.js` contains the controls, while `config.js` owns validated clones
-and per-direction drafts. The curated preset objects remain immutable.
+Each direction keeps an independent in-memory draft until reload. Reset restores
+the curated starting configuration of the selected direction, including text.
+Download JSON saves the current animation frame and host pause state. The native
+labs' own export/import buttons remain available with their original formats.
+
+## Adding another lab
+
+1. Inventory its complete native controls and capabilities before adapting it.
+2. Add its artwork/panel selectors to `js/shared/lab-embed.js`, and include that
+   script before the original app bootstrap. Keep the original entrypoint.
+3. Register native `getState`, strict `validateState`, atomic `setState`, `reset`,
+   `resize`, `isAnimated`, `syncMotion`, `renderAt` and `dispose` methods. Implement
+   these in the native source using its own existing settings/rendering code.
+   Respect `LabEmbed.motionAllowed` for motion and `LabEmbed.size` for sizing.
+   Report programmatic/asynchronous state changes through `LabEmbed.changed()`.
+4. Add a descriptor to `showcase/presets.js` and a matching selector option.
+   A preset is native settings or a native preset name, not a new generator.
+5. Include its actual runtime dependencies in `scripts/build-showcase.mjs`.
+6. Verify complete controls, equivalent native/embedded artwork at matching
+   dimensions and time, text compositing, JSON fidelity, responsive layout,
+   pause and cleanup. Do not substitute mock renderer tests for visual parity.
 
 ## Homepage provenance
 
-The source was inspected read-only in `../beartgroup/site` on 2026-09-09. No build,
-install, development server, or file mutation was performed there. The existing
-pre-rendered Spanish homepage supplied the static markup; current `CorePage.tsx`
-and source CSS supplied the latest hero crop and hidden-tagline behavior.
-The optional unpublished event teaser is omitted, matching the existing build.
-
-Styles were copied from `app/globals.css`, `styles/tokens.css`, and the homepage,
-header, footer, and mobile-menu CSS modules; classes were scoped for this page.
-The selector and footer clearance are presentation additions. Navigation goes to
-the real Be Art site, and no forms or backend features are reproduced.
-
-Local assets come from `public/brand`, the five homepage files in
-`public/media/phase-3/2026/05`, `app/icon.svg`, and `app/fonts`. Poppins's OFL is
-included. Solea is the same supplied identity font already used in this repository.
-The diagram SVGs retain their fallback typography; their ineffective external
-Google Fonts imports were removed to keep rendering self-contained.
-The homepage photograph's original attribution remains in the footer.
-
-This is a fixed review snapshot, not an automatically synchronized copy of Be Art.
+The Be Art source was inspected read-only on 2026-09-09. The pre-rendered Spanish
+homepage supplied markup; current homepage CSS and source supplied the hero crop
+and hidden-tagline behavior. The optional unpublished event teaser is omitted.
+Navigation goes to the real site; no forms/backend functions are reproduced.
+Styles and required public assets were copied locally. Poppins's OFL is included;
+Solea is the supplied identity font already present in this repository. The
+homepage photograph's original attribution remains in the footer.

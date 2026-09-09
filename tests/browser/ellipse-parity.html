@@ -1,0 +1,20 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Native ellipse parity</title><style>body{margin:8px;background:#eee;font:13px sans-serif}.lab-frame,iframe{border:0;width:880px;height:424px}#embedded{width:880px;height:424px}pre{white-space:pre-wrap}</style></head><body><pre id="result">Checking native parity…</pre><div id="embedded"></div><iframe id="standalone" src="../../turrell-ellipse-light/?clean=1"></iframe><script type="module">
+import {createLabHost} from '../../showcase/lab-host.js';
+const result=document.getElementById('result'),standalone=document.getElementById('standalone');
+const host=createLabHost({container:document.getElementById('embedded'),onError:e=>{result.dataset.status='failed';result.textContent=e;}});
+host.layout({editing:false,art:{x:0,y:0,width:880,height:424}});host.setHost({paused:true});
+const wait=async fn=>{const start=performance.now();while(!fn()){if(performance.now()-start>15000)throw Error('Native lab did not load');await new Promise(r=>setTimeout(r,30));}};
+try{
+await host.load({lab:'ellipse',url:'../../turrell-ellipse-light/?embed=1'});await wait(()=>standalone.contentWindow.ellipseLight?.renderAt);
+const a=host.frame.contentWindow,b=standalone.contentWindow;
+const inventory=w=>[...w.document.querySelector('#ui').querySelectorAll('input,select,textarea,button')].map(n=>({id:n.id,key:n.dataset.k,type:n.type,options:n.options?[...n.options].map(o=>o.value):null}));
+if(JSON.stringify(inventory(a))!==JSON.stringify(inventory(b)))throw Error('Control inventories differ');
+const cases=[{}, {paletteStyle:'monochrome',baseHue:284,colorVariation:68,progression:'return',paletteSpan:45,lightProfile:'dark-core',lightStrength:72}, {paletteStyle:'triadic',progression:'alternating',reversePalette:true,colorBlend:'rgb',saturation:120,hueRotation:33,bottomFalloff:.3,coreGlow:.6}, {paletteStyle:'custom',bg:'#a96f02',c1:'#dda844',c2:'#dcaf58',c3:'#dfbe7a',c4:'#e6d198',c5:'#ece3bc',rotation:24,breathing:.025}];
+const checks=[];
+for(const patch of cases){a.ellipseLight.setParameters(patch);const settings=a.ellipseLight.getParameters();b.ellipseLight.setState(settings);
+for(const time of [0,2.5]){a.ellipseLight.renderAt(time);b.ellipseLight.renderAt(time);const first=a.document.querySelector('canvas').toDataURL(),second=b.document.querySelector('canvas').toDataURL();if(first!==second)throw Error('Native artwork differs');checks.push({palette:settings.paletteStyle,time,identical:true});}
+const saved=await host.snapshot();await host.restore(JSON.parse(JSON.stringify(saved)));if(JSON.stringify((await host.snapshot()).native)!==JSON.stringify(saved.native))throw Error('Lost settings in round-trip');}
+const before=await host.snapshot(),invalid=JSON.parse(JSON.stringify(before));invalid.native.parameters.exposure=100;let rejected=false;try{await host.restore(invalid);}catch{rejected=true;}if(!rejected||JSON.stringify(await host.snapshot())!==JSON.stringify(before))throw Error('Invalid import was not atomic');
+result.dataset.status='passed';result.textContent=JSON.stringify({controls:inventory(a).length,checks,json:'exact',invalid:'atomic'},null,2);
+}catch(error){result.dataset.status='failed';result.textContent=error.stack;}
+</script></body></html>

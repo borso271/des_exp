@@ -1,0 +1,41 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Native lab parity</title><style>body{margin:8px;font:13px sans-serif}.lab-frame,iframe{border:0;width:880px;height:424px}#embedded{width:880px;height:424px}pre{white-space:pre-wrap}</style></head><body><pre id="result">Checking native parity…</pre><div id="embedded"></div><iframe id="standalone"></iframe><script type="module">
+import {createLabHost} from '../../showcase/lab-host.js';
+const result=document.getElementById('result'),standalone=document.getElementById('standalone');
+const host=createLabHost({container:document.getElementById('embedded'),onError:e=>{result.dataset.status='failed';result.textContent=e;}});
+host.layout({editing:false,art:{x:0,y:0,width:880,height:424}});host.setHost({paused:true});
+const wait=async fn=>{const start=performance.now();while(!fn()){if(performance.now()-start>20000)throw Error('Native lab did not load');await new Promise(r=>setTimeout(r,30));}};
+const equal=(a,b,label)=>{if(JSON.stringify(a)!==JSON.stringify(b))throw Error(label);};
+const checks=[];
+try{
+for(const lab of ['triangle','moving']){
+ const url=lab==='triangle'?'../../triangle-light/':'../../moving_shapes/moving_shapes.html';
+ const api=lab==='triangle'?'lightStudy':'movingShapes',panel=lab==='triangle'?'#panel':'.sidebar';
+ standalone.src=url+'?parity=2';await host.load({lab,url:url+'?embed=1&parity=2'});
+ await wait(()=>standalone.contentWindow[api]?.validateState);
+ const a=host.frame.contentWindow,b=standalone.contentWindow;
+ if(lab==='triangle'){b.document.body.classList.add('hidden-ui');b.dispatchEvent(new Event('resize'));}
+ const inventory=w=>[...w.document.querySelector(panel).querySelectorAll('input,select,textarea,button')].map(n=>({id:n.id,type:n.type,min:n.min,max:n.max,step:n.step,options:n.options?[...n.options].map(o=>o.value):null}));
+ equal(inventory(a),inventory(b),lab+' controls differ');
+ await new Promise(r=>setTimeout(r,100));
+ const cases=lab==='triangle'?[{}, {paletteStyle:'monochrome',baseHue:30,colorVariation:65,vertexTop:2,vertexLeft:.3,floorBounce:.4}, {paletteStyle:'triadic',baseHue:290,colorVariation:80,floorEnabled:false,junctionX:.25,seamWidth:.035,roll:16}, {coreColor:'#ffc000',seamColor:'#fff5c0',ambientColor:'#241508',spillColor:'#7b3800',bloomRadius:2.2,facet:1.7}]:['random','monochrome','split','forest'];
+ for(const patch of cases){
+   let settings;
+   if(lab==='triangle'){a[api].setParameters({...patch,aspect:'viewport'});settings=a[api].getParameters();}
+   else{settings=a[api].getState();settings.paused=true;settings.palette.type=patch;settings.palette.arrangement=patch==='monochrome'?'radial':patch==='split'?'sectors':'rings';settings.palette.variability=85;settings.config.weightMotion=.9;}
+   a[api].setState(settings);b[api].setState(settings);
+   for(const time of lab==='triangle'?[0]:[0,2.5]){
+    if(lab==='triangle'){a[api].render();b[api].render();equal(a.document.querySelector('canvas').toDataURL(),b.document.querySelector('canvas').toDataURL(),'triangle pixels differ');}
+    else{a[api].renderAt(time);b[api].renderAt(time);equal(a.document.querySelector('svg').innerHTML,b.document.querySelector('svg').innerHTML,'moving paths/colors differ');}
+    checks.push({lab,palette:lab==='triangle'?settings.paletteStyle:patch,time,identical:true});
+   }
+   const saved=await host.snapshot();await host.restore(JSON.parse(JSON.stringify(saved)));equal((await host.snapshot()).native,saved.native,lab+' round-trip lost settings');
+ }
+ const before=await host.snapshot(),invalid=JSON.parse(JSON.stringify(before));
+ if(lab==='triangle')invalid.native.exposure=100;else invalid.native.sites[0].cx=100;
+ let rejected=false;try{await host.restore(invalid);}catch{rejected=true;}if(!rejected)throw Error('Invalid settings accepted');
+ equal((await host.snapshot()).native,before.native,lab+' invalid import mutated settings');
+ checks.push({lab,controls:inventory(a).length,json:'exact',invalid:'atomic'});
+}
+result.dataset.status='passed';result.textContent=JSON.stringify(checks,null,2);
+}catch(error){result.dataset.status='failed';result.textContent=error.stack;}
+</script></body></html>

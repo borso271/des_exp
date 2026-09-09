@@ -5,7 +5,7 @@ const { JSDOM, VirtualConsole } = require("jsdom");
 
 const projectRoot = path.resolve(__dirname, "..");
 const pagePath = path.join(projectRoot, "canvas_light_columns_demo.html");
-const source = fs.readFileSync(pagePath, "utf8");
+const source = [pagePath,"js/shared/poster-text.css","js/shared/poster-text.js","js/light-columns/app.js"].map(file=>fs.readFileSync(path.resolve(projectRoot,file),"utf8")).join("\n");
 const runtimeErrors = [];
 const animationCallbacks = new Map();
 let animationId = 0;
@@ -129,7 +129,7 @@ function input(window, control, value) {
   assert.match(source, /\.app\s*\{[\s\S]*?height:\s*100dvh/);
   assert.match(source, /\.controls\s*\{[\s\S]*?overflow-y:\s*auto/);
   assert.match(source, /\.stage-wrap\s*\{[\s\S]*?overflow:\s*hidden/);
-  const posterCopyRule = source.match(/\.poster-copy\s*\{([\s\S]*?)\}/);
+  const posterCopyRule = fs.readFileSync(path.join(projectRoot,"js/shared/poster-text.css"),"utf8").match(/\.poster-copy\s*\{([\s\S]*?)\}/);
 
   assert.ok(posterCopyRule, "poster copy styling must exist");
   assert.doesNotMatch(
@@ -520,7 +520,7 @@ function input(window, control, value) {
 
   assert.deepEqual(
     Array.from(eventCopyVariant.options).map((option) => option.value),
-    ["museum", "renaissance", "logo-renaissance", "manifesto", "manifesto-title"]
+    ["museum", "logo", "custom", "none", "renaissance", "logo-renaissance", "manifesto", "manifesto-title"]
   );
   assert.equal(eventCopy.dataset.copyVariant, "museum");
   change(dom.window, eventCopyVariant, "renaissance");

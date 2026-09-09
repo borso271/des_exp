@@ -1,0 +1,14 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Shared text effects on all native backgrounds</title><style>body{font:13px system-ui;background:#eee;margin:8px}#grid{display:grid;grid-template-columns:350px 350px;gap:12px}article{height:205px;overflow:hidden}h2{font-size:12px;margin:4px 0}iframe{width:800px;height:424px;border:0;transform:scale(.4375);transform-origin:0 0}header{padding-bottom:12px}</style></head><body><header><label>Logo effect <select id="effect"><option>invert</option><option>difference</option><option>solid-white</option><option>solid-black</option><option>accent</option><option>glass</option><option>hypercolor</option><option>hue</option></select></label><span id="result"> Loading native labs…</span></header><div id="grid"></div><script type="module">
+import {createLabHost} from '../../showcase/lab-host.js';import {getPreset} from '../../showcase/presets.js';
+const hosts=[],result=document.getElementById('result'),root=new URL('../../',location.href);
+try{
+for(const id of ['ellipses','squares','triangle','moving']){
+ const preset=getPreset(id),article=document.createElement('article'),title=document.createElement('h2'),container=document.createElement('div');title.textContent=preset.name+' · actual '+preset.lab+' lab';article.append(title,container);document.getElementById('grid').append(article);
+ const host=createLabHost({container});host.layout({editing:false,art:{x:0,y:0,width:800,height:424}});host.setHost({paused:true});
+ const nativeState=preset.stateURL?await (await fetch(new URL(preset.stateURL,root))).json():undefined;
+ await host.load({...preset,url:new URL(preset.url,root).href,nativeState});hosts.push(host);
+}
+function update(){for(const host of hosts){const text=host.frame.contentWindow.PosterTextHost;text.setState({...text.getState(),logoEffect:document.getElementById('effect').value,logoAccent:'#dba757'});}result.textContent=' Ready — all four actual renderers share the native text effects.';}
+document.getElementById('effect').addEventListener('change',update);update();
+}catch(error){result.textContent=error.message;}
+</script></body></html>

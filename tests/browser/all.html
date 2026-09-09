@@ -1,0 +1,16 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Native lab browser verification</title><style>body{font:13px system-ui}pre{white-space:pre-wrap}iframe{width:1280px;height:900px;border:0;transform:scale(.5);transform-origin:0 0}</style></head><body><pre id="result" data-status="running">Starting native verification…</pre><iframe id="test"></iframe><script type="module">
+const result=document.getElementById('result'),frame=document.getElementById('test'),checks={};
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
+try{
+for(const test of ['ellipse-parity','triangle-moving-parity','canvas-parity','showcase-flow','motion-and-images']){
+ result.textContent=JSON.stringify({running:test,completed:checks},null,2);frame.src='./'+test+'.html?run='+Date.now();
+ const start=performance.now();await delay(150);
+ while(true){const output=frame.contentDocument?.getElementById('result');
+  if(output?.dataset.status==='failed')throw Error(test+': '+output.textContent);
+  if(output?.dataset.status==='passed'){checks[test]=JSON.parse(output.textContent);break;}
+  if(performance.now()-start>90000)throw Error(test+' timed out');await delay(100);
+ }
+}
+result.dataset.status='passed';result.textContent=JSON.stringify(checks,null,2);
+}catch(error){result.dataset.status='failed';result.textContent=error.stack;}
+</script></body></html>
