@@ -5,7 +5,7 @@ import {presets} from '../showcase/presets.js';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const destination=path.join(root,'_site');
 const publicFolders=['assets','styles','renderers','vendor'];
-const publicModules=['app.js','controller.js','presets.js'];
+const publicModules=['app.js','controller.js','presets.js','schema.js','config.js','text-layer.js','editor.js','fallback.js'];
 const allowedExtensions=new Set(['.css','.js','.svg','.webp','.png','.ttf','.txt']);
 fs.rmSync(destination,{recursive:true,force:true});fs.mkdirSync(destination,{recursive:true});
 const files=[];

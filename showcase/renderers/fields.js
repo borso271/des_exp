@@ -4,6 +4,7 @@ export function create(canvas,preset) {
   const context=canvas.getContext('2d',{alpha:false});
   if(!context)throw new Error('Canvas unavailable');
   return {
+    update(next){preset=next;},
     render(width,height,time) {
       if(canvas.width!==width||canvas.height!==height){canvas.width=width;canvas.height=height;}
       context.fillStyle=preset.palette[0];context.fillRect(0,0,width,height);

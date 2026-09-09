@@ -205,7 +205,24 @@
       <option value="moving">Composición viva</option>
     </select>
   </div>
+  <button id="edit-banner" type="button" aria-expanded="false" aria-controls="banner-editor">Editar banner</button>
   <button id="pause-art" type="button" hidden>Pausar</button>
+</aside>
+<aside id="banner-editor" class="banner-editor" aria-label="Editor del banner" hidden>
+  <div class="editor-heading"><div><p class="editor-eyebrow">ESTUDIO / BE ART</p><h2 id="editor-current">Editor del banner</h2></div><button id="close-editor" type="button" aria-label="Cerrar editor">×</button></div>
+  <div class="editor-tabs" role="tablist" aria-label="Controles del banner">
+    <button type="button" role="tab" id="tab-art" data-editor-tab="art" aria-controls="editor-art" aria-selected="true">Arte</button>
+    <button type="button" role="tab" id="tab-text" data-editor-tab="text" aria-controls="editor-text" aria-selected="false" tabindex="-1">Texto</button>
+    <button type="button" role="tab" id="tab-parameters" data-editor-tab="parameters" aria-controls="editor-parameters" aria-selected="false" tabindex="-1">Parámetros</button>
+  </div>
+  <div class="editor-scroll">
+    <div id="editor-art" role="tabpanel" aria-labelledby="tab-art"></div>
+    <div id="editor-text" role="tabpanel" aria-labelledby="tab-text" hidden></div>
+    <div id="editor-parameters" role="tabpanel" aria-labelledby="tab-parameters" hidden></div>
+  </div>
+  <div class="editor-actions"><button id="download-banner" type="button">Descargar JSON</button><button id="load-banner" type="button">Cargar JSON</button><button id="reset-banner" type="button">Restaurar dirección</button></div>
+  <input id="import-banner" type="file" accept=".json,application/json" hidden>
+  <p id="editor-message" class="editor-message" role="status" aria-live="polite">Edita el arte o el texto directamente en el banner.</p>
 </aside>
 <p id="art-status" class="visually-hidden" role="status" aria-live="polite"></p>
 <script type="module" src="./showcase/app.js"></script>

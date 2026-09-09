@@ -1,4 +1,5 @@
 import {getPreset} from './presets.js';
+import {fallbackSVG} from './fallback.js';
 
 export function createController({stage,host,fallback,load,onChange=()=>{},env=window}) {
   let preset=getPreset('original'), renderer=null, canvas=null, generation=0, frame=0;
@@ -17,7 +18,21 @@ export function createController({stage,host,fallback,load,onChange=()=>{},env=w
     if(canvas){canvas.remove();canvas=null;}
   }
   function fail() {
-    release();stage.dataset.renderState='fallback';notify();
+    release();refreshFallback();stage.dataset.renderState='fallback';notify();
+  }
+  function refreshFallback() {
+    if(preset.renderer==='original'||preset.renderer==='image')return;
+    if(!preset.text)return; // Curated files also support the lightweight read-only controller.
+    const rect=stage.getBoundingClientRect();
+    if(rect.width<1||rect.height<1)return;
+    const width=900,height=width*rect.height/rect.width;
+    fallback.style.backgroundImage=`url("data:image/svg+xml,${encodeURIComponent(fallbackSVG(preset,width,height)).replace(/[!'()*]/g,char=>'%'+char.charCodeAt(0).toString(16))}")`;
+    fallback.style.backgroundSize='100% 100%';
+  }
+  function appearance() {
+    stage.dataset.artDescription=preset.description;
+    stage.style.setProperty('--art-shade',preset.shade);
+    fallback.style.backgroundColor=preset.palette[0]||'transparent';
   }
   function contextLost(event) {event.preventDefault();fail();}
   function draw() {
@@ -39,7 +54,7 @@ export function createController({stage,host,fallback,load,onChange=()=>{},env=w
   }
   function schedule() {if(moving()&&renderer&&!frame&&!stopped)frame=env.requestAnimationFrame(tick);}
   function syncMotion() {cancel();notify();schedule();}
-  const observer=new env.ResizeObserver(()=>{draw();schedule();});observer.observe(stage);
+  const observer=new env.ResizeObserver(()=>{if(!renderer)refreshFallback();draw();schedule();});observer.observe(stage);
   const intersection=env.IntersectionObserver?new env.IntersectionObserver(entries=>{
     visible=entries[0].isIntersecting;syncMotion();
   },{threshold:0}):null;
@@ -49,13 +64,14 @@ export function createController({stage,host,fallback,load,onChange=()=>{},env=w
 
   async function select(id) {
     const ticket=++generation;
-    release();elapsed=0;preset=getPreset(id);
+    release();elapsed=0;paused=false;preset=typeof id==='string'?getPreset(id):id;
     stage.dataset.preset=preset.id;stage.dataset.renderState=preset.renderer==='original'?'original':'fallback';
     stage.setAttribute('aria-label',`BE ART. ${preset.description}`);
-    stage.style.setProperty('--art-shade',preset.shade);
+    appearance();
     fallback.style.backgroundImage=preset.renderer==='original'?'none':`url("${new URL(preset.image||`./assets/fallback-${preset.id}.svg`,import.meta.url).href}")`;
     fallback.style.backgroundSize=preset.renderer==='ellipses'?'contain':'cover';
     fallback.style.backgroundColor=preset.palette[0]||'transparent';
+    refreshFallback();
     if(preset.renderer==='image') {ready=true;stage.dataset.renderState='ready';}
     notify();
     if(preset.renderer==='original'||preset.renderer==='image'||stopped)return;
@@ -69,6 +85,12 @@ export function createController({stage,host,fallback,load,onChange=()=>{},env=w
   }
   return {
     select,
+    update(next){
+      if(next.id!==preset.id||next.renderer!==preset.renderer)return select(next);
+      preset=next;appearance();
+      if(renderer){renderer.update(next);draw();}else refreshFallback();
+      syncMotion();
+    },
     togglePause(){paused=!paused;syncMotion();},
     dispose(){
       stopped=true;generation++;release();observer.disconnect();intersection?.disconnect();
