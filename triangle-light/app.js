@@ -39,7 +39,7 @@ const DEFAULTS = Object.freeze({
   intensity: 1.0, coreColor: '#05a7ff', seamColor: '#03ffff',
   vertexTop: 1.0, vertexLeft: 1.15, vertexRight: 1.65,
   vertexReach: 0.060, vertexFocus: 1.0,
-  seamStrength: 1.0, seamWidth: 0.020,
+  seamStrength: 0.0, seamWidth: 0.020,
   junctionDepth: 0.870, junctionX: 0.0, facet: 1.0,
   edgeSoftness: 0.0022,
   spillColor: '#021fff', spillStrength: 1.0, spillReach: 1.0,
