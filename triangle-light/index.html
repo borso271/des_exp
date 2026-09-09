@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Triangle / Light — procedural study</title>
+<link rel="stylesheet" href="./styles.css?v=floor-1">
+</head>
+<body>
+<main>
+  <section id="stage" aria-label="Procedural light composition">
+    <canvas id="art" aria-label="A luminous triangle in a dark architectural space. Drag to move; use the controls to change the light and palette."></canvas>
+    <div id="error" role="alert" hidden></div>
+  </section>
+  <aside id="panel" aria-label="Composition controls">
+    <h1>Triangle / Light</h1>
+    <p>Procedural reconstruction from the supplied photograph. Drag the canvas to position the triangle. No image texture is used.</p>
+    <div class="buttons">
+      <button id="reset" title="Restore the reference-matched starting values">Reference reset</button>
+      <button id="hide">Hide UI · H</button>
+      <button id="fullscreen">Fullscreen · F</button>
+    </div>
+    <div id="controls"></div>
+    <details>
+      <summary>Export / settings</summary>
+      <label for="exportWidth">PNG width </label>
+      <input id="exportWidth" type="number" min="320" max="4096" step="1" value="2842" style="width:75px"> px
+      <div class="buttons">
+        <button id="export">Export PNG</button>
+        <button id="save">Save settings</button>
+        <button id="load">Load settings</button>
+      </div>
+      <input type="file" id="file" accept="application/json,.json" hidden>
+      <p>PNG contains only the artwork. Exports are rendered again at the selected resolution, not enlarged from the preview.</p>
+    </details>
+    <p>H: controls · F: fullscreen · R: reference reset.<br>Double-click a slider to reset that parameter.</p>
+    <div id="status" role="status" aria-live="polite"></div>
+    <p id="message" role="status"></p>
+  </aside>
+</main>
+<button id="restore" hidden>Controls · H</button>
+<script src="../js/shared/color-palettes.js"></script>
+<script src="./palette.js"></script>
+<script src="./app.js?v=floor-1"></script>
+</body>
+</html>

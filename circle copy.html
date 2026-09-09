@@ -1,0 +1,1322 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  />
+
+  <title>Symmetric SVG Rings</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: #090b0f;
+    }
+
+    .animation-box {
+      --frame-width: 900px;
+      --frame-height: 900px;
+      --logo-padding: 24px;
+
+      position: relative;
+      width: min(94vw, var(--frame-width));
+      height: min(94vh, var(--frame-height));
+      overflow: hidden;
+      isolation: isolate;
+      transition: width 220ms ease, height 220ms ease;
+    }
+
+    #art {
+      display: block;
+      width: 100%;
+      height: 100%;
+      transform: scale(1.415);
+      transform-origin: center;
+    }
+
+    .logo-layer {
+      --logo-opacity: 1;
+      --effect-invert: 100%;
+      --effect-blur: 10px;
+      --effect-saturation: 360%;
+      --effect-contrast: 145%;
+      --effect-brightness: 110%;
+      --effect-hue: 90deg;
+      --glass-alpha: 0.26;
+      --difference-color: hsl(0 0% 100%);
+      --logo-mask: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB2ZXJzaW9uPSIxLjEiCiAgIGlkPSJzdmcxIgogICB3aWR0aD0iNjM5Ljk5OTMzIgogICBoZWlnaHQ9IjE3NC44ODI2OSIKICAgdmlld0JveD0iMCAwIDYzOS45OTkzMyAxNzQuODgyNjkiCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGRlZnMKICAgICBpZD0iZGVmczEiIC8+CiAgPGcKICAgICBpZD0iZzEiCiAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTYwLjgwMDQwNCwtNDEyLjc5OTg3KSI+CiAgICA8ZwogICAgICAgaWQ9ImcyIgogICAgICAgc3R5bGU9ImZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MSI+CiAgICAgIDxwYXRoCiAgICAgICAgIGlkPSJwYXRoMiIKICAgICAgICAgZD0ibSAwLDAgYyAwLDE3LjI4IC0xMi43MDEsMjUuOTIgLTM4LjEsMjUuOTIgaCAtMzQuMDE0IHYgLTAuNDk0IGMgMi41MDEsLTMuNDU2IDMuNzUxLC0xMi45NDcgMy43NTEsLTI4LjQ3MSB2IC05Ny40MjUgaCAyNy42NzkgYyAzLjU1NiwwIDcuMTI4LDAuMjE5IDEwLjcxMywwLjY1OSAzLjU4NSwwLjQzOCA3LjczOSwxLjQ4MSAxMi40NjMsMy4xMjYgNC43MjQsMS42NDYgOC44NTEsMy44MTIgMTIuMzgxLDYuNTAxIDMuNTI5LDIuNjg3IDYuNTQ0LDYuNSA5LjA0NSwxMS40MzcgMi41MDEsNC45MzggMy43NTIsMTAuNzI1IDMuNzUyLDE3LjM2MyAwLDE5LjE5OSAtOS43MjcsMzAuOTkzIC0yOS4xNzksMzUuMzgyIEMgLTcuMTcsLTIxLjcyMyAwLC0xMy4wNTYgMCwwIG0gLTUyLjkzOSwtMjkuMDQ3IGggMTYuOTI0IGMgNy45NDcsMCAxNC42NDQsLTIuNjYxIDIwLjA5MiwtNy45ODEgNS40NDYsLTUuMzIyIDguMTcsLTEzLjY1OSA4LjE3LC0yNS4wMTUgMCwtMTEuMTM2IC0yLjcyNCwtMTkuNDg4IC04LjE3LC0yNS4wNTUgLTUuNDQ4LC01LjU2OSAtMTMuMDYyLC04LjM1MiAtMjIuODQ0LC04LjM1MiBoIC0xNC4xNzIgeiBtIDM3LjUxNiwyOC4zMDYgYyAwLC0yLjU3OSAtMC4zMzQsLTUuMDQ3IC0xLjAwMSwtNy40MDUgLTAuNjY3LC0yLjM1OSAtMS45MTcsLTQuODU1IC0zLjc1MSwtNy40ODggLTEuODM0LC0yLjYzMyAtNC44MDgsLTQuNzYgLTguOTIxLC02LjM3NyAtNC4xMTQsLTEuNjE5IC05LjExNiwtMi40MjggLTE1LjAwNiwtMi40MjggaCAtOC44MzcgdiA0NS44MzMgaCAxMC41ODcgYyAxNy44NDEsLTAuMDU1IDI2LjgxNywtNy40MzQgMjYuOTI5LC0yMi4xMzUiCiAgICAgICAgIHN0eWxlPSJmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7ZmlsbC1ydWxlOm5vbnplcm87c3Ryb2tlOm5lIgogICAgICAgICB0cmFuc2Zvcm09Im1hdHJpeCgxLjMzMzMzMzMsMCwwLC0xLjMzMzMzMzMsMTU2Ljk1MjQsNDUwLjU0MTIpIiAvPgogICAgPC9nPgogICAgPHBhdGgKICAgICAgIGlkPSJwYXRoMyIKICAgICAgIGQ9Im0gMCwwIGMgLTIuMTY4LDE2LjA3MyAtOS40NDksMjkuNjIyIC0yMS44NDMsNDAuNjQ5IC0xMi4zOTQsMTEuMDI2IC0yNi44NDUsMTYuNTM5IC00My4zNTIsMTYuNTM5IC0xOC4wMDcsMCAtMzMuNTI4LC02LjM3NyAtNDYuNTYxLC0xOS4xMzEgLTEzLjAzNSwtMTIuNzU0IC0xOS41NTEsLTI4LjA3NCAtMTkuNTUxLC00NS45NTYgMCwtMTEuNTc1IDMuMDU2LC0yMi40NzggOS4xNzEsLTMyLjcwOSA2LjExMywtMTAuMjMxIDE0LjIsLTE4LjM0OSAyNC4yNjEsLTI0LjM1NiAxMC4wNTksLTYuMDA3IDIwLjczLC05LjAxIDMyLjAxMywtOS4wMSAxMi41MDYsMCAyNC40MjcsMy42ODkgMzUuNzY2LDExLjA2NyAxMS4zMzgsNy4zNzggMTkuNzMsMTcuMDE5IDI1LjE3NywyOC45MjMgbCAtNy41MDMsMi4zMDQgYyAtMi42MTMsLTkuODc0IC03Ljc5NSwtMTcuNzA1IC0xNS41NDgsLTIzLjQ5MiAtNy43NTQsLTUuNzg4IC0xNi42ODksLTguNjgxIC0yNi44MDQsLTguNjgxIC0xNi44NCwwIC0zMS42OTQsNi4zNzcgLTQ0LjU2LDE5LjEzMSAtMTIuODY4LDEyLjc1NCAtMTkuNjksMjcuNjYxIC0yMC40NjgsNDQuNzIyIHogbSAtMTUuNjczLDUuMTAyIGggLTEwNC4xMjkgYyAwLjU1NSwxMi41NjEgNC45NjEsMjIuODA1IDEzLjIxNCwzMC43MzMgOC4yNTQsNy45MjYgMTguNDY3LDExLjg5IDMwLjYzOSwxMS44OSAxMy4xMTYsMCAyNS4xOSwtNC4wMTkgMzYuMjI0LC0xMi4wNTUgMTEuMDMyLC04LjAzNiAxOS4wNDksLTE4LjIyNiAyNC4wNTIsLTMwLjU2OCIKICAgICAgIHN0eWxlPSJmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7ZmlsbC1ydWxlOm5vbnplcm87c3Ryb2tlOm5vbmUiCiAgICAgICB0cmFuc2Zvcm09Im1hdHJpeCgxLjMzMzMzMzMsMCwwLC0xLjMzMzMzMzMsMzUxLjY1MTczLDQ4OS4wNTA1MykiIC8+CiAgICA8ZwogICAgICAgaWQ9ImczIgogICAgICAgc3R5bGU9ImZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MSI+CiAgICAgIDxwYXRoCiAgICAgICAgIGlkPSJwYXRoNCIKICAgICAgICAgZD0ibSAwLDAgLTM1Ljg0OSwxMjYuMzg5IGggLTE1LjM0IGwgMi43NTEsLTkuNjI3IEwgLTgxLjYxOSwwIGggMTcuNzU4IHYgMC44MjMgYyAtNS44OTIsNi4wODkgLTcuMzY1LDE1LjE5NCAtNC40MTgsMjcuMzE4IGwgMTIuMjUxLDQzLjU3NyBoIDIwLjI2NCBMIC0xNS4zNCwwIFogbSAtMzYuOTMzLDc2LjkxIGggLTE3LjM0MSBsIDguNTg4LDMwLjYzNiB6IgogICAgICAgICBzdHlsZT0iZmlsbDojMDAwMDAwO2ZpbGwtb3BhY2l0eToxO2ZpbGwtcnVsZTpub256ZXJvO3N0cm9rZTpub25lIgogICAgICAgICB0cmFuc2Zvcm09Im1hdHJpeCgxLjMzMzMzMzMsMCwwLC0xLjMzMzMzMzMsNDk3LjI2OCw1ODQuNTAwOTMpIiAvPgogICAgPC9nPgogICAgPGcKICAgICAgIGlkPSJnNCIKICAgICAgIHN0eWxlPSJmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjEiPgogICAgICA8cGF0aAogICAgICAgICBpZD0icGF0aDUiCiAgICAgICAgIGQ9Im0gMCwwIGMgOC4xOTgsOC44MzEgMTIuMjk3LDE5LjMwOSAxMi4yOTcsMzEuNDMzIDAsNS45MjQgLTEuMTQsMTEuMjczIC0zLjQxOCwxNi4wNDUgLTIuMjgsNC43NzMgLTUuMTU2LDguNjI2IC04LjYyOSwxMS41NjEgLTMuNDc0LDIuOTM0IC03LjU0NSw1LjM3NiAtMTIuMjE0LDcuMzI0IC00LjY2OCwxLjk0NiAtOS4xODQsMy4zMTggLTEzLjU0Nyw0LjExNCAtNC4zNjQsMC43OTQgLTguNzY4LDEuMTkzIC0xMy4yMTQsMS4xOTMgaCAtMjMuMjYgdiAtMC40OTQgYyAyLjUwMSwtMy40NTYgMy43NTIsLTEyLjk0NyAzLjc1MiwtMjguNDcgdiAtOTcuNDI1IGggMTUuNDIzIHYgMzEuNjc5IGMgOS43ODEsMCAxOC44ODMsLTMuMDMxIDI3LjMwMywtOS4wOTIgOC40MjEsLTYuMDYyIDEyLjYzMSwtMTMuNTkxIDEyLjYzMSwtMjIuNTg3IGggMTUuMzQgYyAwLDkuMzI1IC00LjA1OCwxNy4wMTggLTEyLjE3MiwyMy4wOCAtOC4xMTYsNi4wNjEgLTE3Ljg3LDEwLjE2MyAtMjkuMjYzLDEyLjMwMiBDIC0xNy44NTUsLTE1LjI3OCAtOC4xOTksLTguODMzIDAsMCBtIC0zLjA0MywyOS44NjkgYyAwLC03LjczNCAtMS4zMDcsLTE0LjY4OCAtMy45MTgsLTIwLjg1OSAtMi42MTMsLTYuMTcxIC02LjAzMiwtMTEuMDY3IC0xMC4yNTUsLTE0LjY4OCAtNC4yMjQsLTMuNjIgLTguNDksLTYuNDA1IC0xMi43OTcsLTguMzUyIC00LjMwOCwtMS45NDcgLTguNTc0LC0zLjE5NiAtMTIuNzk3LC0zLjc0NCB2IDg0LjI2IGggNC4wODUgYyAyLjk0NSwwIDUuODQ5LC0wLjIzNCA4LjcxMiwtMC42OTkgMi44NjIsLTAuNDY3IDUuOTg4LC0xLjQ4MSA5LjM3OSwtMy4wNDUgMy4zOSwtMS41NjMgNi4zMjIsLTMuNjA4IDguNzk2LC02LjEzIDIuNDcyLC0yLjUyNCA0LjU1NiwtNi4wODkgNi4yNTIsLTEwLjY5NyAxLjY5NSwtNC42MDggMi41NDMsLTkuOTU3IDIuNTQzLC0xNi4wNDYiCiAgICAgICAgIHN0eWxlPSJmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7ZmlsbC1ydWxlOm5vbnplcm87c3Ryb2tlOm5vbmUiCiAgICAgICAgIHRyYW5zZm9ybT0ibWF0cml4KDEuMzMzMzMzMywwLDAsLTEuMzMzMzMzMyw1OTMuNDc2LDUxMS41NDE3MykiIC8+CiAgICA8L2c+CiAgICA8ZwogICAgICAgaWQ9Imc1IgogICAgICAgc3R5bGU9ImZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MSI+CiAgICAgIDxwYXRoCiAgICAgICAgIGlkPSJwYXRoNiIKICAgICAgICAgZD0ibSAwLDAgdiAtMTUuMTQgaCAwLjkxNyBjIDIuOTQ1LDIuNjg3IDUuMTgyLDQuNjIgNi43MTEsNS44MDEgMS41MjgsMS4xNzkgMy43MzgsMi4yNzUgNi42MjgsMy4yOTEgMi44ODksMS4wMTQgNi4zMzYsMS41MjIgMTAuMzM4LDEuNTIyIFYgLTEyNi4zODkgSCA0MC4wMTcgViAtNC41MjYgYyAzLjk0NiwwIDcuMzc4LC0wLjUwOCAxMC4yOTYsLTEuNTIyIDIuOTE4LC0xLjAxNiA1LjE2OSwtMi4xMTIgNi43NTMsLTMuMjkxIDEuNTg0LC0xLjE4MSAzLjc5NCwtMy4xMTQgNi42MjgsLTUuODAxIGggMC45MTcgViAwIFoiCiAgICAgICAgIHN0eWxlPSJmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7ZmlsbC1ydWxlOm5vbnplcm87c3Ryb2tlOm5vbmUiCiAgICAgICAgIHRyYW5zZm9ybT0ibWF0cml4KDEuMzMzMzMzMywwLDAsLTEuMzMzMzMzMyw2MTQuNjUxNzMsNDE1Ljk4MTYpIiAvPgogICAgPC9nPgogIDwvZz4KPC9zdmc+Cg==");
+
+      position: absolute;
+      top: var(--logo-padding);
+      left: var(--logo-padding);
+      z-index: 1;
+      display: block;
+      width: calc(100% - (var(--logo-padding) * 2));
+      aspect-ratio: 639.99933 / 174.88269;
+      opacity: var(--logo-opacity);
+      pointer-events: none;
+      user-select: none;
+      transition: opacity 180ms ease, visibility 180ms ease;
+    }
+
+    .logo-layer.logo-align-top {
+      top: var(--logo-padding);
+      bottom: auto;
+      transform: none;
+    }
+
+    .logo-layer.logo-align-center {
+      top: 50%;
+      bottom: auto;
+      transform: translateY(-50%);
+    }
+
+    .logo-layer.logo-align-bottom {
+      top: auto;
+      bottom: var(--logo-padding);
+      transform: none;
+    }
+
+    .logo-layer.is-hidden {
+      visibility: hidden;
+      opacity: 0;
+    }
+
+    .logo-solid,
+    .logo-effect {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      transition: opacity 180ms ease;
+    }
+
+    .logo-solid {
+      object-fit: fill;
+    }
+
+    .logo-effect {
+      background: transparent;
+      -webkit-mask-image: var(--logo-mask);
+      mask-image: var(--logo-mask);
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-mode: alpha;
+      mask-mode: alpha;
+      -webkit-mask-position: center;
+      mask-position: center;
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+    }
+
+    .logo-layer.effect-invert .logo-effect,
+    .logo-layer.effect-hypercolor .logo-effect,
+    .logo-layer.effect-hue .logo-effect {
+      background: rgb(255 255 255 / 0.001);
+    }
+
+    .logo-layer:not(.effect-solid) .logo-solid,
+    .logo-layer.effect-solid .logo-effect {
+      opacity: 0;
+    }
+
+    .logo-layer.effect-invert .logo-effect {
+      -webkit-backdrop-filter: invert(var(--effect-invert));
+      backdrop-filter: invert(var(--effect-invert));
+    }
+
+    .logo-layer.effect-difference .logo-effect {
+      background: var(--difference-color);
+      mix-blend-mode: difference;
+    }
+
+    .logo-layer.effect-glass .logo-effect {
+      background: rgb(255 255 255 / var(--glass-alpha));
+      -webkit-backdrop-filter:
+        blur(var(--effect-blur))
+        saturate(var(--effect-saturation))
+        contrast(var(--effect-contrast));
+      backdrop-filter:
+        blur(var(--effect-blur))
+        saturate(var(--effect-saturation))
+        contrast(var(--effect-contrast));
+    }
+
+    .logo-layer.effect-hypercolor .logo-effect {
+      -webkit-backdrop-filter:
+        saturate(var(--effect-saturation))
+        contrast(var(--effect-contrast))
+        brightness(var(--effect-brightness));
+      backdrop-filter:
+        saturate(var(--effect-saturation))
+        contrast(var(--effect-contrast))
+        brightness(var(--effect-brightness));
+    }
+
+    .logo-layer.effect-hue .logo-effect {
+      -webkit-backdrop-filter:
+        hue-rotate(var(--effect-hue))
+        saturate(var(--effect-saturation));
+      backdrop-filter:
+        hue-rotate(var(--effect-hue))
+        saturate(var(--effect-saturation));
+    }
+
+    #cells path {
+      stroke: none;
+      shape-rendering: geometricPrecision;
+      transition: fill 220ms ease;
+    }
+
+    .controls {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 1;
+      width: min(240px, calc(100vw - 36px));
+      max-height: calc(100vh - 36px);
+      padding: 16px;
+      overflow-y: auto;
+      color: #f7f8fb;
+      font: 500 14px/1.3 system-ui, sans-serif;
+      background: rgb(15 18 24 / 82%);
+      border: 1px solid rgb(255 255 255 / 14%);
+      border-radius: 14px;
+      box-shadow: 0 12px 36px rgb(0 0 0 / 35%);
+      backdrop-filter: blur(14px);
+    }
+
+    .controls h2 {
+      margin: 0 0 12px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgb(255 255 255 / 58%);
+    }
+
+    .control-group {
+      display: grid;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .control-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: rgb(255 255 255 / 76%);
+      font-size: 12px;
+    }
+
+    .control-value {
+      min-width: 28px;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    .controls select,
+    .controls button {
+      width: 100%;
+      min-height: 36px;
+      padding: 0 10px;
+      color: #f7f8fb;
+      font: inherit;
+      background: rgb(255 255 255 / 8%);
+      border: 1px solid rgb(255 255 255 / 14%);
+      border-radius: 8px;
+    }
+
+    .controls select:focus-visible,
+    .controls button:focus-visible {
+      outline: 3px solid rgb(124 92 255 / 40%);
+      outline-offset: 2px;
+    }
+
+    .controls input[type="range"] {
+      width: 100%;
+      margin: 2px 0;
+      accent-color: #7c5cff;
+    }
+
+    .controls button {
+      margin-top: 16px;
+      font-weight: 650;
+      cursor: pointer;
+      transition: background 120ms ease, transform 120ms ease;
+    }
+
+    .controls button:hover {
+      background: rgb(255 255 255 / 14%);
+    }
+
+    .controls button:active {
+      transform: translateY(1px);
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .switch {
+      position: relative;
+      width: 42px;
+      height: 24px;
+      flex: 0 0 auto;
+    }
+
+    .switch input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    .switch-track {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      background: #3c414b;
+      transition: background 160ms ease;
+    }
+
+    .switch-track::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 1px 4px rgb(0 0 0 / 35%);
+      transition: transform 160ms ease;
+    }
+
+    .switch input:checked + .switch-track {
+      background: #7c5cff;
+    }
+
+    .switch input:checked + .switch-track::after {
+      transform: translateX(18px);
+    }
+
+    .switch input:focus-visible + .switch-track {
+      outline: 3px solid rgb(124 92 255 / 40%);
+      outline-offset: 2px;
+    }
+
+    .control-divider {
+      height: 1px;
+      margin: 14px 0 0;
+      background: rgb(255 255 255 / 10%);
+    }
+
+    .control-section-title {
+      margin: 14px 0 0;
+      color: rgb(255 255 255 / 44%);
+      font-size: 10px;
+      font-weight: 750;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .section-control {
+      margin-top: 12px;
+    }
+
+    @media (max-height: 520px) {
+      .controls {
+        top: 10px;
+        right: 10px;
+        max-height: calc(100vh - 20px);
+        overflow-y: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="animation-box">
+    <svg
+      id="art"
+      viewBox="-96 -96 192 192"
+      preserveAspectRatio="xMidYMid slice"
+      role="img"
+      aria-label="Animated circle made from symmetric colored rings and sectors"
+    >
+      <defs>
+        <!-- Keeps the outer edge perfectly circular. -->
+        <clipPath id="disc-clip">
+          <circle cx="0" cy="0" r="96"></circle>
+        </clipPath>
+      </defs>
+
+      <g id="cells" clip-path="url(#disc-clip)"></g>
+    </svg>
+
+    <div
+      id="be-arts-logo"
+      class="logo-layer logo-align-top effect-invert"
+      role="img"
+      aria-label="BE ARTS"
+    >
+      <img
+        class="logo-solid"
+        src="logo_be_arts.svg"
+        alt=""
+      />
+      <span class="logo-effect" aria-hidden="true"></span>
+    </div>
+  </div>
+
+  <aside class="controls" aria-label="Animation controls">
+    <h2>Controls</h2>
+    <label class="control-row" for="mirror-symmetry">
+      <span>Mirror symmetry</span>
+      <span class="switch">
+        <input id="mirror-symmetry" type="checkbox" checked />
+        <span class="switch-track" aria-hidden="true"></span>
+      </span>
+    </label>
+
+    <div class="control-divider"></div>
+
+    <p class="control-section-title">Frame</p>
+
+    <div class="control-group">
+      <label class="control-label" for="frame-preset">Shape</label>
+      <select id="frame-preset">
+        <option value="square">Square · 1:1</option>
+        <option value="landscape">Landscape · 3:2</option>
+        <option value="widescreen">Widescreen · 16:9</option>
+        <option value="portrait">Portrait · 3:4</option>
+        <option value="custom">Custom</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="frame-width">
+        <span>Width</span>
+        <output id="frame-width-value" class="control-value">900 px</output>
+      </label>
+      <input
+        id="frame-width"
+        type="range"
+        min="320"
+        max="1400"
+        step="10"
+        value="900"
+      />
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="frame-height">
+        <span>Height</span>
+        <output id="frame-height-value" class="control-value">900 px</output>
+      </label>
+      <input
+        id="frame-height"
+        type="range"
+        min="240"
+        max="1000"
+        step="10"
+        value="900"
+      />
+    </div>
+
+    <div class="control-divider"></div>
+
+    <p class="control-section-title">Text layer</p>
+
+    <label
+      class="control-row section-control"
+      for="show-be-arts-logo"
+    >
+      <span>Show BE ARTS logo</span>
+      <span class="switch">
+        <input id="show-be-arts-logo" type="checkbox" checked />
+        <span class="switch-track" aria-hidden="true"></span>
+      </span>
+    </label>
+
+    <div class="control-group">
+      <label class="control-label" for="logo-alignment">
+        Vertical alignment
+      </label>
+      <select id="logo-alignment">
+        <option value="top">Top</option>
+        <option value="center">Center</option>
+        <option value="bottom">Bottom</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="logo-padding">
+        <span>Logo padding</span>
+        <output id="logo-padding-value" class="control-value">24 px</output>
+      </label>
+      <input
+        id="logo-padding"
+        type="range"
+        min="0"
+        max="160"
+        step="2"
+        value="24"
+      />
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="logo-effect">Backdrop effect</label>
+      <select id="logo-effect">
+        <option value="solid">Solid black</option>
+        <option value="invert" selected>Invert</option>
+        <option value="difference">Difference</option>
+        <option value="glass">Glass</option>
+        <option value="hypercolor">Hypercolor</option>
+        <option value="hue">Hue shift</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="logo-effect-strength">
+        <span>Effect strength</span>
+        <output
+          id="logo-effect-strength-value"
+          class="control-value"
+        >100%</output>
+      </label>
+      <input
+        id="logo-effect-strength"
+        type="range"
+        min="0"
+        max="100"
+        value="100"
+      />
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="logo-effect-blur">
+        <span>Blur</span>
+        <output id="logo-effect-blur-value" class="control-value">10 px</output>
+      </label>
+      <input
+        id="logo-effect-blur"
+        type="range"
+        min="0"
+        max="30"
+        value="10"
+      />
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="logo-effect-hue">
+        <span>Hue shift</span>
+        <output id="logo-effect-hue-value" class="control-value">90°</output>
+      </label>
+      <input
+        id="logo-effect-hue"
+        type="range"
+        min="0"
+        max="360"
+        value="90"
+      />
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="logo-effect-opacity">
+        <span>Effect opacity</span>
+        <output
+          id="logo-effect-opacity-value"
+          class="control-value"
+        >100%</output>
+      </label>
+      <input
+        id="logo-effect-opacity"
+        type="range"
+        min="0"
+        max="100"
+        value="100"
+      />
+    </div>
+
+    <div class="control-divider"></div>
+
+    <p class="control-section-title">Palette</p>
+
+    <div class="control-group">
+      <label class="control-label" for="palette-type">Palette type</label>
+      <select id="palette-type">
+        <option value="random">Random</option>
+        <option value="monochrome">Monochrome</option>
+        <option value="analogous">Analogous</option>
+        <option value="complementary">Complementary</option>
+        <option value="split">Split complementary</option>
+        <option value="triadic">Triadic</option>
+        <option value="ocean">Ocean</option>
+        <option value="sunset">Sunset</option>
+        <option value="candy">Candy</option>
+        <option value="forest">Forest</option>
+        <option value="neon">Neon</option>
+        <option value="grayscale">Grayscale</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="base-hue">
+        <span>Base hue</span>
+        <output id="base-hue-value" class="control-value">220°</output>
+      </label>
+      <input id="base-hue" type="range" min="0" max="359" value="220" />
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="color-count">
+        <span>Color count</span>
+        <output id="color-count-value" class="control-value">8</output>
+      </label>
+      <input id="color-count" type="range" min="2" max="16" value="8" />
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="color-arrangement">
+        Arrangement
+      </label>
+      <select id="color-arrangement">
+        <option value="random">Random cells</option>
+        <option value="rings">By ring</option>
+        <option value="sectors">By sector</option>
+        <option value="checker">Checker</option>
+        <option value="radial">Radial gradient</option>
+      </select>
+    </div>
+
+    <button id="shuffle-palette" type="button">Shuffle palette</button>
+  </aside>
+
+  <script>
+    (() => {
+      const SVG_NS = "http://www.w3.org/2000/svg";
+
+      const svg = document.querySelector("#art");
+      const cellsGroup = document.querySelector("#cells");
+      const mirrorSymmetryControl = document.querySelector(
+        "#mirror-symmetry"
+      );
+      const animationBox = document.querySelector(".animation-box");
+      const framePresetControl = document.querySelector("#frame-preset");
+      const frameWidthControl = document.querySelector("#frame-width");
+      const frameWidthValue = document.querySelector("#frame-width-value");
+      const frameHeightControl = document.querySelector("#frame-height");
+      const frameHeightValue = document.querySelector("#frame-height-value");
+      const beArtsLogo = document.querySelector("#be-arts-logo");
+      const showBeArtsLogoControl = document.querySelector(
+        "#show-be-arts-logo"
+      );
+      const logoAlignmentControl = document.querySelector(
+        "#logo-alignment"
+      );
+      const logoPaddingControl = document.querySelector("#logo-padding");
+      const logoPaddingValue = document.querySelector(
+        "#logo-padding-value"
+      );
+      const logoEffectControl = document.querySelector("#logo-effect");
+      const logoEffectStrengthControl = document.querySelector(
+        "#logo-effect-strength"
+      );
+      const logoEffectStrengthValue = document.querySelector(
+        "#logo-effect-strength-value"
+      );
+      const logoEffectBlurControl = document.querySelector(
+        "#logo-effect-blur"
+      );
+      const logoEffectBlurValue = document.querySelector(
+        "#logo-effect-blur-value"
+      );
+      const logoEffectHueControl = document.querySelector(
+        "#logo-effect-hue"
+      );
+      const logoEffectHueValue = document.querySelector(
+        "#logo-effect-hue-value"
+      );
+      const logoEffectOpacityControl = document.querySelector(
+        "#logo-effect-opacity"
+      );
+      const logoEffectOpacityValue = document.querySelector(
+        "#logo-effect-opacity-value"
+      );
+      const paletteTypeControl = document.querySelector("#palette-type");
+      const baseHueControl = document.querySelector("#base-hue");
+      const baseHueValue = document.querySelector("#base-hue-value");
+      const colorCountControl = document.querySelector("#color-count");
+      const colorCountValue = document.querySelector("#color-count-value");
+      const arrangementControl = document.querySelector(
+        "#color-arrangement"
+      );
+      const shufflePaletteButton = document.querySelector(
+        "#shuffle-palette"
+      );
+
+      const RADIUS = 96;
+      const RING_COUNT = 8;
+
+      /*
+       * Four independently animated sectors are created per quadrant.
+       * They are mirrored into the next quadrant and repeated after 180°.
+       */
+      const SECTORS_PER_QUADRANT = 4;
+      const SECTOR_COUNT = SECTORS_PER_QUADRANT * 4;
+
+      const SPEED = 0.78;
+      const RING_MOVEMENT = 0.42;
+      const SECTOR_MOVEMENT = 0.46;
+
+      /*
+       * Tiny overlaps prevent anti-aliased hairline gaps between paths.
+       * These are fills, not visible borders.
+       */
+      const RADIAL_OVERLAP = 0.18;
+      const ANGULAR_OVERLAP = 0.0018;
+
+      const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      const motionMultiplier = reducedMotion ? 0.25 : 1;
+
+      const framePresets = {
+        square: { width: 900, height: 900 },
+        landscape: { width: 1080, height: 720 },
+        widescreen: { width: 1200, height: 675 },
+        portrait: { width: 675, height: 900 }
+      };
+
+      function updateFrameSize() {
+        const width = Number(frameWidthControl.value);
+        const height = Number(frameHeightControl.value);
+        const viewportScale = Math.min(
+          1,
+          (window.innerWidth * 0.94) / width,
+          (window.innerHeight * 0.94) / height
+        );
+
+        animationBox.style.setProperty(
+          "--frame-width",
+          `${width * viewportScale}px`
+        );
+        animationBox.style.setProperty(
+          "--frame-height",
+          `${height * viewportScale}px`
+        );
+        frameWidthValue.value = `${width} px`;
+        frameHeightValue.value = `${height} px`;
+      }
+
+      function applyFramePreset() {
+        const preset = framePresets[framePresetControl.value];
+
+        if (!preset) {
+          return;
+        }
+
+        frameWidthControl.value = preset.width;
+        frameHeightControl.value = preset.height;
+        updateFrameSize();
+      }
+
+      function useCustomFrameSize() {
+        framePresetControl.value = "custom";
+        updateFrameSize();
+      }
+
+      framePresetControl.addEventListener("change", applyFramePreset);
+      frameWidthControl.addEventListener("input", useCustomFrameSize);
+      frameHeightControl.addEventListener("input", useCustomFrameSize);
+      window.addEventListener("resize", updateFrameSize);
+      updateFrameSize();
+
+      function updateLogoVisibility() {
+        beArtsLogo.classList.toggle(
+          "is-hidden",
+          !showBeArtsLogoControl.checked
+        );
+        updateLogoControlStates();
+      }
+
+      function updateLogoPadding() {
+        const padding = Number(logoPaddingControl.value);
+
+        animationBox.style.setProperty("--logo-padding", `${padding}px`);
+        logoPaddingValue.value = `${padding} px`;
+      }
+
+      const logoAlignmentClassNames = [
+        "logo-align-top",
+        "logo-align-center",
+        "logo-align-bottom"
+      ];
+
+      function updateLogoAlignment() {
+        beArtsLogo.classList.remove(...logoAlignmentClassNames);
+        beArtsLogo.classList.add(
+          `logo-align-${logoAlignmentControl.value}`
+        );
+      }
+
+      const logoEffectClassNames = [
+        "effect-solid",
+        "effect-invert",
+        "effect-difference",
+        "effect-glass",
+        "effect-hypercolor",
+        "effect-hue"
+      ];
+
+      function updateLogoControlStates() {
+        const hidden = !showBeArtsLogoControl.checked;
+        const effect = logoEffectControl.value;
+
+        logoAlignmentControl.disabled = hidden;
+        logoPaddingControl.disabled = hidden;
+        logoEffectControl.disabled = hidden;
+        logoEffectStrengthControl.disabled = hidden || effect === "solid";
+        logoEffectBlurControl.disabled = hidden || effect !== "glass";
+        logoEffectHueControl.disabled = hidden || effect !== "hue";
+        logoEffectOpacityControl.disabled = hidden;
+      }
+
+      function updateLogoEffect() {
+        const effect = logoEffectControl.value;
+        const strength = Number(logoEffectStrengthControl.value) / 100;
+        const blur = Number(logoEffectBlurControl.value);
+        const hue = Number(logoEffectHueControl.value);
+        const opacity = Number(logoEffectOpacityControl.value) / 100;
+
+        const saturation = effect === "hypercolor"
+          ? 100 + strength * 260
+          : 100 + strength * 80;
+        const contrast = effect === "hypercolor"
+          ? 100 + strength * 45
+          : 100 + strength * 20;
+
+        beArtsLogo.classList.remove(...logoEffectClassNames);
+        beArtsLogo.classList.add(`effect-${effect}`);
+        beArtsLogo.style.setProperty(
+          "--effect-invert",
+          `${strength * 100}%`
+        );
+        beArtsLogo.style.setProperty("--effect-blur", `${blur}px`);
+        beArtsLogo.style.setProperty(
+          "--effect-saturation",
+          `${saturation}%`
+        );
+        beArtsLogo.style.setProperty(
+          "--effect-contrast",
+          `${contrast}%`
+        );
+        beArtsLogo.style.setProperty(
+          "--effect-brightness",
+          `${100 + strength * 10}%`
+        );
+        beArtsLogo.style.setProperty(
+          "--effect-hue",
+          `${hue * strength}deg`
+        );
+        beArtsLogo.style.setProperty(
+          "--glass-alpha",
+          (0.04 + strength * 0.22).toFixed(2)
+        );
+        beArtsLogo.style.setProperty(
+          "--difference-color",
+          `hsl(0 0% ${strength * 100}%)`
+        );
+        beArtsLogo.style.setProperty("--logo-opacity", opacity);
+
+        logoEffectStrengthValue.value =
+          `${logoEffectStrengthControl.value}%`;
+        logoEffectBlurValue.value = `${blur} px`;
+        logoEffectHueValue.value = `${hue}°`;
+        logoEffectOpacityValue.value =
+          `${logoEffectOpacityControl.value}%`;
+
+        updateLogoControlStates();
+      }
+
+      showBeArtsLogoControl.addEventListener(
+        "change",
+        updateLogoVisibility
+      );
+      logoAlignmentControl.addEventListener("change", updateLogoAlignment);
+      logoPaddingControl.addEventListener("input", updateLogoPadding);
+      logoEffectControl.addEventListener("change", updateLogoEffect);
+      logoEffectStrengthControl.addEventListener("input", updateLogoEffect);
+      logoEffectBlurControl.addEventListener("input", updateLogoEffect);
+      logoEffectHueControl.addEventListener("input", updateLogoEffect);
+      logoEffectOpacityControl.addEventListener("input", updateLogoEffect);
+      updateLogoVisibility();
+      updateLogoAlignment();
+      updateLogoPadding();
+      updateLogoEffect();
+
+      const random = (min, max) =>
+        min + Math.random() * (max - min);
+
+      /*
+       * Normalize any array of positive values so that its total becomes
+       * the requested amount. This keeps the outer radius and full circle
+       * constant while the internal boundaries move.
+       */
+      function normalize(values, total) {
+        const sum = values.reduce((result, value) => result + value, 0);
+        return values.map((value) => (value / sum) * total);
+      }
+
+      function polarPoint(radius, angle) {
+        return {
+          x: Math.cos(angle) * radius,
+          y: Math.sin(angle) * radius
+        };
+      }
+
+      function number(value) {
+        return value.toFixed(3);
+      }
+
+      /*
+       * Creates an SVG path for one annular sector.
+       */
+      function annularSectorPath(innerRadius, outerRadius, startAngle, endAngle) {
+        const outerStart = polarPoint(outerRadius, startAngle);
+        const outerEnd = polarPoint(outerRadius, endAngle);
+
+        const angularSize = endAngle - startAngle;
+        const largeArc = angularSize > Math.PI ? 1 : 0;
+
+        /*
+         * The innermost ring is made from pie-slice paths because its
+         * inner radius is zero.
+         */
+        if (innerRadius <= 0.001) {
+          return [
+            "M 0 0",
+            `L ${number(outerStart.x)} ${number(outerStart.y)}`,
+            `A ${number(outerRadius)} ${number(outerRadius)} 0 ${largeArc} 1`,
+            `${number(outerEnd.x)} ${number(outerEnd.y)}`,
+            "Z"
+          ].join(" ");
+        }
+
+        const innerStart = polarPoint(innerRadius, startAngle);
+        const innerEnd = polarPoint(innerRadius, endAngle);
+
+        return [
+          `M ${number(outerStart.x)} ${number(outerStart.y)}`,
+          `A ${number(outerRadius)} ${number(outerRadius)} 0 ${largeArc} 1`,
+          `${number(outerEnd.x)} ${number(outerEnd.y)}`,
+          `L ${number(innerEnd.x)} ${number(innerEnd.y)}`,
+          `A ${number(innerRadius)} ${number(innerRadius)} 0 ${largeArc} 0`,
+          `${number(innerStart.x)} ${number(innerStart.y)}`,
+          "Z"
+        ].join(" ");
+      }
+
+      /*
+       * Random animation characteristics are generated once.
+       * The values then move continuously using sine waves.
+       */
+      const ringAnimation = Array.from({ length: RING_COUNT }, (_, index) => ({
+        base: random(0.72, 1.35),
+        phaseA: random(0, Math.PI * 2),
+        phaseB: random(0, Math.PI * 2),
+        rateA: random(0.38, 0.72) + index * 0.014,
+        rateB: random(0.18, 0.34) + index * 0.009
+      }));
+
+      const sectorAnimation = Array.from(
+        { length: SECTOR_COUNT },
+        (_, index) => ({
+          base: random(0.78, 1.28),
+          phaseA: random(0, Math.PI * 2),
+          phaseB: random(0, Math.PI * 2),
+          rateA: random(0.38, 0.76) + index * 0.05,
+          rateB: random(0.17, 0.31) + index * 0.03
+        })
+      );
+
+      /*
+       * Create all SVG paths once. During animation, only their "d"
+       * attributes are updated.
+       */
+      const paths = Array.from({ length: RING_COUNT }, (_, ringIndex) => {
+        return Array.from({ length: SECTOR_COUNT }, (_, sectorIndex) => {
+          const path = document.createElementNS(SVG_NS, "path");
+
+          cellsGroup.appendChild(path);
+          return path;
+        });
+      });
+
+      function mirroredSectorIndex(sectorIndex) {
+        const halfIndex = sectorIndex % (SECTORS_PER_QUADRANT * 2);
+
+        return halfIndex < SECTORS_PER_QUADRANT
+          ? halfIndex
+          : SECTORS_PER_QUADRANT * 2 - 1 - halfIndex;
+      }
+
+      const presetPalettes = {
+        ocean: [
+          [187, 78, 42],
+          [204, 88, 52],
+          [222, 82, 57],
+          [251, 65, 59]
+        ],
+        sunset: [
+          [338, 78, 56],
+          [7, 90, 58],
+          [28, 96, 60],
+          [48, 94, 62]
+        ],
+        candy: [
+          [326, 86, 66],
+          [276, 78, 67],
+          [198, 90, 66],
+          [166, 73, 58]
+        ],
+        forest: [
+          [83, 49, 34],
+          [111, 52, 40],
+          [146, 58, 34],
+          [167, 48, 44]
+        ],
+        neon: [
+          [302, 100, 59],
+          [255, 100, 66],
+          [184, 100, 50],
+          [75, 100, 52]
+        ],
+        grayscale: [
+          [0, 0, 18],
+          [0, 0, 42],
+          [0, 0, 68],
+          [0, 0, 92]
+        ]
+      };
+
+      const fixedPaletteTypes = new Set(Object.keys(presetPalettes));
+
+      function makePaletteNoise() {
+        return Array.from({ length: 16 }, () => ({
+          hue: Math.random(),
+          saturation: Math.random(),
+          lightness: Math.random()
+        }));
+      }
+
+      function makeCellNoise() {
+        return Array.from({ length: RING_COUNT }, () => {
+          return Array.from({ length: SECTOR_COUNT }, () => Math.random());
+        });
+      }
+
+      let paletteNoise = makePaletteNoise();
+      let cellNoise = makeCellNoise();
+      let paletteOffset = 0;
+      let activePalette = [];
+
+      function wrapHue(hue) {
+        return ((hue % 360) + 360) % 360;
+      }
+
+      function hslColor(hue, saturation, lightness) {
+        return `hsl(${Math.round(wrapHue(hue))} ${Math.round(saturation)}% ${Math.round(lightness)}%)`;
+      }
+
+      function interpolateHue(start, end, amount) {
+        const distance = ((end - start + 540) % 360) - 180;
+        return wrapHue(start + distance * amount);
+      }
+
+      function samplePreset(anchors, amount) {
+        const position = amount * (anchors.length - 1);
+        const index = Math.min(Math.floor(position), anchors.length - 2);
+        const progress = position - index;
+        const start = anchors[index];
+        const end = anchors[index + 1];
+
+        return hslColor(
+          interpolateHue(start[0], end[0], progress),
+          start[1] + (end[1] - start[1]) * progress,
+          start[2] + (end[2] - start[2]) * progress
+        );
+      }
+
+      function generatePalette() {
+        const type = paletteTypeControl.value;
+        const count = Number(colorCountControl.value);
+        const baseHue = Number(baseHueControl.value);
+
+        if (fixedPaletteTypes.has(type)) {
+          const anchors = presetPalettes[type];
+
+          return Array.from({ length: count }, (_, index) => {
+            return samplePreset(anchors, index / Math.max(1, count - 1));
+          });
+        }
+
+        const huePatterns = {
+          complementary: [0, 180],
+          split: [0, 150, 210],
+          triadic: [0, 120, 240]
+        };
+
+        return Array.from({ length: count }, (_, index) => {
+          const noise = paletteNoise[index];
+          const position = index / Math.max(1, count - 1);
+          let hue;
+          let saturation;
+          let lightness;
+
+          if (type === "random") {
+            hue = baseHue + noise.hue * 360;
+            saturation = 64 + noise.saturation * 28;
+            lightness = 44 + noise.lightness * 24;
+          } else if (type === "monochrome") {
+            hue = baseHue + (noise.hue - 0.5) * 8;
+            saturation = 54 + noise.saturation * 32;
+            lightness = 27 + position * 52 + (noise.lightness - 0.5) * 7;
+          } else if (type === "analogous") {
+            hue = baseHue - 48 + position * 96 + (noise.hue - 0.5) * 10;
+            saturation = 68 + noise.saturation * 22;
+            lightness = 46 + noise.lightness * 20;
+          } else {
+            const pattern = huePatterns[type];
+            hue = baseHue + pattern[index % pattern.length] +
+              (noise.hue - 0.5) * 10;
+            saturation = 68 + noise.saturation * 24;
+            lightness = 44 + noise.lightness * 23;
+          }
+
+          return hslColor(hue, saturation, lightness);
+        });
+      }
+
+      function getPaletteIndex(ringIndex, sectorIndex) {
+        const mirrorSymmetry = mirrorSymmetryControl.checked;
+        const effectiveSector = mirrorSymmetry
+          ? mirroredSectorIndex(sectorIndex)
+          : sectorIndex;
+        const colorCount = activePalette.length;
+
+        switch (arrangementControl.value) {
+          case "rings":
+            return (ringIndex + paletteOffset) % colorCount;
+          case "sectors":
+            return (effectiveSector + paletteOffset) % colorCount;
+          case "checker":
+            return (ringIndex + effectiveSector + paletteOffset) % colorCount;
+          case "radial":
+            return (
+              Math.round(
+                (ringIndex / Math.max(1, RING_COUNT - 1)) *
+                (colorCount - 1)
+              ) + paletteOffset
+            ) % colorCount;
+          default:
+            return Math.min(
+              colorCount - 1,
+              Math.floor(cellNoise[ringIndex][effectiveSector] * colorCount)
+            );
+        }
+      }
+
+      function applyPalette() {
+        paths.forEach((ringPaths, ringIndex) => {
+          ringPaths.forEach((path, sectorIndex) => {
+            path.setAttribute(
+              "fill",
+              activePalette[getPaletteIndex(ringIndex, sectorIndex)]
+            );
+          });
+        });
+      }
+
+      function refreshPalette() {
+        activePalette = generatePalette();
+        baseHueValue.value = `${baseHueControl.value}°`;
+        colorCountValue.value = colorCountControl.value;
+        baseHueControl.disabled = fixedPaletteTypes.has(
+          paletteTypeControl.value
+        );
+        applyPalette();
+      }
+
+      function shufflePalette() {
+        paletteNoise = makePaletteNoise();
+        cellNoise = makeCellNoise();
+        paletteOffset = Math.floor(Math.random() * 16);
+        refreshPalette();
+      }
+
+      mirrorSymmetryControl.addEventListener("change", applyPalette);
+      paletteTypeControl.addEventListener("change", refreshPalette);
+      baseHueControl.addEventListener("input", refreshPalette);
+      colorCountControl.addEventListener("input", refreshPalette);
+      arrangementControl.addEventListener("change", applyPalette);
+      shufflePaletteButton.addEventListener("click", shufflePalette);
+      refreshPalette();
+
+      function calculateRingRadii(time) {
+        const weights = ringAnimation.map((settings) => {
+          const primaryWave =
+            Math.sin(time * settings.rateA + settings.phaseA);
+
+          const secondaryWave =
+            Math.sin(time * settings.rateB + settings.phaseB);
+
+          return Math.max(
+            0.16,
+            settings.base *
+              (
+                1 +
+                RING_MOVEMENT * primaryWave +
+                0.11 * secondaryWave
+              )
+          );
+        });
+
+        const thicknesses = normalize(weights, RADIUS);
+        const radii = [0];
+
+        let accumulatedRadius = 0;
+
+        for (const thickness of thicknesses) {
+          accumulatedRadius += thickness;
+          radii.push(accumulatedRadius);
+        }
+
+        return radii;
+      }
+
+      function calculateSectorWidths(time) {
+        const weights = sectorAnimation.map((settings) => {
+          const primaryWave =
+            Math.sin(time * settings.rateA + settings.phaseA);
+
+          const secondaryWave =
+            Math.sin(time * settings.rateB + settings.phaseB);
+
+          return Math.max(
+            0.16,
+            settings.base *
+              (
+                1 +
+                SECTOR_MOVEMENT * primaryWave +
+                0.12 * secondaryWave
+              )
+          );
+        });
+
+        if (!mirrorSymmetryControl.checked) {
+          return normalize(weights, Math.PI * 2);
+        }
+
+        const quadrant = normalize(
+          weights.slice(0, SECTORS_PER_QUADRANT),
+          Math.PI / 2
+        );
+
+        const mirroredQuadrant = [...quadrant].reverse();
+
+        /*
+         * Q1: original
+         * Q2: mirror
+         * Q3: original
+         * Q4: mirror
+         */
+        return [
+          ...quadrant,
+          ...mirroredQuadrant,
+          ...quadrant,
+          ...mirroredQuadrant
+        ];
+      }
+
+      function animate(milliseconds) {
+        const time =
+          milliseconds *
+          0.001 *
+          SPEED *
+          motionMultiplier;
+
+        const ringRadii = calculateRingRadii(time);
+        const sectorWidths = calculateSectorWidths(time);
+
+        /*
+         * Start at the top of the circle.
+         */
+        const angles = [-Math.PI / 2];
+
+        for (const width of sectorWidths) {
+          angles.push(angles[angles.length - 1] + width);
+        }
+
+        for (let ring = 0; ring < RING_COUNT; ring += 1) {
+          const innerRadius = Math.max(
+            0,
+            ringRadii[ring] - RADIAL_OVERLAP
+          );
+
+          const outerRadius =
+            ringRadii[ring + 1] + RADIAL_OVERLAP;
+
+          for (let sector = 0; sector < SECTOR_COUNT; sector += 1) {
+            const startAngle =
+              angles[sector] - ANGULAR_OVERLAP;
+
+            const endAngle =
+              angles[sector + 1] + ANGULAR_OVERLAP;
+
+            paths[ring][sector].setAttribute(
+              "d",
+              annularSectorPath(
+                innerRadius,
+                outerRadius,
+                startAngle,
+                endAngle
+              )
+            );
+          }
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      requestAnimationFrame(animate);
+    })();
+  </script>
+</body>
+</html>

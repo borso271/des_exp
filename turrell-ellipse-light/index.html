@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Concentric Ellipse Light Study</title>
+<link rel="stylesheet" href="./styles.css?v=palette-1">
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div id="ui">
+  <h1>Concentric ellipse light — controls</h1>
+  <details open id="palette-section"><summary>Color palette</summary>
+    <div class="row select"><label for="colorStudy">Color study</label><select id="colorStudy">
+      <option value="reference">Reference green</option><option value="amber">Amber glow</option>
+      <option value="dusk">Dusk / rose</option><option value="violet">Violet chamber</option>
+      <option value="ice">Glacial light</option><option value="eclipse">Ember eclipse</option>
+      <option value="silver">Silver light</option><option value="custom" disabled>Adjusted</option>
+    </select></div>
+    <div class="row select"><label for="paletteStyle">Palette style</label><select id="paletteStyle" data-k="paletteStyle">
+      <option value="reference">Reference green</option><option value="custom">Custom colors</option>
+      <optgroup label="Color harmonies"><option value="monochrome">Quasi monochrome</option>
+        <option value="analogous">Analogous</option><option value="complementary">Complementary</option>
+        <option value="split">Split complementary</option><option value="triadic">Triadic</option><option value="random">Seeded random</option></optgroup>
+      <optgroup label="Named palettes"><option value="ocean">Ocean</option><option value="sunset">Sunset</option>
+        <option value="candy">Candy</option><option value="forest">Forest</option><option value="neon">Neon</option><option value="grayscale">Grayscale</option></optgroup>
+    </select></div>
+    <div class="row" id="base-hue-row"><label>Base hue</label><input data-k="baseHue" type="range" min="0" max="360" step="1" data-unit="°"><output></output></div>
+    <div class="row" id="variation-row"><label>Color variation</label><input data-k="colorVariation" type="range" min="0" max="100" step="1" data-unit="%"><output></output></div>
+    <div class="row"><label>Hue rotation</label><input data-k="hueRotation" type="range" min="-180" max="180" step="1" data-unit="°"><output></output></div>
+    <div class="row"><label>Saturation</label><input data-k="saturation" type="range" min="0" max="150" step="1" data-unit="%"><output></output></div>
+    <div class="row"><label>Lightness shift</label><input data-k="brightness" type="range" min="-40" max="40" step="1"><output></output></div>
+    <div class="buttons"><button id="newPalette">New variation</button><button id="resetColors">Reset colors</button></div>
+    <div id="palettePreview" role="img" aria-label="Field colors, from background to core"></div>
+    <div class="preview-labels"><span>Background</span><span>Outer → core</span></div>
+  </details>
+
+  <details id="progression-section"><summary>Color progression / light</summary>
+    <div class="row select"><label for="progression">Progression</label><select id="progression" data-k="progression">
+      <option value="sequence">Even progression</option><option value="ease-in">Change near the core</option>
+      <option value="ease-out">Change near the outside</option><option value="return">Out and back</option>
+      <option value="alternating">Alternating hues</option>
+    </select></div>
+    <label class="check"><input data-k="reversePalette" type="checkbox"> Reverse palette direction</label>
+    <div class="row"><label>Palette range</label><input data-k="paletteSpan" type="range" min="10" max="100" step="1" data-unit="%"><output></output></div>
+    <div class="row"><label>Palette offset</label><input data-k="paletteOffset" type="range" min="-100" max="100" step="1" data-unit="%"><output></output></div>
+    <div class="row select"><label for="colorBlend">Color blending</label><select id="colorBlend" data-k="colorBlend">
+      <option value="hsl">Hue interpolation</option><option value="rgb">Linear light RGB</option><option value="steps">Discrete colors</option>
+    </select></div>
+    <div class="row select"><label for="lightProfile">Lightness profile</label><select id="lightProfile" data-k="lightProfile">
+      <option value="palette">Palette lightness</option><option value="luminous">Luminous core</option>
+      <option value="dark-core">Dark core</option><option value="alternating">Alternating light / dark</option>
+    </select></div>
+    <div class="row"><label>Profile strength</label><input data-k="lightStrength" type="range" min="0" max="100" step="1" data-unit="%"><output></output></div>
+    <div class="row select"><label for="backgroundMode">Background</label><select id="backgroundMode" data-k="backgroundMode">
+      <option value="related">Related to outer ellipse</option><option value="opposite">Complementary surround</option><option value="manual">Independent color</option>
+    </select></div>
+    <div class="row"><label>Background shift</label><input data-k="backgroundOffset" type="range" min="-60" max="40" step="1"><output></output></div>
+    <p class="note">Progression assigns colors from the outer ellipse inward. Lightness profiles shape the light independently of hue. Lower palette range uses a narrower part of the palette.</p>
+  </details>
+
+  <details><summary>Individual field colors</summary>
+    <div class="row color"><label>Background</label><input data-k="bg" type="color"></div>
+    <div class="row color"><label>Outer ellipse</label><input data-k="c1" type="color"></div>
+    <div class="row color"><label>Ring 2</label><input data-k="c2" type="color"></div>
+    <div class="row color"><label>Ring 3</label><input data-k="c3" type="color"></div>
+    <div class="row color"><label>Ring 4</label><input data-k="c4" type="color"></div>
+    <div class="row color"><label>Core</label><input data-k="c5" type="color"></div>
+    <p class="note">Editing a field switches to Custom colors and keeps all displayed colors. Global adjustments restart from this custom palette.</p>
+  </details>
+
+  <details><summary>Composition</summary>
+    <div class="row"><label>Center X</label><input data-k="centerX" type="range" min="0" max="1" step="0.001"><output></output></div>
+    <div class="row"><label>Center Y</label><input data-k="centerY" type="range" min="0" max="1" step="0.001"><output></output></div>
+    <div class="row"><label>Outer radius X</label><input data-k="radiusX" type="range" min="0.1" max="0.7" step="0.001"><output></output></div>
+    <div class="row"><label>Outer radius Y</label><input data-k="radiusY" type="range" min="0.1" max="0.7" step="0.001"><output></output></div>
+    <div class="row"><label>Rotation</label><input data-k="rotation" type="range" min="-30" max="30" step="0.1"><output></output></div>
+  </details>
+
+  <details><summary>Nested ellipses</summary>
+    <div class="row"><label>Ring 2 radius</label><input data-k="ring2" type="range" min="0.2" max="0.95" step="0.001"><output></output></div>
+    <div class="row"><label>Ring 3 radius</label><input data-k="ring3" type="range" min="0.1" max="0.9" step="0.001"><output></output></div>
+    <div class="row"><label>Ring 4 radius</label><input data-k="ring4" type="range" min="0.08" max="0.8" step="0.001"><output></output></div>
+    <div class="row"><label>Core radius</label><input data-k="core" type="range" min="0.03" max="0.5" step="0.001"><output></output></div>
+    <div class="row"><label>Core roundness</label><input data-k="coreRoundness" type="range" min="0.65" max="1.35" step="0.001"><output></output></div>
+    <div class="row"><label>Edge softness</label><input data-k="softness" type="range" min="0.001" max="0.08" step="0.001"><output></output></div>
+    <div class="row"><label>Core softness</label><input data-k="coreSoftness" type="range" min="0.001" max="0.16" step="0.001"><output></output></div>
+    <div class="row"><label>Center glow</label><input data-k="coreGlow" type="range" min="0" max="1" step="0.001"><output></output></div>
+  </details>
+
+  <details><summary>Light / atmosphere</summary>
+    <div class="row"><label>Exposure</label><input data-k="exposure" type="range" min="0.5" max="1.8" step="0.001"><output></output></div>
+    <div class="row"><label>Bottom falloff</label><input data-k="bottomFalloff" type="range" min="0" max="0.5" step="0.001"><output></output></div>
+    <div class="row"><label>Vignette</label><input data-k="vignette" type="range" min="0" max="0.5" step="0.001"><output></output></div>
+    <div class="row"><label>Ambient halo</label><input data-k="halo" type="range" min="0" max="0.7" step="0.001"><output></output></div>
+    <div class="row"><label>Grain</label><input data-k="grain" type="range" min="0" max="0.08" step="0.001"><output></output></div>
+    <div class="row"><label>Band irregularity</label><input data-k="irregularity" type="range" min="0" max="0.04" step="0.0005"><output></output></div>
+    <div class="row"><label>Breathing</label><input data-k="breathing" type="range" min="0" max="0.04" step="0.0005"><output></output></div>
+    <div class="row"><label>Breathing speed</label><input data-k="breathingSpeed" type="range" min="0.05" max="1.5" step="0.01"><output></output></div>
+  </details>
+
+
+
+  <details><summary>Render / export</summary>
+    <div class="row"><label>Render scale</label><input data-k="renderScale" type="range" min="0.5" max="2" step="0.05"><output></output></div>
+    <div class="row"><label>Export width</label><input id="exportWidth" type="number" min="512" max="8192" step="1" value="2400"><span>px</span></div>
+    <div class="buttons"><button id="exportBtn">Export PNG</button><button id="saveBtn">Save JSON</button></div>
+    <div class="buttons"><button id="loadBtn">Load JSON</button><button id="resetBtn">Reset reference</button></div>
+    <input id="fileInput" type="file" accept="application/json" hidden>
+  </details>
+  <p class="note">Drag the canvas to move the center. H hides controls. F toggles fullscreen. R restores the reference preset.</p>
+  <div id="status" role="status" aria-live="polite"></div>
+</div>
+<script src="../js/shared/color-palettes.js"></script>
+<script src="./palette.js?v=palette-1"></script>
+<script src="./app.js?v=palette-1"></script>
+</body>
+</html>

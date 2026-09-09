@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Triangle Color Field</title>
+  <link rel="stylesheet" href="./styles.css?v=palettes-1" />
+</head>
+<body>
+  <aside class="controls" aria-label="Triangle color field controls">
+    <header><p class="eyebrow">COLOR & GEOMETRY</p><h1>Triangle Color Field</h1><p class="note">Explore color relationships across a field of solid triangles.</p></header>
+    <div class="control">
+      <label for="study">Color study</label>
+      <select id="study">
+        <option value="original">Original coral / violet</option>
+        <option value="amber">Near monochrome · amber</option>
+        <option value="opposing">Complementary · opposing</option>
+        <option value="sunset">Sunset · mirrored</option>
+        <option value="neon">Neon · repeating steps</option>
+        <option value="forest">Forest · scattered</option>
+        <option value="custom" disabled>Custom study</option>
+      </select>
+    </div>
+    <details open>
+      <summary>Geometry</summary>
+      <div class="control"><label for="ratio">Height / width <output id="ratioOut">0.58</output></label><input id="ratio" type="range" min="0.20" max="1.80" step="0.01" value="0.58" /></div>
+      <div class="control"><label for="columns">Columns <output id="columnsOut">36</output></label><input id="columns" type="range" min="4" max="120" step="1" value="36" /></div>
+      <label class="check"><input id="flip" type="checkbox" checked /> Alternate diagonals</label>
+    </details>
+    <details open>
+      <summary>Palette</summary>
+      <div class="control"><label for="palette-source">Palette source</label><select id="palette-source"><option value="manual">Manual colors</option><option value="generated">Generated palette</option></select></div>
+      <div id="generated-controls" hidden>
+        <div class="control"><label for="palette-type">Palette style</label><select id="palette-type">
+          <option value="monochrome">Near monochrome</option><option value="analogous">Analogous</option><option value="complementary">Complementary</option><option value="split">Split complementary</option><option value="triadic">Triadic</option><option value="random">Random harmony</option><option value="ocean">Ocean</option><option value="sunset">Sunset</option><option value="candy">Candy</option><option value="forest">Forest</option><option value="neon">Neon</option><option value="grayscale">Grayscale</option>
+        </select></div>
+        <div class="control"><label for="base-hue">Base hue <output id="base-hue-out">28°</output></label><input id="base-hue" type="range" min="0" max="360" value="28" /></div>
+        <div class="control" id="rotation-control" hidden><label for="hue-rotation">Hue rotation <output id="hue-rotation-out">0°</output></label><input id="hue-rotation" type="range" min="-180" max="180" value="0" /></div>
+        <div class="control"><label for="color-variation">Color variation <output id="color-variation-out">40%</output></label><input id="color-variation" type="range" min="0" max="100" value="40" /></div>
+        <button id="new-palette" type="button">New palette variation</button>
+      </div>
+      <div class="control"><label for="palette-count">Palette colors <output id="palette-count-out">2</output></label><input id="palette-count" type="range" min="2" max="8" value="2" /></div>
+      <div id="palette-swatches" class="swatches" aria-label="Palette colors"></div>
+      <p class="note">Edit any swatch to make the palette your own. Adding colors inserts evenly spaced stops.</p>
+      <div class="buttons"><button id="swap" type="button">Reverse palette</button><button id="rotate" type="button">Rotate</button><button id="shuffle" type="button">Shuffle</button></div>
+      <div id="palette-preview" class="color-strip" role="img" aria-label="Palette progression preview"></div>
+    </details>
+    <details open>
+      <summary>Color progression</summary>
+      <div class="control"><label for="pattern">Across triangles</label><select id="pattern">
+        <option value="sequence">Triangle sequence</option><option value="columns">Together by column</option><option value="opposing">Opposing triangles</option><option value="center">From center outward</option><option value="scatter">Seeded scatter</option>
+      </select></div>
+      <p class="note" id="pattern-note">Each triangle takes the next color along the palette.</p>
+      <button id="reshuffle" type="button" hidden>Reshuffle triangles</button>
+      <div class="control"><label for="transition">Transitions</label><select id="transition"><option value="continuous">Continuous</option><option value="soft">Soft transitions</option><option value="steps">Discrete palette colors</option></select></div>
+      <div class="control"><label for="color-space">Color blending</label><select id="color-space"><option value="oklab">Perceptual · OKLab</option><option value="rgb">Linear light · RGB</option><option value="hsl">Along the hue wheel · HSL</option></select></div>
+      <div class="control"><label for="curve">Progression curve</label><select id="curve"><option value="linear">Even progression</option><option value="ease-in">Slow start</option><option value="ease-out">Slow finish</option><option value="smooth">Slow at both ends</option></select></div>
+      <label class="check"><input id="reverse" type="checkbox" /> Reverse progression</label>
+      <div class="control"><label for="span">Palette span <output id="span-out">100%</output></label><input id="span" type="range" min="10" max="300" value="100" /></div>
+      <div class="control"><label for="offset">Palette offset <output id="offset-out">0%</output></label><input id="offset" type="range" min="-200" max="200" value="0" /></div>
+      <div class="control"><label for="overflow">Outside the palette</label><select id="overflow"><option value="extend">Hold edge colors</option><option value="mirror">Mirror back and forth</option><option value="repeat">Repeat from the start</option><option value="loop">Seamless loop</option></select></div>
+      <div class="control"><label for="pair-shift">Second triangle shift <output id="pair-shift-out">0%</output></label><input id="pair-shift" type="range" min="-100" max="100" value="0" /></div>
+      <p class="note">A shorter span crosses the palette faster. The second triangle shift separates the colors on either side of each diagonal.</p>
+      <button id="reset-progression" type="button">Reset progression</button>
+    </details>
+  </aside>
+  <main class="stage">
+    <div id="composition" role="img" aria-label="Field of 72 colored triangles"></div>
+  </main>
+  <script src="../js/shared/color-palettes.js"></script>
+  <script src="./color-field.js?v=palettes-1"></script>
+  <script src="./app.js?v=palettes-1"></script>
+</body>
+</html>

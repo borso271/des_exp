@@ -1,0 +1,961 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  />
+
+  <title>Symmetric SVG Rings</title>
+
+  <link rel="stylesheet" href="circle.css?v=manifesto-1" />
+</head>
+
+<body>
+  <div class="animation-box">
+    <svg
+      id="art"
+      class="presentation-polar"
+      viewBox="-96 -96 192 192"
+      preserveAspectRatio="xMidYMid slice"
+      role="img"
+      aria-label="Animated circle made from symmetric colored rings and sectors"
+    >
+      <defs>
+        <!-- Keeps the outer edge perfectly circular. -->
+        <clipPath id="disc-clip">
+          <circle cx="0" cy="0" r="96"></circle>
+        </clipPath>
+      </defs>
+
+      <g id="cells" clip-path="url(#disc-clip)"></g>
+    </svg>
+
+    <div
+      id="be-arts-logo"
+      class="logo-layer logo-align-top effect-invert"
+    >
+      <div class="logo-graphic" role="img" aria-label="BE ARTS">
+        <img
+          class="logo-solid"
+          src="logo_be_arts.svg"
+          alt=""
+        />
+        <span class="logo-effect" aria-hidden="true"></span>
+      </div>
+
+      <section
+        class="event-copy text-effect-invert"
+        aria-label="Event details"
+      >
+        <h1 class="manifesto-title" lang="es" aria-label="NO SOMOS ESPECTADORES">
+          <span class="manifesto-top"><span>NO</span> <span>SOMOS</span></span>
+          <span class="manifesto-bottom">ESPECTADORES</span>
+        </h1>
+        <p class="event-kicker">
+          <span>Join us</span>
+          <span>November 4</span>
+        </p>
+
+        <p class="event-venue">
+          At Museo Nacional<br />
+          <span class="event-venue-name">Thyssen‑Bornemisza</span>
+        </p>
+
+        <div class="speaker-block">
+          <p class="speaker-label">With</p>
+          <ul class="speaker-list" aria-label="Speakers">
+            <li>Lucía Ferrer</li>
+            <li>Omar Diallo</li>
+            <li>Mina Park</li>
+            <li>Théo Laurent</li>
+          </ul>
+        </div>
+
+        <p class="event-link">
+          <span>Discover more</span>
+          <span class="event-link-address">bearts.art/november4</span>
+        </p>
+      </section>
+    </div>
+  </div>
+
+  <aside
+    id="controls-panel"
+    class="controls"
+    aria-label="Animation controls"
+  >
+    <div class="controls-header">
+      <h2>Controls</h2>
+      <button
+        id="hide-controls"
+        class="controls-dismiss"
+        type="button"
+        aria-controls="controls-panel"
+      >Hide</button>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="symmetry-mode">Symmetry</label>
+      <select id="symmetry-mode">
+        <option value="none">None</option>
+        <option value="horizontal">Horizontal</option>
+        <option value="vertical">Vertical</option>
+        <option value="four-way" selected>Four-way</option>
+        <option value="point">Point · 180°</option>
+      </select>
+    </div>
+
+    <div class="control-divider"></div>
+
+    <p class="control-section-title">Geometry</p>
+
+    <div class="control-group">
+      <label class="control-label" for="geometry-type">Shape family</label>
+      <select id="geometry-type">
+        <option value="rings">Circle rings</option>
+        <option value="polygons">Polygon rings</option>
+        <option value="superellipse">Superellipse rings</option>
+        <option value="grid">Modular grid</option>
+        <option value="diagonal">Diagonal bands</option>
+        <option value="pinched">Pinched stripes</option>
+        <option value="rays">Ray fan</option>
+        <option value="moving">Moving composition</option>
+      </select>
+    </div>
+
+    <div class="control-group" data-geometry-only="rings polygons superellipse">
+      <label class="control-label" for="ring-count"><span>Rings</span><output id="ring-count-value" class="control-value" for="ring-count">8</output></label>
+      <input id="ring-count" type="range" min="1" max="24" step="1" value="8" />
+    </div>
+
+    <div class="control-group" data-geometry-only="rings polygons superellipse">
+      <label class="control-label" for="sector-count"><span>Sectors</span><output id="sector-count-value" class="control-value" for="sector-count">16</output></label>
+      <input id="sector-count" type="range" min="1" max="32" step="1" value="16" />
+      <p class="control-hint">Set to 1 for undivided rings. Vertical, four-way, and point symmetry require an even sector count.</p>
+    </div>
+
+    <div class="control-group" data-geometry-only="moving" hidden>
+      <label class="control-label" for="moving-shape-count">
+        <span>Number of shapes</span>
+        <output id="moving-shape-count-value" class="control-value" for="moving-shape-count">18</output>
+      </label>
+      <input id="moving-shape-count" type="range" min="2" max="60" value="18" />
+    </div>
+
+    <div class="control-group" data-geometry-only="moving" hidden>
+      <label class="control-label" for="moving-breathing">
+        <span>Size breathing</span>
+        <output id="moving-breathing-value" class="control-value" for="moving-breathing">65%</output>
+      </label>
+      <input id="moving-breathing" type="range" min="0" max="100" value="65" />
+    </div>
+
+    <div class="control-group" data-geometry-only="moving" hidden>
+      <label class="control-label" for="moving-speed">
+        <span>Motion speed</span>
+        <output id="moving-speed-value" class="control-value" for="moving-speed">100%</output>
+      </label>
+      <input id="moving-speed" type="range" min="10" max="300" value="100" />
+    </div>
+
+    <div class="control-group" data-geometry-only="moving" hidden>
+      <button id="moving-regenerate" type="button">Regenerate composition</button>
+      <p class="control-hint">Shapes may disappear as neighboring regions expand.</p>
+    </div>
+
+    <div class="control-group" data-geometry-only="polygons">
+      <label class="control-label" for="polygon-sides">
+        <span>Polygon sides</span>
+        <output id="polygon-sides-value" class="control-value">6</output>
+      </label>
+      <input
+        id="polygon-sides"
+        type="range"
+        min="3"
+        max="12"
+        value="6"
+      />
+    </div>
+
+    <div class="control-group" data-geometry-only="superellipse">
+      <label class="control-label" for="superellipse-roundness">
+        <span>Roundness</span>
+        <output
+          id="superellipse-roundness-value"
+          class="control-value"
+        >4.0</output>
+      </label>
+      <input
+        id="superellipse-roundness"
+        type="range"
+        min="2"
+        max="12"
+        step="0.1"
+        value="4"
+      />
+    </div>
+
+    <div
+      class="control-group"
+      data-geometry-only="polygons superellipse"
+    >
+      <label class="control-label" for="shape-rotation">
+        <span>Shape rotation</span>
+        <output id="shape-rotation-value" class="control-value">0°</output>
+      </label>
+      <input
+        id="shape-rotation"
+        type="range"
+        min="0"
+        max="360"
+        value="0"
+      />
+    </div>
+
+    <div class="control-group" data-geometry-only="grid">
+      <label class="control-label" for="grid-rows">
+        <span>Rows</span>
+        <output id="grid-rows-value" class="control-value">8</output>
+      </label>
+      <input
+        id="grid-rows"
+        type="range"
+        min="2"
+        max="16"
+        value="8"
+      />
+    </div>
+
+    <div class="control-group" data-geometry-only="grid">
+      <label class="control-label" for="grid-columns">
+        <span>Columns</span>
+        <output id="grid-columns-value" class="control-value">16</output>
+      </label>
+      <input
+        id="grid-columns"
+        type="range"
+        min="2"
+        max="24"
+        value="16"
+      />
+    </div>
+
+    <div class="control-group" data-geometry-only="diagonal">
+      <label class="control-label" for="diagonal-band-count">
+        <span>Band count</span>
+        <output
+          id="diagonal-band-count-value"
+          class="control-value"
+        >12</output>
+      </label>
+      <input
+        id="diagonal-band-count"
+        type="range"
+        min="3"
+        max="24"
+        value="12"
+      />
+    </div>
+
+    <div class="control-group" data-geometry-only="diagonal">
+      <label class="control-label" for="diagonal-angle">
+        <span>Band angle</span>
+        <output id="diagonal-angle-value" class="control-value">35°</output>
+      </label>
+      <input
+        id="diagonal-angle"
+        type="range"
+        min="-75"
+        max="75"
+        value="35"
+      />
+    </div>
+
+    <div class="control-group" data-geometry-only="diagonal">
+      <label class="control-label" for="diagonal-offset">
+        <span>Band offset</span>
+        <output
+          id="diagonal-offset-value"
+          class="control-value"
+        >0%</output>
+      </label>
+      <input
+        id="diagonal-offset"
+        type="range"
+        min="-100"
+        max="100"
+        value="0"
+      />
+    </div>
+
+    <div class="control-group" data-geometry-only="pinched">
+      <label class="control-label" for="pinched-columns">
+        <span>Stripe count</span>
+        <output id="pinched-columns-value" class="control-value">16</output>
+      </label>
+      <input
+        id="pinched-columns"
+        type="range"
+        min="4"
+        max="24"
+        value="16"
+      />
+    </div>
+
+    <div class="control-group" data-geometry-only="pinched">
+      <label class="control-label" for="pinched-count">
+        <span>Pinch count</span>
+        <output id="pinched-count-value" class="control-value">2</output>
+      </label>
+      <input
+        id="pinched-count"
+        type="range"
+        min="1"
+        max="5"
+        value="2"
+      />
+    </div>
+
+    <div class="control-group" data-geometry-only="pinched">
+      <label class="control-label" for="pinched-depth">
+        <span>Pinch depth</span>
+        <output id="pinched-depth-value" class="control-value">92%</output>
+      </label>
+      <input
+        id="pinched-depth"
+        type="range"
+        min="0"
+        max="100"
+        value="92"
+      />
+    </div>
+
+    <div class="control-group" data-geometry-only="pinched">
+      <label class="control-label" for="pinched-position">
+        <span>Vertical position</span>
+        <output
+          id="pinched-position-value"
+          class="control-value"
+        >50%</output>
+      </label>
+      <input
+        id="pinched-position"
+        type="range"
+        min="0"
+        max="100"
+        value="50"
+      />
+    </div>
+
+    <div class="control-group" data-geometry-only="pinched">
+      <label class="control-label" for="pinched-sides">Pinch sides</label>
+      <select id="pinched-sides">
+        <option value="alternating">Alternating</option>
+        <option value="left">Left</option>
+        <option value="right">Right</option>
+      </select>
+    </div>
+
+    <div class="control-group" data-geometry-only="pinched">
+      <label class="control-label" for="pinched-slant">
+        <span>Boundary slant</span>
+        <output id="pinched-slant-value" class="control-value">100%</output>
+      </label>
+      <input
+        id="pinched-slant"
+        type="range"
+        min="0"
+        max="100"
+        value="100"
+      />
+    </div>
+
+    <div class="control-group" data-geometry-only="pinched">
+      <label class="control-label" for="pinched-motion">
+        <span>Motion</span>
+        <output id="pinched-motion-value" class="control-value">55%</output>
+      </label>
+      <input
+        id="pinched-motion"
+        type="range"
+        min="0"
+        max="100"
+        value="55"
+      />
+    </div>
+
+    <div class="control-group" data-geometry-only="pinched">
+      <label class="control-label" for="pinched-speed">
+        <span>Motion speed</span>
+        <output id="pinched-speed-value" class="control-value">150%</output>
+      </label>
+      <input
+        id="pinched-speed"
+        type="range"
+        min="10"
+        max="200"
+        value="150"
+      />
+    </div>
+
+    <div class="control-group" data-geometry-only="rays">
+      <label class="control-label" for="ray-origin">Ray origin</label>
+      <select id="ray-origin">
+        <option value="bottom-center">Bottom center</option>
+        <option value="top-center">Top center</option>
+        <option value="top-left">Top left</option>
+        <option value="top-right">Top right</option>
+        <option value="bottom-left">Bottom left</option>
+        <option value="bottom-right">Bottom right</option>
+      </select>
+    </div>
+
+    <div class="control-group" data-geometry-only="rays">
+      <label class="control-label" for="ray-count">
+        <span>Ray count</span>
+        <output id="ray-count-value" class="control-value">16</output>
+      </label>
+      <input
+        id="ray-count"
+        type="range"
+        min="4"
+        max="32"
+        step="2"
+        value="16"
+      />
+    </div>
+
+    <div class="control-group" data-geometry-only="rays">
+      <label class="control-label" for="ray-motion">
+        <span>Ray motion</span>
+        <output id="ray-motion-value" class="control-value">48%</output>
+      </label>
+      <input
+        id="ray-motion"
+        type="range"
+        min="0"
+        max="100"
+        value="48"
+      />
+    </div>
+
+    <div class="control-group" data-geometry-only="rays">
+      <label class="control-label" for="ray-speed">
+        <span>Motion speed</span>
+        <output id="ray-speed-value" class="control-value">120%</output>
+      </label>
+      <input
+        id="ray-speed"
+        type="range"
+        min="10"
+        max="200"
+        value="120"
+      />
+    </div>
+
+    <div class="control-divider"></div>
+
+    <p class="control-section-title">Rendering</p>
+
+    <div class="control-group">
+      <label class="control-label" for="render-style">Style</label>
+      <select id="render-style">
+        <option value="solid">Solid</option>
+        <option value="gradient">Gradient</option>
+        <option value="luminous">Luminous regions</option>
+      </select>
+    </div>
+
+    <div class="control-group" data-render-only="gradient" hidden>
+      <label class="control-label" for="gradient-type">Gradient type</label>
+      <select id="gradient-type">
+        <option value="linear">Linear</option>
+        <option value="radial">Radial</option>
+      </select>
+      <p class="control-hint">Each shape blends through the active palette. Arrangement sets its starting color.</p>
+    </div>
+    <div class="control-group" data-render-only="gradient" id="gradient-direction-group" hidden>
+      <label class="control-label" for="gradient-angle"><span>Direction</span><output id="gradient-angle-value" for="gradient-angle" class="control-value">90°</output></label>
+      <input id="gradient-angle" type="range" min="0" max="360" step="1" value="90" />
+      <p class="control-hint">0° left to right · 90° top to bottom</p>
+    </div>
+    <div class="control-group" data-render-only="gradient" hidden>
+      <label class="control-label" for="gradient-reverse"><span>Reverse colors</span><input id="gradient-reverse" type="checkbox" /></label>
+    </div>
+
+    <div class="control-group" data-render-only="luminous">
+      <label class="control-label" for="luminous-bloom">
+        <span>Bloom strength</span>
+        <output id="luminous-bloom-value" class="control-value">86%</output>
+      </label>
+      <input
+        id="luminous-bloom"
+        type="range"
+        min="0"
+        max="150"
+        value="86"
+      />
+    </div>
+
+    <div class="control-group" data-render-only="luminous">
+      <label class="control-label" for="luminous-softness">
+        <span>Blend softness</span>
+        <output
+          id="luminous-softness-value"
+          class="control-value"
+        >28</output>
+      </label>
+      <input
+        id="luminous-softness"
+        type="range"
+        min="0"
+        max="70"
+        value="28"
+      />
+    </div>
+
+    <div class="control-group" data-render-only="luminous">
+      <label class="control-label" for="luminous-pale-depth">
+        <span>Pale-region depth</span>
+        <output
+          id="luminous-pale-depth-value"
+          class="control-value"
+        >34%</output>
+      </label>
+      <input
+        id="luminous-pale-depth"
+        type="range"
+        min="5"
+        max="70"
+        value="34"
+      />
+    </div>
+
+    <div class="control-group" data-render-only="luminous">
+      <label class="control-label" for="luminous-transition">
+        <span>Color transition</span>
+        <output
+          id="luminous-transition-value"
+          class="control-value"
+        >54%</output>
+      </label>
+      <input
+        id="luminous-transition"
+        type="range"
+        min="25"
+        max="80"
+        value="54"
+      />
+    </div>
+
+    <div class="control-group" data-render-only="luminous">
+      <label class="control-label" for="luminous-warmth">
+        <span>Warm / cool balance</span>
+        <output id="luminous-warmth-value" class="control-value">70%</output>
+      </label>
+      <input
+        id="luminous-warmth"
+        type="range"
+        min="0"
+        max="100"
+        value="70"
+      />
+    </div>
+
+    <div class="control-group" data-render-only="luminous">
+      <label class="control-label" for="luminous-scale">
+        <span>Light-field scale</span>
+        <output id="luminous-scale-value" class="control-value">100%</output>
+      </label>
+      <input
+        id="luminous-scale"
+        type="range"
+        min="50"
+        max="180"
+        value="100"
+      />
+    </div>
+
+    <div class="control-group" data-render-only="luminous">
+      <label class="control-label" for="luminous-variation">
+        <span>Field variation</span>
+        <output
+          id="luminous-variation-value"
+          class="control-value"
+        >55%</output>
+      </label>
+      <input
+        id="luminous-variation"
+        type="range"
+        min="0"
+        max="100"
+        value="55"
+      />
+    </div>
+
+    <div class="control-group" data-render-only="luminous">
+      <label class="control-label" for="luminous-motion">
+        <span>Field motion</span>
+        <output id="luminous-motion-value" class="control-value">35%</output>
+      </label>
+      <input
+        id="luminous-motion"
+        type="range"
+        min="0"
+        max="100"
+        value="35"
+      />
+    </div>
+
+    <div class="control-group" data-render-only="luminous">
+      <label class="control-label" for="luminous-speed">
+        <span>Motion speed</span>
+        <output id="luminous-speed-value" class="control-value">90%</output>
+      </label>
+      <input
+        id="luminous-speed"
+        type="range"
+        min="10"
+        max="200"
+        value="90"
+      />
+    </div>
+
+    <div class="control-group" data-render-only="luminous">
+      <button id="randomize-luminous" type="button">
+        Randomize light fields
+      </button>
+    </div>
+
+    <div class="control-divider"></div>
+
+    <p class="control-section-title">Frame</p>
+
+    <div class="control-group">
+      <label class="control-label" for="frame-preset">Shape</label>
+      <select id="frame-preset">
+        <option value="square">Square · 1:1</option>
+        <option value="landscape">Landscape · 3:2</option>
+        <option value="widescreen">Widescreen · 16:9</option>
+        <option value="portrait">Portrait · 3:4</option>
+        <option value="custom">Custom</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="frame-width">
+        <span>Width</span>
+        <output id="frame-width-value" class="control-value">900 px</output>
+      </label>
+      <input
+        id="frame-width"
+        type="range"
+        min="320"
+        max="1400"
+        step="10"
+        value="900"
+      />
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="frame-height">
+        <span>Height</span>
+        <output id="frame-height-value" class="control-value">900 px</output>
+      </label>
+      <input
+        id="frame-height"
+        type="range"
+        min="240"
+        max="1000"
+        step="10"
+        value="900"
+      />
+    </div>
+
+    <div class="control-divider"></div>
+
+    <p class="control-section-title">Text layer</p>
+
+    <div class="control-group">
+      <label class="control-label" for="text-content">Text content</label>
+      <select id="text-content">
+        <option value="event" selected>Event details</option>
+        <option value="manifesto">Manifesto · NO SOMOS ESPECTADORES</option>
+      </select>
+    </div>
+
+    <label
+      class="control-row section-control"
+      for="show-be-arts-logo"
+    >
+      <span>Show BE ARTS logo</span>
+      <span class="switch">
+        <input id="show-be-arts-logo" type="checkbox" checked />
+        <span class="switch-track" aria-hidden="true"></span>
+      </span>
+    </label>
+
+    <label
+      class="control-row section-control"
+      for="show-event-copy"
+    >
+      <span>Show text</span>
+      <span class="switch">
+        <input id="show-event-copy" type="checkbox" checked />
+        <span class="switch-track" aria-hidden="true"></span>
+      </span>
+    </label>
+
+    <div class="control-group">
+      <label class="control-label" for="event-text-effect">
+        Text effect
+      </label>
+      <select id="event-text-effect">
+        <option value="solid-black">Solid black</option>
+        <option value="solid-white">Solid white</option>
+        <option value="invert" selected>Invert</option>
+        <option value="difference">Difference</option>
+        <option value="accent">Accent color</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="event-text-accent">
+        <span>Text accent</span>
+        <output id="event-text-accent-value" class="control-value">
+          #7C5CFF
+        </output>
+      </label>
+      <input id="event-text-accent" type="color" value="#7c5cff" />
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="logo-alignment">
+        Vertical alignment
+      </label>
+      <select id="logo-alignment">
+        <option value="top">Top</option>
+        <option value="center">Center</option>
+        <option value="bottom">Bottom</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="logo-padding">
+        <span>Overlay padding</span>
+        <output id="logo-padding-value" class="control-value">24 px</output>
+      </label>
+      <input
+        id="logo-padding"
+        type="range"
+        min="0"
+        max="160"
+        step="2"
+        value="24"
+      />
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="logo-effect">Backdrop effect</label>
+      <select id="logo-effect">
+        <option value="solid">Solid black</option>
+        <option value="accent">Solid accent</option>
+        <option value="invert" selected>Invert</option>
+        <option value="difference">Difference</option>
+        <option value="glass">Glass</option>
+        <option value="hypercolor">Hypercolor</option>
+        <option value="hue">Hue shift</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="logo-accent">
+        <span>Logo accent</span>
+        <output id="logo-accent-value" class="control-value">
+          #7C5CFF
+        </output>
+      </label>
+      <input id="logo-accent" type="color" value="#7c5cff" />
+    </div>
+
+    <label
+      class="control-row section-control"
+      for="match-text-accent"
+    >
+      <span>Match text accent</span>
+      <span class="switch">
+        <input id="match-text-accent" type="checkbox" />
+        <span class="switch-track" aria-hidden="true"></span>
+      </span>
+    </label>
+
+    <div class="control-group">
+      <label class="control-label" for="logo-effect-strength">
+        <span>Effect strength</span>
+        <output
+          id="logo-effect-strength-value"
+          class="control-value"
+        >100%</output>
+      </label>
+      <input
+        id="logo-effect-strength"
+        type="range"
+        min="0"
+        max="100"
+        value="100"
+      />
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="logo-effect-blur">
+        <span>Blur</span>
+        <output id="logo-effect-blur-value" class="control-value">10 px</output>
+      </label>
+      <input
+        id="logo-effect-blur"
+        type="range"
+        min="0"
+        max="30"
+        value="10"
+      />
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="logo-effect-hue">
+        <span>Hue shift</span>
+        <output id="logo-effect-hue-value" class="control-value">90°</output>
+      </label>
+      <input
+        id="logo-effect-hue"
+        type="range"
+        min="0"
+        max="360"
+        value="90"
+      />
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="logo-effect-opacity">
+        <span>Effect opacity</span>
+        <output
+          id="logo-effect-opacity-value"
+          class="control-value"
+        >100%</output>
+      </label>
+      <input
+        id="logo-effect-opacity"
+        type="range"
+        min="0"
+        max="100"
+        value="100"
+      />
+    </div>
+
+    <div class="control-divider"></div>
+
+    <p class="control-section-title">Palette</p>
+
+    <div class="control-group">
+      <label class="control-label" for="palette-type">Palette type</label>
+      <select id="palette-type">
+        <option value="random">Random</option>
+        <option value="monochrome">Near monochrome</option>
+        <option value="analogous">Analogous</option>
+        <option value="complementary">Complementary</option>
+        <option value="split">Split complementary</option>
+        <option value="triadic">Triadic</option>
+        <option value="ocean">Ocean</option>
+        <option value="sunset">Sunset</option>
+        <option value="candy">Candy</option>
+        <option value="forest">Forest</option>
+        <option value="neon">Neon</option>
+        <option value="grayscale">Grayscale</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="base-hue">
+        <span>Base hue</span>
+        <output id="base-hue-value" class="control-value">220°</output>
+      </label>
+      <input id="base-hue" type="range" min="0" max="359" value="220" />
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="color-count">
+        <span>Color count</span>
+        <output id="color-count-value" class="control-value">8</output>
+      </label>
+      <input id="color-count" type="range" min="2" max="16" value="8" />
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="color-variability">
+        <span>Color variability</span>
+        <output id="color-variability-value" class="control-value">
+          40%
+        </output>
+      </label>
+      <input
+        id="color-variability"
+        type="range"
+        min="0"
+        max="100"
+        value="40"
+      />
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="color-arrangement">
+        Arrangement
+      </label>
+      <select id="color-arrangement">
+        <option value="random">Random cells</option>
+        <option value="rings">By ring</option>
+        <option value="sectors">By sector</option>
+        <option value="checker">Checker</option>
+        <option value="radial">Radial gradient</option>
+      </select>
+    </div>
+
+    <button id="shuffle-palette" type="button">Shuffle palette</button>
+
+    <div class="control-divider"></div>
+    <p class="control-section-title">Configuration</p>
+    <button id="download-configuration" type="button">Download JSON</button>
+    <div class="control-group">
+      <label class="control-label" for="load-configuration">Load JSON</label>
+      <input id="load-configuration" type="file" accept=".json,application/json" />
+    </div>
+    <p class="control-hint">Save frame, geometry, logo, effects, and palette settings. Loading regenerates the shape motion.</p>
+    <p class="control-hint" id="configuration-status" role="status" aria-live="polite"></p>
+  </aside>
+
+  <button
+    id="show-controls"
+    class="controls-reveal"
+    type="button"
+    aria-controls="controls-panel"
+    hidden
+  >Show controls</button>
+
+  <script src="js/state.js?v=manifesto-1"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/geometry/rings.js?v=ring-counts-1"></script>
+  <script src="js/geometry/polygons.js?v=ring-counts-1"></script>
+  <script src="js/geometry/superellipse.js?v=ring-counts-1"></script>
+  <script src="js/geometry/grid.js"></script>
+  <script src="js/geometry/diagonal-bands.js"></script>
+  <script src="js/geometry/pinched-stripes.js"></script>
+  <script src="js/geometry/ray-fan.js"></script>
+  <script src="js/geometry/moving-composition.js"></script>
+  <script src="js/palette.js"></script>
+  <script src="js/rendering.js?v=gradients-1"></script>
+  <script src="js/animation.js"></script>
+  <script src="js/overlays.js?v=manifesto-1"></script>
+  <script src="js/controls.js?v=manifesto-1"></script>
+  <script src="js/settings.js?v=manifesto-1"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SVG Blended Light Columns</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #0d0f14;
+    --panel: #171a22;
+    --panel-2: #11141b;
+    --text: #f4f5f7;
+    --muted: #9ca3af;
+    --border: rgba(255,255,255,.10);
+    --accent: #8b8cff;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font: 14px/1.4 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  .app {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(280px, 340px) 1fr;
+  }
+
+  .controls {
+    padding: 22px;
+    border-right: 1px solid var(--border);
+    background: var(--panel-2);
+    overflow: auto;
+  }
+
+  h1 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  .lede {
+    color: var(--muted);
+    margin: 0 0 20px;
+  }
+
+  fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0 0 20px;
+  }
+
+  legend {
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 72px;
+    gap: 10px;
+    align-items: center;
+    margin: 10px 0;
+  }
+
+  .row label { color: #d6d9df; }
+
+  input[type="range"] { width: 100%; accent-color: var(--accent); }
+  input[type="number"], select {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--panel);
+    color: var(--text);
+    padding: 7px 8px;
+  }
+
+  .wide {
+    display: grid;
+    gap: 8px;
+    margin: 10px 0;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    appearance: none;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--panel);
+    color: var(--text);
+    padding: 9px 11px;
+    cursor: pointer;
+  }
+  button:hover { border-color: rgba(255,255,255,.22); }
+
+  .stage-wrap {
+    min-width: 0;
+    padding: 24px;
+    display: grid;
+    place-items: center;
+    background: #0d0f14;
+  }
+
+  .stage {
+    width: min(100%, 1280px);
+    aspect-ratio: 16 / 10;
+    min-height: 460px;
+    overflow: hidden;
+    background: #eef0f4;
+  }
+
+  svg { display: block; width: 100%; height: 100%; }
+
+  .note {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  @media (max-width: 820px) {
+    .app { grid-template-columns: 1fr; }
+    .controls { border-right: 0; border-bottom: 1px solid var(--border); }
+    .stage-wrap { padding: 12px; }
+    .stage { min-height: 360px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="controls">
+    <h1>SVG blended light columns</h1>
+    <p class="lede">Equal-height rectangular columns, touching edge-to-edge. The effect comes only from color gradients plus blurred translucent color fields — no gloss, reflections, rounded corners, gaps, or height staggering.</p>
+
+    <fieldset>
+      <legend>Composition</legend>
+
+      <div class="row">
+        <label for="columns">Columns</label>
+        <input id="columnsN" type="number" min="1" max="30" step="1" value="8" aria-label="Columns numeric value">
+      </div>
+      <input id="columns" type="range" min="1" max="30" step="1" value="8">
+    </fieldset>
+
+    <fieldset>
+      <legend>Light / blending</legend>
+
+      <div class="row">
+        <label for="blur">Blend softness</label>
+        <output id="blurOut">28</output>
+      </div>
+      <input id="blur" type="range" min="0" max="70" step="1" value="28">
+
+      <div class="row">
+        <label for="bloom">Color-field strength</label>
+        <output id="bloomOut">0.86</output>
+      </div>
+      <input id="bloom" type="range" min="0" max="1.5" step="0.01" value="0.86">
+
+      <div class="row">
+        <label for="fade">Pale-top depth</label>
+        <output id="fadeOut">34%</output>
+      </div>
+      <input id="fade" type="range" min="5" max="70" step="1" value="34">
+
+      <div class="row">
+        <label for="transition">Color transition</label>
+        <output id="transitionOut">54%</output>
+      </div>
+      <input id="transition" type="range" min="25" max="80" step="1" value="54">
+    </fieldset>
+
+    <fieldset>
+      <legend>Color</legend>
+
+      <div class="row">
+        <label for="hue">Hue shift</label>
+        <output id="hueOut">0°</output>
+      </div>
+      <input id="hue" type="range" min="-180" max="180" step="1" value="0">
+
+      <div class="row">
+        <label for="spread">Hue spread</label>
+        <output id="spreadOut">36°</output>
+      </div>
+      <input id="spread" type="range" min="0" max="140" step="1" value="36">
+
+      <div class="row">
+        <label for="warmth">Warm lower field</label>
+        <output id="warmthOut">0.84</output>
+      </div>
+      <input id="warmth" type="range" min="0" max="1" step="0.01" value="0.84">
+
+      <div class="row">
+        <label for="variation">Per-column color variation</label>
+        <output id="variationOut">0.55</output>
+      </div>
+      <input id="variation" type="range" min="0" max="1" step="0.01" value="0.55">
+    </fieldset>
+
+    <fieldset>
+      <legend>Variations</legend>
+      <div class="wide">
+        <label for="preset">Preset</label>
+        <select id="preset">
+          <option value="reference">Reference-like</option>
+          <option value="cool">Cool spectrum</option>
+          <option value="dusk">Dusk spectrum</option>
+          <option value="soft">Soft pastel</option>
+        </select>
+      </div>
+
+      <div class="buttons">
+        <button id="randomize" type="button">Randomize color fields</button>
+        <button id="download" type="button">Download SVG</button>
+      </div>
+    </fieldset>
+
+    <p class="note"><strong>Underlying effect:</strong> a vertical base gradient establishes the pale-to-saturated-to-warm progression. Two large blurred translucent radial gradients overlap inside each rectangular column to make the color feel like blended light rather than a flat gradient.</p>
+  </aside>
+
+  <main class="stage-wrap">
+    <div class="stage">
+      <svg id="art" viewBox="0 0 1200 750" role="img" aria-label="Generated blended gradient columns">
+        <rect width="1200" height="750" fill="#eef0f4" />
+        <g id="scene"></g>
+      </svg>
+    </div>
+  </main>
+</div>
+
+<script>
+(() => {
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = document.getElementById('art');
+  const scene = document.getElementById('scene');
+
+  const controls = {
+    columns: document.getElementById('columns'),
+    columnsN: document.getElementById('columnsN'),
+    blur: document.getElementById('blur'),
+    bloom: document.getElementById('bloom'),
+    fade: document.getElementById('fade'),
+    transition: document.getElementById('transition'),
+    hue: document.getElementById('hue'),
+    spread: document.getElementById('spread'),
+    warmth: document.getElementById('warmth'),
+    variation: document.getElementById('variation'),
+    preset: document.getElementById('preset')
+  };
+
+  const outputs = {
+    blur: document.getElementById('blurOut'),
+    bloom: document.getElementById('bloomOut'),
+    fade: document.getElementById('fadeOut'),
+    transition: document.getElementById('transitionOut'),
+    hue: document.getElementById('hueOut'),
+    spread: document.getElementById('spreadOut'),
+    warmth: document.getElementById('warmthOut'),
+    variation: document.getElementById('variationOut')
+  };
+
+  let seed = 2107;
+
+  const presets = {
+    reference: { blur:28, bloom:.86, fade:34, transition:54, hue:0, spread:36, warmth:.84, variation:.55 },
+    cool:      { blur:36, bloom:.72, fade:43, transition:58, hue:-28, spread:24, warmth:.34, variation:.38 },
+    dusk:      { blur:20, bloom:1.12, fade:27, transition:48, hue:22, spread:72, warmth:1, variation:.78 },
+    soft:      { blur:44, bloom:.58, fade:53, transition:62, hue:-8, spread:46, warmth:.58, variation:.42 }
+  };
+
+  function el(name, attrs = {}, parent = null) {
+    const node = document.createElementNS(NS, name);
+    for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+    if (parent) parent.appendChild(node);
+    return node;
+  }
+
+  function mulberry32(a) {
+    return function() {
+      let t = a += 0x6D2B79F5;
+      t = Math.imul(t ^ t >>> 15, t | 1);
+      t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+  function hue(n) { return ((n % 360) + 360) % 360; }
+  function hsla(h, s, l, a = 1) { return `hsla(${hue(h)} ${s}% ${l}% / ${a})`; }
+
+  function addStop(parent, offset, color, opacity) {
+    const attrs = { offset, 'stop-color': color };
+    if (opacity !== undefined) attrs['stop-opacity'] = opacity;
+    el('stop', attrs, parent);
+  }
+
+  function value(id) { return Number(controls[id].value); }
+
+  function readState() {
+    return {
+      columns: clamp(Math.round(value('columns')), 1, 30),
+      blur: value('blur'),
+      bloom: value('bloom'),
+      fade: value('fade') / 100,
+      transition: value('transition') / 100,
+      hue: value('hue'),
+      spread: value('spread'),
+      warmth: value('warmth'),
+      variation: value('variation')
+    };
+  }
+
+  function syncOutputs() {
+    controls.columnsN.value = controls.columns.value;
+    outputs.blur.textContent = controls.blur.value;
+    outputs.bloom.textContent = Number(controls.bloom.value).toFixed(2);
+    outputs.fade.textContent = `${controls.fade.value}%`;
+    outputs.transition.textContent = `${controls.transition.value}%`;
+    outputs.hue.textContent = `${controls.hue.value}°`;
+    outputs.spread.textContent = `${controls.spread.value}°`;
+    outputs.warmth.textContent = Number(controls.warmth.value).toFixed(2);
+    outputs.variation.textContent = Number(controls.variation.value).toFixed(2);
+  }
+
+  function render() {
+    syncOutputs();
+    const s = readState();
+    scene.replaceChildren();
+
+    const rand = mulberry32(seed);
+    const defs = el('defs', {}, scene);
+
+    // Fixed geometry by design: equal height, no gaps, square corners.
+    const x0 = 54;
+    const y = 54;
+    const usableW = 1092;
+    const h = 642;
+    const w = usableW / s.columns;
+
+    for (let i = 0; i < s.columns; i++) {
+      const r1 = rand();
+      const r2 = rand();
+      const r3 = rand();
+      const r4 = rand();
+      const x = x0 + i * w;
+
+      const v = s.variation;
+      const localShift =
+        s.hue +
+        (r2 - .5) * s.spread * 2 * v +
+        (i - (s.columns - 1) / 2) * s.spread / Math.max(1, s.columns - 1);
+
+      const coolHue = 240 + localShift;
+      const violetHue = 268 + localShift;
+      const warmHue = 22 + localShift * .22;
+      const warmSat = 70 + 18 * s.warmth;
+      const warmLight = 72 - 14 * s.warmth;
+
+      const clipId = `clip-${i}`;
+      const baseId = `base-${i}`;
+      const hotId = `hot-${i}`;
+      const coolId = `cool-${i}`;
+      const blurId = `blur-${i}`;
+
+      const clip = el('clipPath', { id:clipId }, defs);
+      el('rect', { x, y, width:w, height:h }, clip);
+
+      const blur = el('filter', {
+        id:blurId,
+        x:'-65%', y:'-40%', width:'230%', height:'190%',
+        'color-interpolation-filters':'sRGB'
+      }, defs);
+      el('feGaussianBlur', {
+        stdDeviation: Math.max(.01, s.blur * (0.82 + r3 * .28))
+      }, blur);
+
+      // Base field only — no separate white overlay or specular gloss.
+      const base = el('linearGradient', {
+        id:baseId,
+        x1:'0', y1:'0', x2:'0', y2:'1'
+      }, defs);
+
+      const paleEnd = clamp(s.fade * 100, 5, 70);
+      const blueStart = clamp(s.transition * 100 - 12, paleEnd + 3, 76);
+      const violetStart = clamp(s.transition * 100 + 12, blueStart + 3, 90);
+
+      addStop(base, '0%', hsla(coolHue, 22, 95), 1);
+      addStop(base, `${paleEnd.toFixed(1)}%`, hsla(coolHue, 48, 84), .94);
+      addStop(base, `${blueStart.toFixed(1)}%`, hsla(coolHue, 92, 59), 1);
+      addStop(base, `${violetStart.toFixed(1)}%`, hsla(violetHue, 84, 60), 1);
+      addStop(base, '100%', hsla(warmHue, warmSat, warmLight), .98);
+
+      // Warm lower field.
+      const hot = el('radialGradient', {
+        id:hotId,
+        cx:`${18 + r4 * 64}%`, cy:'100%', r:'92%',
+        fx:`${20 + r4 * 58}%`, fy:'100%'
+      }, defs);
+      addStop(hot, '0%', hsla(warmHue, 94, 69), .92);
+      addStop(hot, '45%', hsla(330 + localShift * .15, 80, 70), .48);
+      addStop(hot, '100%', hsla(violetHue, 80, 55), 0);
+
+      // Cool middle field. Its overlap with the warm field creates the light-mixing effect.
+      const cool = el('radialGradient', {
+        id:coolId,
+        cx:`${72 - r2 * 45}%`, cy:`${38 + r3 * 17}%`, r:'78%'
+      }, defs);
+      addStop(cool, '0%', hsla(205 + localShift * .35, 96, 67), .84);
+      addStop(cool, '45%', hsla(244 + localShift, 92, 59), .38);
+      addStop(cool, '100%', hsla(coolHue, 95, 55), 0);
+
+      const col = el('g', { 'clip-path':`url(#${clipId})` }, scene);
+
+      // Layer 1: vertical base gradient.
+      el('rect', { x, y, width:w, height:h, fill:`url(#${baseId})` }, col);
+
+      // Layer 2: oversized blurred color fields. No white highlight layer.
+      const glowGroup = el('g', {
+        filter:`url(#${blurId})`,
+        opacity:String(s.bloom)
+      }, col);
+
+      el('ellipse', {
+        cx: x + w * (0.25 + .50 * r2),
+        cy: y + h * (0.76 + .06 * r3),
+        rx: Math.max(w * 1.05, 85),
+        ry: h * .42,
+        fill:`url(#${hotId})`
+      }, glowGroup);
+
+      el('ellipse', {
+        cx: x + w * (0.60 - .34 * r1),
+        cy: y + h * (0.48 + .07 * r4),
+        rx: Math.max(w * .95, 76),
+        ry: h * .37,
+        fill:`url(#${coolId})`
+      }, glowGroup);
+    }
+  }
+
+  function applyPreset(name) {
+    const p = presets[name];
+    if (!p) return;
+    for (const [key, val] of Object.entries(p)) {
+      if (controls[key]) controls[key].value = val;
+    }
+    render();
+  }
+
+  function serializeSVG() {
+    const clone = svg.cloneNode(true);
+    clone.setAttribute('xmlns', NS);
+    return `<?xml version="1.0" encoding="UTF-8"?>\n${new XMLSerializer().serializeToString(clone)}`;
+  }
+
+  controls.columns.addEventListener('input', () => {
+    controls.columnsN.value = controls.columns.value;
+    render();
+  });
+
+  controls.columnsN.addEventListener('input', () => {
+    const n = clamp(Number(controls.columnsN.value || 1), 1, 30);
+    controls.columns.value = String(Math.round(n));
+    render();
+  });
+
+  for (const [name, node] of Object.entries(controls)) {
+    if (name === 'columns' || name === 'columnsN' || name === 'preset') continue;
+    node.addEventListener('input', render);
+    node.addEventListener('change', render);
+  }
+
+  controls.preset.addEventListener('change', () => applyPreset(controls.preset.value));
+
+  document.getElementById('randomize').addEventListener('click', () => {
+    seed = Math.floor(Math.random() * 1_000_000_000);
+    render();
+  });
+
+  document.getElementById('download').addEventListener('click', () => {
+    const blob = new Blob([serializeSVG()], { type:'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'blended-light-columns.svg';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

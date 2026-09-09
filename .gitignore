@@ -1,0 +1,36 @@
+# Operating system and editor files
+.DS_Store
+._*
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Local credentials and environment configuration
+.env
+.env.*
+!.env.example
+!.env.template
+*.pem
+*.key
+
+# Dependencies and local runtimes
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Build, test, and tool output
+dist/
+build/
+.next/
+.cache/
+.pytest_cache/
+coverage/
+playwright-report/
+test-results/
+*.log
+*.tmp
