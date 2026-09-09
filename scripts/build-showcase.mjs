@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url';
 import {presets} from '../showcase/presets.js';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),destination=path.join(root,'_site');
 const entries=['index.html','canvas_light_columns_demo.html','logo_be_arts.svg','fonts/solea-regular.ttf',
+ 'showcase/entry.js','showcase/access.js','showcase/access-config.js',
  'showcase/app.js','showcase/config.js','showcase/lab-host.js','showcase/presets.js','showcase/original.html',
  'showcase/assets','showcase/styles','showcase/compositions',
  'js/shared','js/light-columns','turrell-ellipse-light','triangle-light','moving_shapes'];

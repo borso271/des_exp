@@ -29,6 +29,19 @@ QA files, tests, documentation, and the user's reference PNGs. Nothing requires
 Vercel or a backend. The existing GitHub Actions workflow deploys this artifact
 to GitHub Pages on pushes to `main`.
 
+## Preview access
+
+The landing page starts with a browser password screen. It remembers access in
+session storage for the current tab and repository path, then loads the showcase
+module and selected lab. Direct composition links keep their selection. The
+configured SHA-256 digest lives in `showcase/access-config.js`; changing it also
+invalidates remembered access. If session storage is unavailable, entry still
+works for the current page.
+
+This is a courtesy barrier for casual visitors, not server authentication or
+encryption. The published lab URLs, assets, and public repository remain
+accessible. Standalone lab pages are not gated.
+
 ## Native embedding
 
 `showcase/presets.js` maps names and URLs to native starting configurations:

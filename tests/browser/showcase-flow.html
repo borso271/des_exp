@@ -1,9 +1,14 @@
-<!doctype html><html><head><meta charset="utf-8"><title>Native showcase flow verification</title><style>body{margin:8px;font:12px system-ui}iframe#page{border:0;width:1280px;height:900px;transform:scale(.55);transform-origin:0 0}pre{white-space:pre-wrap}</style></head><body><pre id="result">Checking live landing-page flow…</pre><iframe id="page" src="../../?art=ellipses"></iframe><script type="module">
+<!doctype html><html><head><meta charset="utf-8"><title>Native showcase flow verification</title><style>body{margin:8px;font:12px system-ui}iframe#page{border:0;width:1280px;height:900px;transform:scale(.55);transform-origin:0 0}pre{white-space:pre-wrap}</style></head><body><pre id="result">Checking live landing-page flow…</pre><iframe id="page"></iframe><script type="module">
+import {PASSWORD_DIGEST} from '../../showcase/access-config.js';
+import {accessSessionKey} from '../../showcase/access.js';
 const page=document.getElementById('page'),result=document.getElementById('result'),checks=[];
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 async function wait(fn,label){const start=performance.now();while(!fn()){if(performance.now()-start>30000)throw Error('Timed out: '+label);await delay(30);}}
 const equal=(a,b,label)=>{if(JSON.stringify(a)!==JSON.stringify(b))throw Error(label);};
 try{
+// Gate behavior has its own tests; this suite exercises the unlocked showcase.
+sessionStorage.setItem(accessSessionKey(new URL('../../',location.href).pathname),PASSWORD_DIGEST);
+page.src='../../?art=ellipses';
 await wait(()=>page.contentDocument?.querySelector('.native-banner-host[data-pending=false]'),'initial lab');
 const w=page.contentWindow,d=w.document;
 const child=()=>d.querySelector('.native-banner-host[data-pending=false] iframe').contentWindow;
