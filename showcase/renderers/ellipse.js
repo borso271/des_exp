@@ -1,5 +1,15 @@
 import {VERT, FRAG} from '../vendor/ellipse-shaders.js';
 
+export function fitEllipse(geometry,width,height) {
+  const aspect=geometry.radiusX*geometry.referenceAspect/geometry.radiusY;
+  const availableX=(Math.min(geometry.centerX,1-geometry.centerX)-geometry.margin)*width;
+  const availableY=(Math.min(geometry.centerY,1-geometry.centerY)-geometry.margin)*height;
+  // Include the soft outer boundary and the small contour irregularity in the fit.
+  const extent=1+geometry.softness+geometry.irregularity;
+  const radiusY=Math.min(availableY,availableX/aspect)/extent;
+  return {...geometry,radiusX:radiusY*aspect/width,radiusY:radiusY/height};
+}
+
 export function create(canvas, preset) {
   const gl=canvas.getContext('webgl2',{alpha:false,antialias:false,depth:false,powerPreference:'low-power'});
   if(!gl)throw new Error('WebGL unavailable');
@@ -26,7 +36,7 @@ export function create(canvas, preset) {
       if(gl.isContextLost())throw new Error('Context lost');
       if(canvas.width!==width||canvas.height!==height){canvas.width=width;canvas.height=height;}
       gl.viewport(0,0,width,height);gl.useProgram(program);gl.bindVertexArray(vao);
-      const p=preset.geometry,l=preset.light;
+      const p=fitEllipse(preset.geometry,width,height),l=preset.light;
       gl.uniform2f(u('uResolution'),width,height);gl.uniform1f(u('uTime'),time);
       gl.uniform2f(u('uCenter'),p.centerX,1-p.centerY);gl.uniform2f(u('uRadius'),p.radiusX,p.radiusY);
       gl.uniform1f(u('uRotation'),p.rotation*Math.PI/180);

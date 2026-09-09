@@ -1,7 +1,7 @@
 # Be Art art-direction showcase
 
-The root `index.html` is a static Spanish homepage reproduction with five curated
-hero directions. The selector updates `?art=original|ellipses|squares|triangle|moving`;
+The root `index.html` is a static Spanish homepage reproduction with six curated
+hero directions. The selector updates `?art=original|ellipses|ellipses-gold|squares|triangle|moving`;
 copy the browser URL to share a selection. Back/forward navigation restores it.
 
 ## Preview and checks
@@ -31,12 +31,14 @@ QA files. Repository Settings → Pages must use **GitHub Actions** as its sourc
 ## Curating directions
 
 Edit `presets.js` for names, deterministic seeds, palettes, geometry, shading,
-and motion. Keep the five `index.html` selector options in sync. The white logo,
+and motion. Keep the `index.html` selector options in sync. The white logo,
 hero dimensions, page content, and layout remain consistent between directions.
 
 - Original: the existing photographic desktop and mobile hero crops.
-- Elipses azules: the supplied `ellipse-light-2400x1286.png`, displayed as a static
-  image with no dark overlay. The image fills the hero with a centered crop.
+- Elipses azules / Elipses doradas: static shader compositions with palettes
+  recovered from the supplied blue and gold exports. Both preserve the original
+  ellipse proportions and fit the complete soft outer edge within a 6% banner
+  margin on every screen. There is no dark overlay or breathing animation.
 - Campos de color: four offset, nested squares; static.
 - Umbral azul: the triangle's original WebGL light pipeline, without the floor;
   static, with portrait geometry fitted to the banner.
@@ -49,6 +51,8 @@ Image presets use their local `image` asset directly, without a canvas or animat
 Animated directions can be paused; reduced motion uses their initial frame.
 Rendering failures and WebGL context loss display a local SVG fallback. Light
 fallbacks approximate the composition; they do not reproduce the GPU bloom exactly.
+Ellipse fallbacks use the same fitted proportions, with the surrounding field
+colour filling any remaining space so they also avoid cropping.
 
 `vendor/` contains rendering-only snapshots extracted from the prototypes. Refresh
 them after deliberately changing their source renderers:

@@ -5,6 +5,7 @@ const selector=document.getElementById('art-direction');
 const pause=document.getElementById('pause-art');
 const status=document.getElementById('art-status');
 const modules={
+  ellipses:()=>import('./renderers/ellipse.js'),
   squares:()=>import('./renderers/fields.js'),
   triangle:()=>import('./renderers/triangle.js'),
   moving:()=>import('./renderers/fields.js')
@@ -14,7 +15,7 @@ const controller=createController({
   fallback:document.getElementById('art-fallback'),load:id=>modules[id](),
   onChange({preset,paused,reduced,ready}) {
     selector.value=preset.id;
-    document.getElementById('direction-number').textContent=`${String(presets.indexOf(preset)+1).padStart(2,'0')} / 05`;
+    document.getElementById('direction-number').textContent=`${String(presets.indexOf(preset)+1).padStart(2,'0')} / ${String(presets.length).padStart(2,'0')}`;
     pause.hidden=!preset.motion.enabled||!ready;pause.disabled=reduced;
     pause.textContent=reduced?'Sin movimiento':paused?'Reanudar':'Pausar';
     pause.setAttribute('aria-label',reduced?'Movimiento reducido según la preferencia del dispositivo':paused?'Reanudar animación':'Pausar animación');

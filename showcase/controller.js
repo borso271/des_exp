@@ -54,6 +54,8 @@ export function createController({stage,host,fallback,load,onChange=()=>{},env=w
     stage.setAttribute('aria-label',`BE ART. ${preset.description}`);
     stage.style.setProperty('--art-shade',preset.shade);
     fallback.style.backgroundImage=preset.renderer==='original'?'none':`url("${new URL(preset.image||`./assets/fallback-${preset.id}.svg`,import.meta.url).href}")`;
+    fallback.style.backgroundSize=preset.renderer==='ellipses'?'contain':'cover';
+    fallback.style.backgroundColor=preset.palette[0]||'transparent';
     if(preset.renderer==='image') {ready=true;stage.dataset.renderState='ready';}
     notify();
     if(preset.renderer==='original'||preset.renderer==='image'||stopped)return;

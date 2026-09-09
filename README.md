@@ -3,7 +3,7 @@
 Standalone browser studies in geometry, color, light, and typography, using SVG,
 Canvas, and WebGL. No build step is needed to view the artwork.
 
-`index.html` presents five curated hero directions in a static reproduction of the
+`index.html` presents six curated hero directions in a static reproduction of the
 Spanish Be Art homepage. See [showcase documentation](showcase/README.md) for
 presets, validation, and the isolated GitHub Pages deployment.
 

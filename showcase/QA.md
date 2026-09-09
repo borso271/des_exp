@@ -40,3 +40,17 @@ not a particular physical phone/GPU. GPU-light fallbacks are approximations.
   disposes the canvas and returns to still mode.
 - All 21 test files passed, including the image selection lifecycle and the Pages
   artifact's byte-for-byte copy of the PNG. Work was confined to DESIGN_EXP.
+
+## Fitted blue and gold ellipses — 2026-09-09
+
+- Replaced the blue PNG presentation with the original ellipse shader and added
+  a separate gold direction. Palettes were recovered from the supplied exports;
+  both presets remain static, without a dark overlay.
+- All 21 test files passed. Geometry checks cover desktop, portrait, square, and
+  very wide banners, preserving ellipse proportions and a minimum 6% margin
+  around the softened outer edge. Switching and rendering-failure checks cover
+  all six directions and the fitted SVG fallbacks.
+- Both colours were viewed at 1280px and 390px browser widths. The outer ellipse
+  remained fully visible; each selection used one canvas and no animation loop.
+  A forced WebGL failure also showed an uncropped gold fallback on mobile.
+- Changes were confined to DESIGN_EXP; the Be Art project was not modified.
