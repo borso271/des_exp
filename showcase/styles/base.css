@@ -1,0 +1,98 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--color-canvas);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  overflow-wrap: break-word;
+}
+
+body {
+  min-height: 100svh;
+  margin: 0;
+  background: var(--color-canvas);
+  font-size: var(--text-ui);
+  font-weight: var(--weight-ui);
+  line-height: var(--leading-normal);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  font-weight: var(--weight-ui);
+}
+
+/* Real Regular provides emphasis against Light prose; no synthetic bold/italic. */
+strong,
+b {
+  font-weight: var(--weight-emphasis);
+}
+
+em,
+i {
+  font-style: normal;
+  font-weight: var(--weight-emphasis);
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--color-primary);
+  color: var(--color-on-dark);
+}
+
+:focus-visible {
+  outline: var(--focus-width) solid var(--color-focus);
+  outline-offset: var(--focus-offset);
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 1000;
+  top: var(--space-3);
+  left: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  translate: 0 calc(-100% - var(--space-5));
+  border: var(--border-hairline) solid var(--color-primary);
+  background: var(--color-surface);
+  font-size: var(--text-small);
+  transition: translate var(--motion-fast) ease;
+}
+
+.skip-link:focus-visible {
+  translate: 0;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  border: 0 !important;
+  margin: -1px !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

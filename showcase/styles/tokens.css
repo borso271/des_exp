@@ -1,0 +1,114 @@
+:root {
+  /* Theme palette */
+  --color-primary: #0a0a0a;
+  --color-secondary: #242424;
+  --color-text: #0a0a0a;
+  --color-text-muted: #595959;
+  /* Lightened web adaptation of Concept p. 11 (PANTONE 7477 U, 25% tint).
+     Original PDF screen sample: #d6dbde. */
+  --color-surface: #e0e4e6;
+  --color-canvas: #ffffff;
+  --color-rule: #d8d8d8;
+  --color-focus: #000000;
+  --color-on-dark: #ffffff;
+  --color-banner-text: #f5f5f5;
+  --color-control-hover: #f5f5f3;
+  --color-muted-border: #a5a5a5;
+  --color-navigation-muted: #595959;
+  --color-media-background: #0a0a0a;
+  --color-overlay: rgb(0 0 0 / 96%);
+  --color-backdrop: rgb(0 0 0 / 76%);
+  --color-error-border: #8a1f1f;
+  --color-error-text: #721c1c;
+
+  /* Web interpretation of the identity: Poppins supports the Soleá display face.
+     Futura/Univers remain dependent on suitable, licensed web assets. */
+  --font-body: var(--font-poppins), Poppins, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-ui: var(--font-poppins), Poppins, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: var(--font-solea), Georgia, serif;
+  --weight-extra-light: 200;
+  --weight-light: 300;
+  --weight-regular: 400;
+  --weight-ui: var(--weight-regular);
+  --weight-emphasis: var(--weight-regular);
+  --weight-heading: var(--weight-light);
+  --weight-prose: var(--weight-light);
+  --weight-lead: var(--weight-light);
+
+  --text-caption: 0.8125rem;
+  --text-small: 0.875rem;
+  --text-detail: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+  --text-ui: clamp(1rem, 0.96rem + 0.18vw, 1.125rem);
+  --text-navigation: 0.9375rem;
+  --text-body: clamp(1.125rem, 1.1rem + 0.15vw, 1.1875rem);
+  --text-lead: clamp(1.25rem, 1.16rem + 0.4vw, 1.5rem);
+  --text-name: clamp(1.1875rem, 1.125rem + 0.25vw, 1.3125rem);
+  --text-heading-detail: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+  --text-heading-small: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  --text-heading-section: clamp(1.75rem, 1.3rem + 1.8vw, 2.75rem);
+  --text-heading-page: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+  /* Soleá page titles and short statements have separate scales from Poppins headings. */
+  --text-title: clamp(2.25rem, 1.55rem + 3.2vw, 4.5rem);
+  --text-statement: clamp(1.75rem, 1.25rem + 2vw, 2.75rem);
+  --text-display: clamp(3.5rem, 8vw, 8rem);
+  --leading-tight: 1.08;
+  --leading-display: 1.02;
+  --leading-heading: 1.2;
+  --leading-lead: 1.5;
+  --leading-detail: 1.5;
+  --leading-normal: 1.65;
+  --tracking-display: 0;
+  --tracking-heading: -0.015em;
+  --tracking-metadata: 0.05em;
+  --tracking-navigation: 0.03em;
+  --tracking-tagline: 0.15em;
+  --tracking-tagline-mobile: 0.06em;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-15: 3.75rem;
+  --space-22: 5.625rem;
+  --space-30: 7.5rem;
+
+  /* Borders and motion */
+  --border-hairline: 1px;
+  --focus-width: 2px;
+  --focus-offset: 3px;
+  --motion-fast: 160ms;
+  --motion-medium: 240ms;
+  --motion-menu: 320ms;
+
+  /* Layout */
+  --breakpoint-mobile: 47.9375rem;
+  --breakpoint-tablet: 53.75rem;
+  --container-reading: 62ch;
+  --container-default: 75rem;
+  --container-wide: 90rem;
+  --page-gutter: clamp(1rem, 3.2vw, 3rem);
+  --shell-gutter: var(--page-gutter);
+  --shell-gutter-compact: 1rem;
+  --layout-inline-space: calc(2 * var(--page-gutter));
+  --layout-inline-space-compact: 2rem;
+  --layout-wide-width: min(calc(100% - var(--layout-inline-space)), var(--container-wide));
+  --layout-wide-width-compact: calc(100% - var(--layout-inline-space-compact));
+  --shell-header-height: 4.5rem;
+  --section-space: clamp(5rem, 9vw, 9rem);
+  --text-section-space: clamp(3.5rem, 7vw, 6rem);
+  --text-divider-space: clamp(2.5rem, 5vw, 4rem);
+  --text-title-gap: clamp(2rem, 4vw, 3rem);
+}
+
+@media (min-width: 64rem) {
+  :root {
+    /* Give desktop section headings more presence; retain smaller-screen sizes. */
+    --text-heading-section: clamp(1.75rem, 1.3rem + 2vw, 3rem);
+  }
+}

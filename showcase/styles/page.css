@@ -1,0 +1,237 @@
+.page-homeMain {
+  background: var(--color-canvas);
+}
+
+.page-homeHero {
+  width: var(--layout-wide-width);
+  margin: var(--page-gutter) auto 0;
+}
+
+.page-homeHeroVisual {
+  position: relative;
+  display: grid;
+  isolation: isolate;
+}
+
+.page-homeHeroPicture {
+  display: block;
+  grid-area: 1 / 1;
+}
+
+.page-homeHeroImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #000;
+  border: var(--border-hairline) solid var(--color-rule);
+  filter: brightness(0.65);
+  object-fit: contain;
+  object-position: center;
+}
+
+@media (min-width: 48rem) {
+  .page-homeHeroPicture {
+    overflow: hidden;
+  }
+
+  .page-homeHeroImage {
+    /* Crop the desktop asset's ~205px black edges within the existing frame. */
+    transform: scale(1.207);
+  }
+}
+
+.page-homeHeroBrand {
+  position: relative;
+  grid-area: 1 / 1;
+  align-self: center;
+  justify-self: center;
+  padding-block: 1rem;
+  display: grid;
+  width: min(61%, 50rem);
+  color: var(--color-banner-text);
+  pointer-events: none;
+  row-gap: clamp(1rem, 2vw, 2rem);
+}
+
+.page-homeHeroBrandLogo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 640 / 175;
+  background-color: currentColor;
+  mask: url("../assets/logo-be-art.svg") center / contain no-repeat;
+}
+
+.page-homeHeroTagline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.35em 0.5em;
+  width: 100%;
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: clamp(1rem, 1.25vw, 1.125rem);
+  font-weight: var(--weight-light);
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-tagline);
+}
+
+.page-homeHeroTagline > span {
+  white-space: nowrap;
+}
+
+.page-homeHeroTagline[hidden] {
+  display: none;
+}
+
+.page-homeEditorial {
+  display: grid;
+  width: var(--layout-wide-width);
+  margin-inline: auto;
+  padding-block: var(--text-section-space);
+  border-top: var(--border-hairline) solid var(--color-rule);
+  gap: clamp(3rem, 8vw, 9rem);
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+}
+
+.page-homeIntroduction {
+  border-top: 0;
+}
+
+.page-homeEditorialHeading h1,
+.page-homeEditorialHeading h2 {
+  max-width: 18ch;
+  margin: clamp(1.75rem, 3vw, 3rem) 0 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-heading-section);
+  font-weight: var(--weight-heading);
+  letter-spacing: var(--tracking-heading);
+  line-height: var(--leading-heading);
+  text-wrap: balance;
+}
+
+.page-homeEditorialHeading h1 {
+  font-size: var(--text-heading-page);
+}
+
+.page-homeMarker {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-family: var(--font-ui);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-ui);
+  letter-spacing: var(--tracking-metadata);
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.page-homeMarker span:first-child::after {
+  margin-left: 0.65rem;
+  content: "/";
+}
+
+.page-homeEditorialCopy {
+  max-width: var(--container-reading);
+  font-size: var(--text-body);
+  font-weight: var(--weight-prose);
+  line-height: var(--leading-normal);
+}
+
+.page-homeEditorialCopy p {
+  margin: 0 0 1.5em;
+}
+
+.page-homeEditorialCopy p:last-child {
+  margin-bottom: 0;
+}
+
+.page-homeEditorialCopy .page-homeLead {
+  margin-bottom: 1.4em;
+  font-size: var(--text-lead);
+  font-weight: var(--weight-lead);
+  line-height: var(--leading-lead);
+}
+
+.page-homeImage {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.page-homeImage,
+.page-homeGraphic {
+  width: var(--layout-wide-width);
+  margin-inline: auto;
+}
+
+.page-homeGraphic {
+  display: block;
+  border: var(--border-hairline) solid var(--color-rule);
+  background: var(--color-canvas);
+}
+
+.page-homeGraphicImage {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.page-homeGraphic + .page-homeEditorial {
+  border-top: 0;
+}
+
+@media (max-width: 64rem) {
+  .page-homeEditorial {
+    gap: clamp(2.5rem, 5vw, 4rem);
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+}
+
+@media (max-width: 47.9375rem) {
+  .page-homeHero {
+    width: var(--layout-wide-width-compact);
+    margin-top: 1rem;
+  }
+
+  .page-homeHeroImage {
+    aspect-ratio: 7 / 8;
+  }
+
+  .page-homeHeroBrand {
+    width: min(82%, 24rem);
+    row-gap: 1rem;
+  }
+
+  .page-homeHeroTagline {
+    font-size: clamp(0.75rem, 3.2vw, 0.8125rem);
+    letter-spacing: var(--tracking-tagline-mobile);
+  }
+
+  .page-homeEditorial {
+    width: var(--layout-wide-width-compact);
+    gap: 1.75rem;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-homeEditorialHeading h1,
+  .page-homeEditorialHeading h2 {
+    max-width: none;
+  }
+
+  .page-homeEditorialCopy {
+    font-size: var(--text-body);
+  }
+
+  .page-homeEditorialCopy .page-homeLead {
+    font-size: var(--text-lead);
+  }
+
+  .page-homeImage,
+  .page-homeGraphic {
+    width: var(--layout-wide-width-compact);
+  }
+
+}

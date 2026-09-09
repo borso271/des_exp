@@ -1,0 +1,119 @@
+.footer-footer {
+  border-top: var(--border-hairline) solid var(--color-rule);
+  background: var(--color-canvas);
+}
+
+.footer-inner {
+  display: grid;
+  width: var(--layout-wide-width);
+  gap: clamp(3rem, 6vw, 6rem);
+  margin-inline: auto;
+  padding-block: clamp(3.5rem, 7vw, 6.5rem) 1.75rem;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+}
+
+.footer-brand {
+  align-self: start;
+}
+
+.footer-brand img {
+  display: block;
+  width: clamp(8rem, 13vw, 11rem);
+  height: auto;
+}
+
+.footer-navigation {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+.footer-group {
+  display: grid;
+  align-content: start;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-link {
+  display: inline-flex;
+  max-width: 100%;
+  min-height: 2rem;
+  align-items: center;
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  font-weight: var(--weight-ui);
+  letter-spacing: var(--tracking-metadata);
+  line-height: 1.5;
+  text-decoration: none;
+  text-transform: uppercase;
+  text-underline-offset: 0.3rem;
+  overflow-wrap: anywhere;
+}
+
+.footer-link:hover,
+.footer-link:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+
+.footer-colophon {
+  grid-column: 1 / -1;
+}
+
+.footer-copyright {
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-rule);
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-ui);
+  letter-spacing: var(--tracking-metadata);
+  text-transform: uppercase;
+}
+
+.footer-imageCredit {
+  margin: 0.75rem 0 0;
+  color: var(--color-text-muted);
+  font-family: var(--font-ui);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-regular);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.footer-imageCredit > span {
+  display: block;
+}
+
+.footer-imageCredit strong {
+  font-weight: var(--weight-ui);
+}
+
+.footer-imageCredit a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+@media (max-width: 47.9375rem) {
+  .footer-inner {
+    width: var(--layout-wide-width-compact);
+    gap: 3rem;
+    padding-block: 3.5rem 1.5rem;
+    grid-template-columns: 1fr;
+  }
+
+  .footer-navigation {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .footer-link {
+    font-size: var(--text-small);
+  }
+
+  .footer-colophon {
+    grid-column: 1;
+  }
+}

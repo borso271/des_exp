@@ -34,3 +34,7 @@ playwright-report/
 test-results/
 *.log
 *.tmp
+
+# Local showcase verification and Pages staging
+_qa/
+_site/

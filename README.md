@@ -3,6 +3,10 @@
 Standalone browser studies in geometry, color, light, and typography, using SVG,
 Canvas, and WebGL. No build step is needed to view the artwork.
 
+`index.html` presents five curated hero directions in a static reproduction of the
+Spanish Be Art homepage. See [showcase documentation](showcase/README.md) for
+presets, validation, and the isolated GitHub Pages deployment.
+
 From this directory, start a local server:
 
 ```sh
@@ -32,11 +36,12 @@ its generation script lives in `scripts/`. Font provenance is documented in
 
 ## Checks
 
-Regression checks live in `tests/` and use Node.js. DOM-based checks also require
-`jsdom` to be available to Node. Run from the repository root:
+Regression checks live in `tests/` and use Node.js 22 or later. Install the pinned
+development dependency and run from the repository root:
 
 ```sh
-node --test tests/*.test.js
+npm ci
+npm test
 ```
 
 WebGL appearance and image exports should also be checked in a browser.

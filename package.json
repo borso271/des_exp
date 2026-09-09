@@ -1,0 +1,13 @@
+{
+  "name": "be-art-design-experiments",
+  "private": true,
+  "version": "1.0.0",
+  "engines": {"node": ">=22"},
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "build:showcase": "node scripts/build-showcase.mjs",
+    "sync:showcase": "node scripts/sync-showcase-renderers.mjs && node scripts/generate-showcase-fallbacks.mjs",
+    "check:showcase": "node scripts/sync-showcase-renderers.mjs --check && node scripts/generate-showcase-fallbacks.mjs --check"
+  },
+  "devDependencies": {"jsdom": "26.0.0"}
+}
