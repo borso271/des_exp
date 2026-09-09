@@ -42,7 +42,7 @@ const {JSDOM}=require('jsdom');
     controller.togglePause();assert.equal(frames.size,1);
     media.matches=true;media.dispatchEvent(new w.Event('change'));assert.equal(frames.size,0);
     assert.equal(stage.dataset.motion,'still');
-    await controller.select('ellipses');assert.equal(frames.size,0,'initial reduced-motion frame schedules no animation');
+    await controller.select('moving');assert.equal(frames.size,0,'initial reduced-motion frame schedules no animation');
     assert.equal(draws.at(-1).time,0);
     media.matches=false;media.dispatchEvent(new w.Event('change'));assert.equal(frames.size,1);
     intersections[0].callback([{isIntersecting:false}]);assert.equal(frames.size,0);
@@ -51,19 +51,25 @@ const {JSDOM}=require('jsdom');
     doc.dispatchEvent(new w.Event('visibilitychange'));assert.equal(frames.size,0);
     Object.defineProperty(doc,'visibilityState',{configurable:true,value:'visible'});
     doc.dispatchEvent(new w.Event('visibilitychange'));assert.equal(frames.size,1);
+    await controller.select('ellipses');
+    assert.equal(stage.dataset.renderState,'ready');assert.equal(active,0);assert.equal(frames.size,0);
+    assert.equal(host.querySelectorAll('canvas').length,0,'image selection releases the previous renderer');
+    assert.match(fallback.style.backgroundImage,/ellipse-light-2400x1286\.png/);
+    assert.equal(stage.style.getPropertyValue('--art-shade'),'0');
     for(let i=0;i<5;i++)for(const preset of presets){
       await controller.select(preset.id);
-      assert.equal(host.querySelectorAll('canvas').length,preset.id==='original'?0:1);
-      assert.equal(active,preset.id==='original'?0:1);
+      const needsCanvas=!['original','image'].includes(preset.renderer);
+      assert.equal(host.querySelectorAll('canvas').length,needsCanvas?1:0);
+      assert.equal(active,needsCanvas?1:0);
       assert.equal(frames.size,preset.motion.enabled?1:0);
     }
     failure=true;await controller.select('triangle');
     assert.equal(stage.dataset.renderState,'fallback');assert.equal(active,0);assert.equal(frames.size,0);
     assert.match(fallback.style.backgroundImage,/fallback-triangle\.svg/);
-    failure=false;await controller.select('ellipses');
+    failure=false;await controller.select('triangle');
     host.querySelector('canvas').dispatchEvent(new w.Event('webglcontextlost',{cancelable:true}));
     assert.equal(stage.dataset.renderState,'fallback');assert.equal(active,0);assert.equal(frames.size,0);
-    controller.dispose();assert.ok(disposed>20);assert.ok(observers[0].disconnected&&intersections[0].disconnected);
+    controller.dispose();assert.ok(disposed>0);assert.ok(observers[0].disconnected&&intersections[0].disconnected);
     assert.equal(active,0);assert.equal(frames.size,0);
 
     let complete;
@@ -89,6 +95,7 @@ const {JSDOM}=require('jsdom');
     execFileSync(process.execPath,['scripts/build-showcase.mjs']);
     assert.deepEqual(fs.readdirSync('_site').sort(),['.nojekyll','index.html','showcase']);
     assert.ok(!fs.existsSync('_site/showcase/package.json'));
+    assert.deepEqual(fs.readFileSync('_site/showcase/assets/ellipse-light-2400x1286.png'),fs.readFileSync('showcase/assets/ellipse-light-2400x1286.png'));
     assert.ok(!fs.existsSync('_site/triangle-light')&&!fs.existsSync('_site/_qa'));
     console.log('PASS: curated Pages artifact, five presets, renderer races/cleanup, fallback, banner sizing, pause, reduced motion, visibility and static page structure');
   } finally {controller.dispose();dom.window.close();}

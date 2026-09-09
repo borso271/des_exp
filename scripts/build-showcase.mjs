@@ -6,7 +6,7 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const destination=path.join(root,'_site');
 const publicFolders=['assets','styles','renderers','vendor'];
 const publicModules=['app.js','controller.js','presets.js'];
-const allowedExtensions=new Set(['.css','.js','.svg','.webp','.ttf','.txt']);
+const allowedExtensions=new Set(['.css','.js','.svg','.webp','.png','.ttf','.txt']);
 fs.rmSync(destination,{recursive:true,force:true});fs.mkdirSync(destination,{recursive:true});
 const files=[];
 function copy(source,relative) {
@@ -40,6 +40,7 @@ for(const file of files){
   if(file.endsWith('.js'))for(const match of text.matchAll(/(?:from\s*|import\s*\()["']([^"']+)["']/g))verifyReference(file,match[1]);
 }
 for(const preset of presets.filter(p=>p.renderer!=='original')){
+  if(preset.renderer==='image') {verifyReference('showcase/presets.js',preset.image);continue;}
   if(!fs.existsSync(path.join(destination,`showcase/assets/fallback-${preset.id}.svg`)))throw new Error(`Missing fallback: ${preset.id}`);
 }
 fs.writeFileSync(path.join(destination,'.nojekyll'),'');

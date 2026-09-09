@@ -35,7 +35,8 @@ and motion. Keep the five `index.html` selector options in sync. The white logo,
 hero dimensions, page content, and layout remain consistent between directions.
 
 - Original: the existing photographic desktop and mobile hero crops.
-- Luz ámbar: concentric ellipse shader with slow breathing.
+- Elipses azules: the supplied `ellipse-light-2400x1286.png`, displayed as a static
+  image with no dark overlay. The image fills the hero with a centered crop.
 - Campos de color: four offset, nested squares; static.
 - Umbral azul: the triangle's original WebGL light pipeline, without the floor;
   static, with portrait geometry fitted to the banner.
@@ -44,6 +45,7 @@ hero dimensions, page content, and layout remain consistent between directions.
 `renderers/` adapts the studies to the banner. `controller.js` owns the canvas,
 animation time, resize/intersection observers, reduced-motion preference,
 visibility handling, and disposal. Only the selected renderer is instantiated.
+Image presets use their local `image` asset directly, without a canvas or animation.
 Animated directions can be paused; reduced motion uses their initial frame.
 Rendering failures and WebGL context loss display a local SVG fallback. Light
 fallbacks approximate the composition; they do not reproduce the GPU bloom exactly.

@@ -3,7 +3,7 @@ import {presets} from '../showcase/presets.js';
 import * as nested from '../showcase/vendor/nested.js';
 import * as moving from '../showcase/vendor/moving.js';
 const w=1200,h=578;
-for(const p of presets.filter(p=>p.id!=='original')){
+for(const p of presets.filter(p=>p.renderer!=='original'&&p.renderer!=='image')){
  let body=`<rect width="${w}" height="${h}" fill="${p.palette[0]}"/>`;
  if(p.id==='squares'||p.id==='moving'){
   const engine=p.id==='squares'?nested:moving;

@@ -30,3 +30,13 @@
 The local reference and fault-injection harnesses live in ignored `_qa/`; none
 are in the deployment artifact. Phone checks validate responsive browser layout,
 not a particular physical phone/GPU. GPU-light fallbacks are approximations.
+
+## Ellipse image update — 2026-09-09
+
+- Replaced the amber ellipse preset with the supplied blue
+  `ellipse-light-2400x1286.png`; the copied asset has the same SHA-256 as the input.
+- Browser preview shows the PNG with a transparent shade layer, no active canvas,
+  and no pause button. Switching from the moving composition back to the image
+  disposes the canvas and returns to still mode.
+- All 21 test files passed, including the image selection lifecycle and the Pages
+  artifact's byte-for-byte copy of the PNG. Work was confined to DESIGN_EXP.

@@ -5,7 +5,6 @@ const selector=document.getElementById('art-direction');
 const pause=document.getElementById('pause-art');
 const status=document.getElementById('art-status');
 const modules={
-  ellipses:()=>import('./renderers/ellipse.js'),
   squares:()=>import('./renderers/fields.js'),
   triangle:()=>import('./renderers/triangle.js'),
   moving:()=>import('./renderers/fields.js')
