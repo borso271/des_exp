@@ -166,7 +166,7 @@
     grain:.018, irregularity:.0025,
     breathing:0, breathingSpeed:.25,
     renderScale:1,
-    ...palette.defaults, ...palette.reference
+    ...palette.study('reference')
   };
   let p={...reference};
 

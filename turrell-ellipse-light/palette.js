@@ -12,7 +12,7 @@
     hueRotation:0, saturation:100, brightness:0,
     progression:'sequence', reversePalette:false, paletteSpan:100, paletteOffset:0,
     colorBlend:'hsl', lightProfile:'palette', lightStrength:75,
-    backgroundMode:'manual', backgroundOffset:-18, backgroundColor:reference.bg,
+    backgroundMode:'related', backgroundOffset:-18, backgroundColor:reference.bg,
     customColors:Object.freeze(fieldKeys.map(key => reference[key]))
   });
   const enums = {
@@ -118,7 +118,7 @@
   // field. Subsequent global adjustments then start from these custom colors.
   function capture(state, overrides = {}) {
     const shown = {...state, ...overrides};
-    return {...defaults, paletteStyle:'custom', baseHue:state.baseHue,
+    return {...defaults, paletteStyle:'custom', backgroundMode:'manual', baseHue:state.baseHue,
       colorVariation:state.colorVariation, paletteSeed:state.paletteSeed,
       customColors:fieldKeys.map(key => shown[key]), backgroundColor:shown.bg,
       ...Object.fromEntries(['bg', ...fieldKeys].map(key => [key, shown[key]]))};
@@ -127,7 +127,7 @@
   function applyChange(previous, patch) {
     const next = sanitize(patch, previous);
     if (next.paletteStyle !== previous.paletteStyle && next.paletteStyle === 'reference') {
-      Object.assign(next, defaults, reference);
+      Object.assign(next, study('reference'));
     } else if (next.paletteStyle !== previous.paletteStyle && next.paletteStyle === 'custom') {
       Object.assign(next, capture(previous));
     } else {
@@ -142,7 +142,14 @@
     }
     const manual = Object.fromEntries(['bg', ...fieldKeys].filter(key => isHex(patch[key]))
       .map(key => [key, patch[key].toLowerCase()]));
-    if (Object.keys(manual).length) Object.assign(next, capture(next, manual));
+    if (Object.keys(manual).length) {
+      Object.assign(next, capture(next, manual));
+      // Presets can supply field colors and explicitly request a linked surround.
+      if (enums.backgroundMode.includes(patch.backgroundMode)) {
+        Object.assign(next, sanitize({backgroundMode:patch.backgroundMode, backgroundOffset:patch.backgroundOffset}, next));
+        Object.assign(next, generate(next));
+      }
+    }
     return next;
   }
 
@@ -157,7 +164,7 @@
   }
 
   const studies = Object.freeze({
-    reference:{...defaults, ...reference},
+    reference:{...defaults, ...generate(defaults)},
     amber:{paletteStyle:'monochrome', baseHue:35, colorVariation:25, lightProfile:'luminous', lightStrength:90},
     dusk:{paletteStyle:'sunset', colorVariation:100, reversePalette:true, lightProfile:'luminous', lightStrength:55},
     violet:{paletteStyle:'analogous', baseHue:270, colorVariation:70, lightProfile:'luminous', lightStrength:85, backgroundOffset:-36},
@@ -166,7 +173,7 @@
     silver:{paletteStyle:'grayscale', colorVariation:100, lightProfile:'luminous', lightStrength:50, backgroundOffset:-25}
   });
   function study(name) {
-    if (name === 'reference' || !studies[name]) return {...defaults, ...reference};
+    if (name === 'reference' || !studies[name]) return {...studies.reference};
     const settings = {...defaults, backgroundMode:'related', ...studies[name]};
     return {...settings, ...generate(settings)};
   }

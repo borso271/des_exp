@@ -14,7 +14,9 @@ const keys = ['bg', ...palette.fieldKeys];
 const fieldColors = state => keys.map(key => state[key]);
 const hsl = hex => colors.rgbToHsl(colors.hexToRgb(hex));
 const original = palette.study('reference');
-assert.deepEqual(plain(palette.generate(original)), plain(palette.reference), 'reference is preserved exactly');
+assert.equal(original.backgroundMode, 'related');
+palette.fieldKeys.forEach(key => assert.equal(original[key], palette.reference[key], 'reference ellipse colors are preserved'));
+assert.deepEqual(fieldColors(palette.generate(original)), fieldColors(original), 'default background matches its palette controls');
 for (const type of colors.generatedTypes) {
   const state = palette.applyChange(original, {paletteStyle:type});
   assert.equal(state.paletteStyle, type);
@@ -96,6 +98,21 @@ assert.deepEqual(plain(invalid), plain(palette.defaults));
     };
     assert.equal(errors.length, 0, errors.map(String).join('\n'));
     assert.deepEqual(fieldColors(state()), fieldColors(original));
+    assert.equal($('backgroundMode').value, 'related');
+    assert.equal($('p-backgroundOffset').disabled, false);
+    const {presets} = await import('../showcase/presets.js');
+    for (const preset of presets.filter(preset => preset.lab === 'ellipse')) {
+      $('resetBtn').click();
+      window.ellipseLight.setParameters(preset.preset);
+      const initial = state();
+      assert.equal(initial.backgroundMode, 'related', `${preset.id}: related background by default`);
+      palette.fieldKeys.forEach(key => assert.equal(initial[key], preset.preset[key], `${preset.id}: preserves ellipse palette`));
+      assert.deepEqual(fieldColors(initial), fieldColors(palette.generate(initial)), `${preset.id}: displayed background follows the outer ellipse`);
+      assert.doesNotThrow(() => window.ellipseLight.validateState(initial));
+      await load(await save());
+      assert.deepEqual(state(), initial, `${preset.id}: complete JSON retains the related background`);
+    }
+    $('resetBtn').click();
     input('centerX', .7);
     study('dusk');
     assert.equal(state().centerX, .7, 'color studies keep geometry');
