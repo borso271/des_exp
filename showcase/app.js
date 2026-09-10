@@ -1,6 +1,6 @@
-import {presets,getPreset} from './presets.js?v=native-2';
+import {presets,getPreset} from './presets.js?v=native-3';
 import {createLabHost} from './lab-host.js?v=native-1';
-import {clone,makeConfig,parseConfig,serializeConfig,MAX_CONFIG_BYTES} from './config.js?v=native-1';
+import {clone,makeConfig,parseConfig,serializeConfig,MAX_CONFIG_BYTES} from './config.js?v=native-2';
 const stage=document.getElementById('hero-art'),selector=document.getElementById('art-direction');
 const pause=document.getElementById('pause-art'),toggle=document.getElementById('edit-banner');
 const editor=document.getElementById('banner-editor'),message=document.getElementById('editor-message');

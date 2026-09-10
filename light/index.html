@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Light in darkness — reference study v2</title>
+    <link rel="stylesheet" href="./styles.css?v=embed-1">
+  </head>
+  <body>
+    <div id="stage">
+      <canvas id="art" aria-label="Procedural light cone, blue and warm optical halo, and lens ghosts" role="img"></canvas>
+    </div>
+    <button id="show" type="button" hidden title="Show controls (H)">Controls · H</button>
+    <aside id="panel" aria-label="Light controls">
+      <h1>Light in darkness / v2</h1>
+      <p>Reference-calibrated optical field. No image textures.</p>
+      <div class="toolbar">
+        <button id="reset">Reference</button>
+        <button id="hide">Hide · H</button>
+        <button id="fullscreen">Fullscreen</button>
+      </div>
+      <div id="fields"></div>
+      <details>
+        <summary>Framing / export</summary>
+        <label class="wide">Frame
+          <select id="frame">
+            <option value="reference">Original screenshot</option>
+            <option value="clean">Artwork only</option>
+            <option value="viewport">Fill window</option>
+          </select>
+        </label>
+        <label class="wide">Render quality
+          <select id="quality">
+            <option value="0.75">0.75×</option>
+            <option value="1">1×</option>
+            <option value="1.5">1.5×</option>
+            <option value="2">2×</option>
+          </select>
+        </label>
+        <label class="wide">PNG width
+          <select id="exportWidth">
+            <option value="2047">2047 px · reference</option>
+            <option value="3072">3072 px</option>
+            <option value="3840">3840 px</option>
+            <option value="5120">5120 px</option>
+          </select>
+        </label>
+        <div class="toolbar">
+          <button id="png">Export PNG</button>
+          <button id="save">Save settings</button>
+          <button id="load">Load settings</button>
+        </div>
+        <input type="file" id="file" accept="application/json,.json" hidden>
+        <label class="wide">Slow atmospheric drift<input type="checkbox" id="animate"></label>
+        <small>PNG is rendered afresh at the selected size, without the interface. Settings files contain parameters only.</small>
+      </details>
+      <p><small>Drag to move the source. H: controls · F: fullscreen · R: reference. Double-click a slider to reset it. Numbers are editable.</small></p>
+      <div id="status" role="status">Starting renderer…</div>
+    </aside>
+    <div id="error" role="alert"></div>
+    <div id="notice" role="status"></div>
+    <script defer src="../js/shared/lab-embed.js?v=native-6" data-lab="light"></script>
+    <script defer src="./parameters.js"></script>
+    <script defer src="./shaders.js"></script>
+    <script defer src="./renderer.js?v=embed-1"></script>
+    <script defer src="./files.js"></script>
+    <script defer src="./controls.js?v=embed-1"></script>
+    <script defer src="./app.js?v=embed-1"></script>
+  </body>
+</html>

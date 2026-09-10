@@ -2,7 +2,7 @@
 (() => {
   if(!new URLSearchParams(location.search).has('embed'))return;
   const script=document.currentScript,lab=script.dataset.lab;
-  const definitions={original:{art:'#original-art',panel:'#original-controls'},ellipse:{art:'#gl',panel:'#ui'},triangle:{art:'#stage',panel:'#panel'},canvas:{art:'.poster',panel:'.controls'},moving:{art:'#world',panel:'.sidebar'}};
+  const definitions={original:{art:'#original-art',panel:'#original-controls'},ellipse:{art:'#gl',panel:'#ui'},triangle:{art:'#stage',panel:'#panel'},canvas:{art:'.poster',panel:'.controls'},moving:{art:'#world',panel:'.sidebar'},light:{art:'#stage',panel:'#panel'}};
   const definition=definitions[lab];
   const art=document.querySelector(definition.art),panel=document.querySelector(definition.panel);
   if(!art||!panel)throw new Error(`Missing native ${lab} art or panel`);

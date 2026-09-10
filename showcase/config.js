@@ -1,4 +1,4 @@
-import {presets,getPreset} from './presets.js?v=native-1';
+import {presets,getPreset} from './presets.js?v=native-3';
 export const CONFIG_FORMAT='be-art-native-banner';
 export const CONFIG_VERSION=2;
 export const MAX_CONFIG_BYTES=32*1024*1024;

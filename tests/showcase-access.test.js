@@ -32,8 +32,8 @@ const {JSDOM}=require('jsdom');
  try{
   const first=page();first.locked();
   assert.equal(first.d.querySelector('iframe'),null);
-  const scripts=[...first.d.scripts].map(script=>script.getAttribute('src'));
-  assert.deepEqual(scripts,['./showcase/entry.js?v=1'],'the application is loaded only through the access gate');
+  const scripts=[...first.d.scripts].map(script=>script.getAttribute('src').split('?')[0]);
+  assert.deepEqual(scripts,['./showcase/entry.js'],'the application is loaded only through the access gate');
   await first.submit('incorrect');first.locked();
   assert.equal(first.d.getElementById('access-password').getAttribute('aria-invalid'),'true');
   assert.match(first.d.getElementById('access-message').textContent,/incorrecta/);

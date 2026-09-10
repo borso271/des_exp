@@ -18,6 +18,8 @@ export const presets=[
    intensity:.8,bloom:.075,bloomRadius:1.15,spillStrength:1.2,ambient:.8,exposure:-.25},
   description:'Un triángulo de luz azul suspendido en un campo oscuro.'},
  {id:'moving',name:'Composición viva',lab:'moving',url:'./moving_shapes/moving_shapes.html?embed=1',stateURL:'./showcase/compositions/moving.json',text,
-  description:'Planos de color que se desplazan y transforman su composición.'}
+  description:'Planos de color que se desplazan y transforman su composición.'},
+ {id:'light',name:'Luz en la oscuridad',lab:'light',url:'./light/?embed=1',preset:{frame:'viewport'},text,
+  description:'Un haz de luz con un halo óptico en la oscuridad; movimiento atmosférico opcional.'}
 ];
 export function getPreset(id){return presets.find(preset=>preset.id===id)||presets[0];}

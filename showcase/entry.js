@@ -2,7 +2,7 @@ import {requestAccess} from './access.js?v=1';
 
 await requestAccess();
 try{
- await import('./app.js?v=native-2');
+ await import('./app.js?v=native-3');
 }catch{
  const content=document.getElementById('preview-content');
  content.hidden=true;content.setAttribute('inert','');

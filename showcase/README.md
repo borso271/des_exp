@@ -6,8 +6,8 @@ Mostrar parámetros reveals the original lab controls alongside the banner on
 wide screens and below it on narrow screens. Hiding controls preserves the art.
 No code in `../beartgroup` is modified, built, or run by this project.
 
-The six existing selection URLs remain stable:
-`?art=original|ellipses|ellipses-gold|squares|triangle|moving`.
+The seven selection URLs are:
+`?art=original|ellipses|ellipses-gold|squares|triangle|moving|light`.
 A URL shares the curated starting direction. Download JSON to share an edited
 composition, including its complete native settings and text treatments.
 
@@ -53,6 +53,7 @@ accessible. Standalone lab pages are not gated.
 | Campos de color | `canvas_light_columns_demo.html`, native nested-square preset |
 | Umbral azul | `triangle-light/index.html`, without the floor |
 | Composición viva | `moving_shapes/moving_shapes.html` |
+| Luz en la oscuridad | `light/index.html`, with the frame filling the banner |
 
 Blue/gold use the supplied palettes, with the default outer ellipse sized inside
 the banner. Native geometry remains native: changing frame proportions has the
@@ -72,6 +73,10 @@ into an artwork preview plus the original control panel. There are no copied
 shader snapshots, replacement geometry algorithms, or reduced parameter forms.
 The Canvas lab retains every geometry and aesthetic, including its image layer,
 rich gradient mapping, generated/manual palettes and hover effects.
+The Light study retains all 39 composition/optical parameters, framing, quality,
+native JSON/PNG exports, dragging, and optional atmospheric drift. Its renderer
+sizes to the banner rectangle, including while the editor is open. Its starting
+preset uses the native viewport framing and static reference light.
 
 A selected lab responds to host pause/reduced motion and page visibility. State
 captures animation time where relevant. The parent waits for the old lab to

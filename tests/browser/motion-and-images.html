@@ -5,12 +5,13 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms)),copy=value=>JSON.parse(JSON.str
 const equal=(a,b,label)=>{if(JSON.stringify(a)!==JSON.stringify(b))throw Error(label);};
 const wait=async fn=>{const start=performance.now();while(!fn()){if(performance.now()-start>10000)throw Error('Image did not load');await delay(30);}};
 try{
-for(const lab of ['ellipse','moving','canvas']){
+for(const lab of ['ellipse','moving','canvas','light']){
  const host=createLabHost({container});host.layout({editing:false,art:{x:0,y:0,width:880,height:424}});host.setHost({paused:true});
- const urls={ellipse:'../../turrell-ellipse-light/?embed=1',moving:'../../moving_shapes/moving_shapes.html?embed=1',canvas:'../../canvas_light_columns_demo.html?embed=1'};
+ const urls={ellipse:'../../turrell-ellipse-light/?embed=1',moving:'../../moving_shapes/moving_shapes.html?embed=1',canvas:'../../canvas_light_columns_demo.html?embed=1',light:'../../light/?embed=1'};
  await host.load({lab,url:urls[lab]});const child=host.frame.contentWindow;
  let state=await host.snapshot();
  if(lab==='ellipse')state.native.parameters.breathing=.025;
+ if(lab==='light')state.native.parameters.animate=true;
  if(lab==='moving')state.native.paused=false;
  if(lab==='canvas'){state.native.settings.controls.geometryFamily='moving';state.native.settings.controls.movingAnimated=true;}
  await host.restore(state);
@@ -37,7 +38,7 @@ for(const lab of ['ellipse','moving','canvas']){
   await host.restore(copy(vectorState));equal(await host.snapshot(),vectorState,'SVG image round-trip lost native state');
   checks.push({localImage:'original PNG and SVG resources round-trip',invalidImage:'atomic'});
  }
- const art=child.document.querySelector('canvas'),gl=lab==='ellipse'?art.getContext('webgl2'):null;
+ const art=child.document.querySelector('canvas'),gl=['ellipse','light'].includes(lab)?art.getContext('webgl2'):null;
  const moving=lab==='moving'?child.movingShapes:null,held=moving?.getState().time;
  await host.dispose();await delay(60);
  if(gl&&!gl.isContextLost())throw Error('Ellipse GPU context remained active');

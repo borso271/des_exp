@@ -2,7 +2,7 @@
 const result=document.getElementById('result'),frame=document.getElementById('test'),checks={};
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 try{
-for(const test of ['ellipse-parity','triangle-moving-parity','canvas-parity','showcase-flow','motion-and-images']){
+for(const test of ['ellipse-parity','triangle-moving-parity','canvas-parity','light-parity','showcase-flow','motion-and-images']){
  result.textContent=JSON.stringify({running:test,completed:checks},null,2);frame.src='./'+test+'.html?run='+Date.now();
  const start=performance.now();await delay(150);
  while(true){const output=frame.contentDocument?.getElementById('result');

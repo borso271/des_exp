@@ -7,7 +7,7 @@ const entries=['index.html','canvas_light_columns_demo.html','logo_be_arts.svg',
  'showcase/entry.js','showcase/access.js','showcase/access-config.js',
  'showcase/app.js','showcase/config.js','showcase/lab-host.js','showcase/presets.js','showcase/original.html',
  'showcase/assets','showcase/styles','showcase/compositions',
- 'js/shared','js/light-columns','turrell-ellipse-light','triangle-light','moving_shapes'];
+ 'js/shared','js/light-columns','turrell-ellipse-light','triangle-light','moving_shapes','light'];
 const extensions=new Set(['.html','.css','.js','.svg','.webp','.png','.ttf','.txt','.json']);
 fs.rmSync(destination,{recursive:true,force:true});fs.mkdirSync(destination,{recursive:true});
 const files=[];
